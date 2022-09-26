@@ -1,0 +1,11 @@
+#ifndef PMT_CONFIG_H_
+#define PMT_CONFIG_H_
+
+#cmakedefine HAVE_LIKWID
+#cmakedefine HAVE_NVML
+#cmakedefine HAVE_ROCM-smi
+
+#define PMT_HEADER "@PMT_HEADER@"
+#define PMT_SOURCE "@PMT_SOURCE@"
+
+#endif
