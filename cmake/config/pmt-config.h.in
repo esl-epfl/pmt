@@ -5,7 +5,7 @@
 #cmakedefine HAVE_NVML
 #cmakedefine HAVE_ROCM-smi
 
-#define PMT_HEADER "@PMT_HEADER@"
-#define PMT_SOURCE "@PMT_SOURCE@"
+#define POWERSENSOR_HEADER "@POWERSENSOR_HEADER@"
+#define POWERSENSOR_SOURCE "@POWERSENSOR_SOURCE@"
 
 #endif

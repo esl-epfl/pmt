@@ -37,9 +37,9 @@ option(BUILD_ROCM_PMT "" OFF)
 
 # Find dependencies for Arduinopmt
 if(${BUILD_ARDUINO_PMT})
-    set(PMT_ROOT_DIR ${CMAKE_SOURCE_DIR}/arduino/pmt)
-    set(PMT_HEADER ${PMT_ROOT_DIR}/pmt.h)
-    set(PMT_SOURCE ${PMT_ROOT_DIR}/pmt.cc)
+    set(POWERSENSOR_ROOT_DIR ${CMAKE_SOURCE_DIR}/arduino/PowerSensor)
+    set(POWERSENSOR_HEADER ${POWERSENSOR_ROOT_DIR}/PowerSensor.h)
+    set(POWERSENSOR_SOURCE ${POWERSENSOR_ROOT_DIR}/PowerSensor.cc)
 endif()
 
 # Find dependencies for Likwidpmt
