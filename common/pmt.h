@@ -28,11 +28,11 @@ namespace pmt {
                 const State &firstState,
                 const State &secondState);
 
-            static double Joules(
+            static double joules(
                const State &firstState,
                const State &secondState);
 
-            static double Watt(
+            static double watts(
                 const State &firstState,
                 const State &secondState);
 

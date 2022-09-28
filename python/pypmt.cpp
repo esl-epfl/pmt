@@ -36,7 +36,7 @@ double joules(pmt::State start, pmt::State end){
     return end.joulesAtRead - start.joulesAtRead;
 }
 
-double watt(pmt::State start, pmt::State end){
+double watts(pmt::State start, pmt::State end){
     return joules(start, end) / seconds(start, end);
 }
 
@@ -45,7 +45,7 @@ PYBIND11_MODULE(pypmt, m) {
 
     m.def("seconds", &seconds, "Get elapsed time");
     m.def("joules", &joules, "Get energy consumption");
-    m.def("watt", &watt, "Get average power consumption");
+    m.def("watts", &watts, "Get average power consumption");
 
     py::class_<pmt::State>(m, "State");
 

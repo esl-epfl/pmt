@@ -54,7 +54,7 @@ def pmt(platform, device_id = 0):
             curr_results = {"platform" : platform,  \
                             "joules" : format(ps.joules(start, end),".3f"),  \
                             "seconds" : format(ps.seconds(start, end),".3f"), \
-                            "watt" : format(ps.watt(start, end),".3f")}
+                            "watt" : format(ps.watts(start, end),".3f")}
             results.append(curr_results)
 
             return results

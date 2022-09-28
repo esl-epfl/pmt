@@ -17,11 +17,11 @@ void run(pmt::pmt* sensor, int argc, char* argv[])
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             auto end = sensor->read();
             std::cout << pmt::pmt::seconds(start, end) << " s, ";
-            std::cout << pmt::pmt::Joules(start, end) << " J, ";
-            std::cout << pmt::pmt::Watt(start, end )<< " W, ";
+            std::cout << pmt::pmt::joules(start, end) << " J, ";
+            std::cout << pmt::pmt::watts(start, end )<< " W, ";
             std::cout << pmt::pmt::seconds(first, end) << " s (total), ";
-            std::cout << pmt::pmt::Joules(first, end) << " J (total), ";
-            std::cout << pmt::pmt::Watt(first, end )<< " W (average)";
+            std::cout << pmt::pmt::joules(first, end) << " J (total), ";
+            std::cout << pmt::pmt::watts(first, end )<< " W (average)";
             std::cout << std::endl;
         }
     } else {
@@ -38,7 +38,7 @@ void run(pmt::pmt* sensor, int argc, char* argv[])
         }
         auto end = sensor->read();
         std::cout << "Runtime: " << pmt::pmt::seconds(start, end) << " s" << std::endl;
-        std::cout << "Joules: " << pmt::pmt::Joules(start, end) << " J" << std::endl;
-        std::cout << "Watt: " << pmt::pmt::Watt(start, end) << " W" << std::endl;
+        std::cout << "Joules: " << pmt::pmt::joules(start, end) << " J" << std::endl;
+        std::cout << "Watt: " << pmt::pmt::watts(start, end) << " W" << std::endl;
     }
 }

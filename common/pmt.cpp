@@ -16,7 +16,7 @@ namespace pmt {
               firstState.timeAtRead;
     }
 
-    double pmt::Joules(
+    double pmt::joules(
        const State &firstState,
        const State &secondState)
     {
@@ -24,7 +24,7 @@ namespace pmt {
                 firstState.joulesAtRead;
     }
 
-    double pmt::Watt(
+    double pmt::watts(
         const State &firstState,
         const State &secondState)
     {
@@ -69,7 +69,7 @@ namespace pmt {
         if (dumpFile != nullptr) {
             std::unique_lock<std::mutex> lock(dumpFileMutex);
             *dumpFile << "S " << seconds(startState, secondState)
-                      << " " << Watt(firstState, secondState);
+                      << " " << watts(firstState, secondState);
             for (int i = 0; i < secondState.misc.size(); i++) {
                 if (i > 0) {
                     *dumpFile << " ";
