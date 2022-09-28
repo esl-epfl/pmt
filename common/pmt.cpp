@@ -28,7 +28,7 @@ namespace pmt {
         const State &firstState,
         const State &secondState)
     {
-        return Joules(firstState, secondState) /
+        return joules(firstState, secondState) /
                seconds(firstState, secondState);
     }
 
