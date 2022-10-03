@@ -4,12 +4,12 @@
 #include "pmt.h"
 
 namespace pmt {
-    namespace jetson {
-        class Jetsonpmt : public pmt {
-            public:
-                static Jetsonpmt* create();
-        };
-    } // end namespace jetson
+namespace jetson {
+class Jetsonpmt : public pmt {
+public:
+  static Jetsonpmt *create();
+};
+} // end namespace jetson
 } // end namespace pmt
 
 #endif

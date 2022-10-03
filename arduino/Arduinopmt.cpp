@@ -8,57 +8,47 @@
 #include POWERSENSOR_HEADER
 using _PowerSensor = PowerSensor::PowerSensor;
 using _State = PowerSensor::State;
-double (&_seconds)(const _State&, const _State&) = PowerSensor::seconds;
-double (&_Joules)(const _State&, const _State&, int) = PowerSensor::Joules;
-
+double (&_seconds)(const _State &, const _State &) = PowerSensor::seconds;
+double (&_Joules)(const _State &, const _State &, int) = PowerSensor::Joules;
 
 namespace pmt {
 namespace arduino {
 
 class Arduinopmt_ : public Arduinopmt {
-    public:
-        Arduinopmt_(const char *device);
-        ~Arduinopmt_();
+public:
+  Arduinopmt_(const char *device);
+  ~Arduinopmt_();
 
-        State measure();
+  State measure();
 
-    private:
-        virtual const char* getDumpFileName() {
-            return "/tmp/arduinopmt.out";
-        }
+private:
+  virtual const char *getDumpFileName() { return "/tmp/arduinopmt.out"; }
 
-        virtual int getDumpInterval() {
-            return 1; // milliseconds
-        }
+  virtual int getDumpInterval() {
+    return 1; // milliseconds
+  }
 
-
-        _PowerSensor* _powersensor;
-        _State _firstState;
+  _PowerSensor *_powersensor;
+  _State _firstState;
 };
 
-Arduinopmt* Arduinopmt::create(
-    const char *device)
-{
-    return new Arduinopmt_(device);
+Arduinopmt *Arduinopmt::create(const char *device) {
+  return new Arduinopmt_(device);
 }
 
-Arduinopmt_::Arduinopmt_(
-    const char *device)
-{
-    _powersensor = new _PowerSensor(device);
-    _firstState = _powersensor->read();
+Arduinopmt_::Arduinopmt_(const char *device) {
+  _powersensor = new _PowerSensor(device);
+  _firstState = _powersensor->read();
 }
 
-Arduinopmt_::~Arduinopmt_() {
-    delete _powersensor;
-}
+Arduinopmt_::~Arduinopmt_() { delete _powersensor; }
 
 State Arduinopmt_::measure() {
-    _State _state = _powersensor->read();
-    State state;
-    state.timeAtRead   = _seconds(_firstState, _state);
-    state.joulesAtRead = _Joules(_firstState, _state, -1);
-    return state;
+  _State _state = _powersensor->read();
+  State state;
+  state.timeAtRead = _seconds(_firstState, _state);
+  state.joulesAtRead = _Joules(_firstState, _state, -1);
+  return state;
 }
 
 } // end namespace arduino

@@ -1,3 +1,3 @@
 #include "pmt.h"
 
-void run(pmt::pmt* sensor, int argc, char* argv[]);
+void run(pmt::pmt *sensor, int argc, char *argv[]);

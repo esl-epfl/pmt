@@ -4,10 +4,10 @@
 #include "pmt.h"
 
 namespace pmt {
-    class Dummypmt : public pmt {
-        public:
-            static Dummypmt* create();
-   };
+class Dummypmt : public pmt {
+public:
+  static Dummypmt *create();
+};
 } // end namespace pmt
 
 #endif
