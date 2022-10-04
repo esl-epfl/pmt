@@ -78,4 +78,4 @@ double pmt::get_wtime() {
 
 State pmt::read() { return stop ? previousState : measure(); }
 
-} // end namespace pmt
+}  // end namespace pmt

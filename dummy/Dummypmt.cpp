@@ -3,7 +3,7 @@
 namespace pmt {
 
 class Dummypmt_ : public Dummypmt {
-private:
+ private:
   virtual State measure();
 
   virtual const char *getDumpFileName() { return nullptr; }
@@ -20,4 +20,4 @@ State Dummypmt_::measure() {
   return state;
 }
 
-} // end namespace pmt
+}  // end namespace pmt

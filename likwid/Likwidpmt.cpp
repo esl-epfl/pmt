@@ -20,11 +20,11 @@ namespace pmt {
 namespace likwid {
 
 class Likwidpmt_ : public Likwidpmt {
-public:
+ public:
   Likwidpmt_();
   ~Likwidpmt_();
 
-private:
+ private:
   virtual State measure() override;
 
   virtual const char *getDumpFileName() override {
@@ -32,10 +32,10 @@ private:
   }
 
   virtual int getDumpInterval() override {
-    return 100; // milliseconds
+    return 100;  // milliseconds
   }
 
-private:
+ private:
   int nr_groups;
   int nr_threads_group;
   double joulesTotal = 0;
@@ -118,9 +118,9 @@ Likwidpmt_::Likwidpmt_() {
       topology_finalize();
       exit(EXIT_FAILURE);
     }
-  } // end for socket
+  }  // end for socket
 #endif
-} // end constructor
+}  // end constructor
 
 Likwidpmt_::~Likwidpmt_() {
 #if defined(HAVE_LIKWID)
@@ -129,7 +129,7 @@ Likwidpmt_::~Likwidpmt_() {
   perfmon_finalize();
   topology_finalize();
 #endif
-} // end destructor
+}  // end destructor
 
 State Likwidpmt_::measure() {
 #if defined(HAVE_LIKWID)
@@ -160,5 +160,5 @@ State Likwidpmt_::measure() {
   return state;
 }
 
-} // end namespace likwid
-} // end namespace pmt
+}  // end namespace likwid
+}  // end namespace pmt

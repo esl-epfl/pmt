@@ -15,17 +15,17 @@ namespace pmt {
 namespace arduino {
 
 class Arduinopmt_ : public Arduinopmt {
-public:
+ public:
   Arduinopmt_(const char *device);
   ~Arduinopmt_();
 
   State measure();
 
-private:
+ private:
   virtual const char *getDumpFileName() { return "/tmp/arduinopmt.out"; }
 
   virtual int getDumpInterval() {
-    return 1; // milliseconds
+    return 1;  // milliseconds
   }
 
   _PowerSensor *_powersensor;
@@ -51,5 +51,5 @@ State Arduinopmt_::measure() {
   return state;
 }
 
-} // end namespace arduino
-} // end namespace pmt
+}  // end namespace arduino
+}  // end namespace pmt

@@ -82,8 +82,7 @@ void Rapl::detect_cpu() {
 
   while (1) {
     result = fgets(buffer, BUFSIZ, fff);
-    if (result == NULL)
-      break;
+    if (result == NULL) break;
 
     if (!strncmp(result, "vendor_id", 8)) {
       sscanf(result, "%*s%*s%s", vendor_string);
@@ -115,67 +114,67 @@ void Rapl::detect_cpu() {
     printf("CPU model: ");
 
     switch (model) {
-    case CPU_SANDYBRIDGE:
-      printf("Sandybridge");
-      break;
-    case CPU_SANDYBRIDGE_EP:
-      printf("Sandybridge-EP");
-      break;
-    case CPU_IVYBRIDGE:
-      printf("Ivybridge");
-      break;
-    case CPU_IVYBRIDGE_EP:
-      printf("Ivybridge-EP");
-      break;
-    case CPU_HASWELL:
-    case CPU_HASWELL_ULT:
-    case CPU_HASWELL_GT3E:
-      printf("Haswell");
-      break;
-    case CPU_HASWELL_EP:
-      printf("Haswell-EP");
-      break;
-    case CPU_BROADWELL:
-    case CPU_BROADWELL_GT3E:
-      printf("Broadwell");
-      break;
-    case CPU_BROADWELL_EP:
-      printf("Broadwell-EP");
-      break;
-    case CPU_SKYLAKE:
-    case CPU_SKYLAKE_HS:
-      printf("Skylake");
-      break;
-    case CPU_SKYLAKE_X:
-      printf("Skylake-X");
-      break;
-    case CPU_KABYLAKE:
-    case CPU_KABYLAKE_MOBILE:
-      printf("Kaby Lake");
-      break;
-    case CPU_KNIGHTS_LANDING:
-      printf("Knight's Landing");
-      break;
-    case CPU_KNIGHTS_MILL:
-      printf("Knight's Mill");
-      break;
-    case CPU_ATOM_GOLDMONT:
-    case CPU_ATOM_GEMINI_LAKE:
-    case CPU_ATOM_DENVERTON:
-      printf("Atom");
-      break;
-    default:
-      printf("Unsupported model %d\n", model);
-      model = -1;
-      break;
+      case CPU_SANDYBRIDGE:
+        printf("Sandybridge");
+        break;
+      case CPU_SANDYBRIDGE_EP:
+        printf("Sandybridge-EP");
+        break;
+      case CPU_IVYBRIDGE:
+        printf("Ivybridge");
+        break;
+      case CPU_IVYBRIDGE_EP:
+        printf("Ivybridge-EP");
+        break;
+      case CPU_HASWELL:
+      case CPU_HASWELL_ULT:
+      case CPU_HASWELL_GT3E:
+        printf("Haswell");
+        break;
+      case CPU_HASWELL_EP:
+        printf("Haswell-EP");
+        break;
+      case CPU_BROADWELL:
+      case CPU_BROADWELL_GT3E:
+        printf("Broadwell");
+        break;
+      case CPU_BROADWELL_EP:
+        printf("Broadwell-EP");
+        break;
+      case CPU_SKYLAKE:
+      case CPU_SKYLAKE_HS:
+        printf("Skylake");
+        break;
+      case CPU_SKYLAKE_X:
+        printf("Skylake-X");
+        break;
+      case CPU_KABYLAKE:
+      case CPU_KABYLAKE_MOBILE:
+        printf("Kaby Lake");
+        break;
+      case CPU_KNIGHTS_LANDING:
+        printf("Knight's Landing");
+        break;
+      case CPU_KNIGHTS_MILL:
+        printf("Knight's Mill");
+        break;
+      case CPU_ATOM_GOLDMONT:
+      case CPU_ATOM_GEMINI_LAKE:
+      case CPU_ATOM_DENVERTON:
+        printf("Atom");
+        break;
+      default:
+        printf("Unsupported model %d\n", model);
+        model = -1;
+        break;
     }
     printf("\n");
 #endif
   }
 
   if (vendor == CPU_VENDOR_AMD) {
-    if (!(family == 23 ||  // Zen, Zen+, Zen2
-          family == 25)) { // Zen 3
+    if (!(family == 23 ||   // Zen, Zen+, Zen2
+          family == 25)) {  // Zen 3
       printf("Wrong CPU family %d\n", family);
       exit(1);
     }
@@ -184,7 +183,7 @@ void Rapl::detect_cpu() {
 
   fclose(fff);
   cpu_model = model;
-} // end Rapl::detect_cpu
+}  // end Rapl::detect_cpu
 
 void Rapl::detect_packages() {
   char filename[BUFSIZ];
@@ -192,8 +191,7 @@ void Rapl::detect_packages() {
   int package;
   int i;
 
-  for (i = 0; i < MAX_PACKAGES; i++)
-    package_map[i] = -1;
+  for (i = 0; i < MAX_PACKAGES; i++) package_map[i] = -1;
 
 #if defined(DEBUG)
   printf("\t");
@@ -202,8 +200,7 @@ void Rapl::detect_packages() {
     sprintf(filename,
             "/sys/devices/system/cpu/cpu%d/topology/physical_package_id", i);
     fff = fopen(filename, "r");
-    if (fff == NULL)
-      break;
+    if (fff == NULL) break;
     fscanf(fff, "%d", &package);
 #if defined(DEBUG)
     printf("%d (%d)", i, package);
@@ -229,7 +226,7 @@ void Rapl::detect_packages() {
 #if defined(DEBUG)
   printf("\tDetected %d cores in %d packages\n\n", total_cores, total_packages);
 #endif
-} // end Rapl::detect_packages
+}  // end Rapl::detect_packages
 
 double Rapl::measure() {
   char filenames[MAX_PACKAGES][NUM_RAPL_DOMAINS][256];
@@ -316,4 +313,4 @@ double Rapl::measure() {
 
   rapl_supported = true;
   return consumed_energy_package + consumed_energy_dram;
-} // end Rapl::measure
+}  // end Rapl::measure

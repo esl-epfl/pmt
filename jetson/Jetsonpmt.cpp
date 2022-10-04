@@ -10,12 +10,12 @@ namespace pmt {
 namespace jetson {
 
 class Jetsonpmt_ : public Jetsonpmt {
-public:
+ public:
   Jetsonpmt_();
 
-private:
+ private:
   class JetsonState {
-  public:
+   public:
     operator State();
     double timeAtRead;
     unsigned int instantaneousPowerGPU = 0;
@@ -33,7 +33,7 @@ private:
   virtual const char *getDumpFileName() { return "/tmp/jetsonpmt.out"; }
 
   virtual int getDumpInterval() {
-    return 50; // milliseconds
+    return 50;  // milliseconds
   }
 
   JetsonState previousState;
@@ -144,5 +144,5 @@ Jetsonpmt_::JetsonState Jetsonpmt_::read_jetson() {
 
 State Jetsonpmt_::measure() { return read_jetson(); }
 
-} // end namespace jetson
-} // end namespace pmt
+}  // end namespace jetson
+}  // end namespace pmt

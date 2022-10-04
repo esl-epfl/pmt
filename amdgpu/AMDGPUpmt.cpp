@@ -12,12 +12,12 @@ namespace pmt {
 namespace amdgpu {
 
 class AMDGPUpmt_ : public AMDGPUpmt {
-public:
+ public:
   AMDGPUpmt_(const unsigned device_number);
 
-private:
+ private:
   class AMDGPUState {
-  public:
+   public:
     operator State();
     double timeAtRead;
     double instantaneousPower = 0;
@@ -29,7 +29,7 @@ private:
   virtual const char *getDumpFileName() { return "/tmp/xilinxpmt.out"; }
 
   virtual int getDumpInterval() {
-    return 100; // milliseconds
+    return 100;  // milliseconds
   }
 
   std::string filename;
@@ -112,5 +112,5 @@ AMDGPUpmt_::AMDGPUState AMDGPUpmt_::read_amdgpu() {
 
 State AMDGPUpmt_::measure() { return read_amdgpu(); }
 
-} // end namespace amdgpu
-} // end namespace pmt
+}  // end namespace amdgpu
+}  // end namespace pmt

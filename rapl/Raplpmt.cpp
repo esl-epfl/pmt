@@ -5,13 +5,13 @@ namespace pmt {
 namespace rapl {
 
 class Raplpmt_ : public Raplpmt {
-private:
+ private:
   virtual State measure();
 
   virtual const char *getDumpFileName() { return "/tmp/raplpmt.out"; }
 
   virtual int getDumpInterval() {
-    return 500; // milliseconds
+    return 500;  // milliseconds
   }
 
   Rapl rapl;
@@ -26,5 +26,5 @@ State Raplpmt_::measure() {
   return state;
 }
 
-} // end namespace rapl
-} // end namespace pmt
+}  // end namespace rapl
+}  // end namespace pmt

@@ -6,11 +6,10 @@ cmake_minimum_required(VERSION 3.17.5)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 # Set build type
-if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  set(
-      CMAKE_BUILD_TYPE Release
-      CACHE STRING "Default build type." FORCE
-    )
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_BUILD_TYPE
+      Release
+      CACHE STRING "Default build type." FORCE)
 endif()
 
 # Set debug print info
@@ -23,78 +22,71 @@ find_package(OpenMP REQUIRED)
 find_package(Threads REQUIRED)
 
 # Add PMT common directory as include directory
-include_directories(
-    ${CMAKE_SOURCE_DIR}/common
-)
+include_directories(${CMAKE_SOURCE_DIR}/common)
 
 # Options to disable implementations
 # that require external dependencies
 option(BUILD_ARDUINO_PMT "" OFF)
 option(BUILD_LIKWID_PMT "" OFF)
-option(BUILD_NVML_PMT  "" OFF)
+option(BUILD_NVML_PMT "" OFF)
 option(BUILD_PYTHON_PMT "" OFF)
 option(BUILD_ROCM_PMT "" OFF)
 
 # Find dependencies for Arduinopmt
 if(${BUILD_ARDUINO_PMT})
-    set(POWERSENSOR_ROOT_DIR ${CMAKE_SOURCE_DIR}/arduino/PowerSensor)
-    set(POWERSENSOR_HEADER ${POWERSENSOR_ROOT_DIR}/PowerSensor.h)
-    set(POWERSENSOR_SOURCE ${POWERSENSOR_ROOT_DIR}/PowerSensor.cc)
+  set(POWERSENSOR_ROOT_DIR ${CMAKE_SOURCE_DIR}/arduino/PowerSensor)
+  set(POWERSENSOR_HEADER ${POWERSENSOR_ROOT_DIR}/PowerSensor.h)
+  set(POWERSENSOR_SOURCE ${POWERSENSOR_ROOT_DIR}/PowerSensor.cc)
 endif()
 
 # Find dependencies for Likwidpmt
 if(${BUILD_LIKWID_PMT})
-    find_package(Likwid QUIET)
-    if(${LIKWID_FOUND})
-        set(HAVE_LIKWID TRUE)
-    else()
-        message("Likwid was not found, Likwidpmt will not be built.")
-    endif()
+  find_package(Likwid QUIET)
+  if(${LIKWID_FOUND})
+    set(HAVE_LIKWID TRUE)
+  else()
+    message("Likwid was not found, Likwidpmt will not be built.")
+  endif()
 endif()
 
 # Find dependencies for NVMLpmt
 if(${BUILD_NVML_PMT})
-    find_package(CUDAToolkit QUIET)
-    if(${CUDAToolkit_FOUND})
-        set(HAVE_NVML TRUE)
-    endif()
+  find_package(CUDAToolkit QUIET)
+  if(${CUDAToolkit_FOUND})
+    set(HAVE_NVML TRUE)
+  endif()
 endif()
 
 if(${BUILD_PYTHON_PMT})
-    find_package (Python3 COMPONENTS Interpreter Development REQUIRED)
-    find_package(pybind11 CONFIG REQUIRED)
+  find_package(
+    Python3
+    COMPONENTS Interpreter Development
+    REQUIRED)
+  find_package(pybind11 CONFIG REQUIRED)
 endif()
 
 # Find dependencies for ROCMpmt
 if(${BUILD_ROCM_PMT})
-	find_package(ROCM-SMI)
-    if(${ROCM-SMI_FOUND})
-	set(HAVE_ROCM-SMI TRUE)
-    else()
-    	message("ROCM-SMI was not found, ROCMpmt will not be built.")
-    endif()
+  find_package(ROCM-SMI)
+  if(${ROCM-SMI_FOUND})
+    set(HAVE_ROCM-SMI TRUE)
+  else()
+    message("ROCM-SMI was not found, ROCMpmt will not be built.")
+  endif()
 endif()
 
 # Config file
-configure_file(
-    ${PROJECT_SOURCE_DIR}/cmake/config/pmt-config.h.in
-    ${PROJECT_BINARY_DIR}/pmt-config.h
-)
+configure_file(${PROJECT_SOURCE_DIR}/cmake/config/pmt-config.h.in
+               ${PROJECT_BINARY_DIR}/pmt-config.h)
 
-include_directories(
-    ${PROJECT_BINARY_DIR}
-)
-install(
-    FILES
-    ${PROJECT_BINARY_DIR}/pmt-config.h
-    DESTINATION
-    include
-)
+include_directories(${PROJECT_BINARY_DIR})
+install(FILES ${PROJECT_BINARY_DIR}/pmt-config.h DESTINATION include)
 
 # Installation
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR} CACHE PATH
-    "pmt install prefix" FORCE)
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX
+      ${CMAKE_BINARY_DIR}
+      CACHE PATH "pmt install prefix" FORCE)
 endif()
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -104,18 +96,14 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH True)
 add_subdirectory(common)
 
 # PMT library
-add_library(
-    pmt
-    SHARED
-    $<TARGET_OBJECTS:pmt-common>
-)
+add_library(pmt SHARED $<TARGET_OBJECTS:pmt-common>)
 
 # AMDGPUpmt
 add_subdirectory(amdgpu)
 
 # Arduinopmt
 if(${BUILD_ARDUINO_PMT})
-add_subdirectory(arduino)
+  add_subdirectory(arduino)
 endif()
 
 # Dummypmt
@@ -123,12 +111,12 @@ add_subdirectory(dummy)
 
 # Likwidpmt
 if(${LIKWID_FOUND})
-add_subdirectory(likwid)
+  add_subdirectory(likwid)
 endif()
 
 # NVMLpmt
 if(${CUDAToolkit_FOUND})
-add_subdirectory(nvml)
+  add_subdirectory(nvml)
 endif()
 
 # Jetsonpmt
@@ -136,7 +124,7 @@ add_subdirectory(jetson)
 
 #Python Bindings
 if(${pybind11_FOUND})
-    add_subdirectory(python)
+  add_subdirectory(python)
 endif()
 
 # Raplpmt
@@ -144,23 +132,17 @@ add_subdirectory(rapl)
 
 # ROCMpmt
 if(${ROCM-SMI_FOUND})
-add_subdirectory(rocm)
+  add_subdirectory(rocm)
 endif()
 
 # Xilinxpmt
 add_subdirectory(xilinx)
 
 # Public header file
-set_target_properties(
-    pmt
-    PROPERTIES
-    PUBLIC_HEADER
-    pmt.h
-)
+set_target_properties(pmt PROPERTIES PUBLIC_HEADER pmt.h)
 
 # Install library
 install(
-    TARGETS pmt
-    LIBRARY DESTINATION lib
-    PUBLIC_HEADER DESTINATION include
-)
+  TARGETS pmt
+  LIBRARY DESTINATION lib
+  PUBLIC_HEADER DESTINATION include)

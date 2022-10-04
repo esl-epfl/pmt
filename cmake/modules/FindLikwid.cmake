@@ -16,4 +16,5 @@ get_filename_component(_LIKWID_INC_DIR ${LIKWID_LIB_DIR}/../include ABSOLUTE)
 # search for headers relative to the library
 find_path(LIKWID_INCLUDE_DIR likwid.h PATHS ${_LIKWID_INC_DIR})
 
-find_package_handle_standard_args(Likwid DEFAULT_MSG LIKWID_LIBRARY LIKWID_INCLUDE_DIR)
+find_package_handle_standard_args(Likwid DEFAULT_MSG LIKWID_LIBRARY
+                                  LIKWID_INCLUDE_DIR)

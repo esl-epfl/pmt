@@ -17,12 +17,12 @@ namespace pmt {
 namespace xilinx {
 
 class Xilinxpmt_ : public Xilinxpmt {
-public:
+ public:
   Xilinxpmt_(int device_number);
 
-private:
+ private:
   class XilinxState {
-  public:
+   public:
     operator State();
     double timeAtRead;
     double instantaneousPower = 0;
@@ -34,7 +34,7 @@ private:
   virtual const char *getDumpFileName() { return "/tmp/xilinxpmt.out"; }
 
   virtual int getDumpInterval() {
-    return 100; // milliseconds
+    return 100;  // milliseconds
   }
 
   std::string filename;
@@ -103,5 +103,5 @@ Xilinxpmt_::XilinxState Xilinxpmt_::read_xilinx() {
 
 State Xilinxpmt_::measure() { return read_xilinx(); }
 
-} // end namespace xilinx
-} // end namespace pmt
+}  // end namespace xilinx
+}  // end namespace pmt

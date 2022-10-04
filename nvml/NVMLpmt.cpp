@@ -29,13 +29,13 @@ namespace pmt {
 namespace nvml {
 
 class NVMLpmt_ : public NVMLpmt {
-public:
+ public:
   NVMLpmt_(int device_number);
   ~NVMLpmt_();
 
-private:
+ private:
   class NVMLState {
-  public:
+   public:
     operator State();
     double timeAtRead;
     unsigned int instantaneousPower = 0;
@@ -47,7 +47,7 @@ private:
   virtual const char *getDumpFileName() { return "/tmp/nvmlpmt.out"; }
 
   virtual int getDumpInterval() {
-    return 10; // milliseconds
+    return 10;  // milliseconds
   }
 
   NVMLState previousState;
@@ -112,5 +112,5 @@ NVMLpmt_::NVMLState NVMLpmt_::read_nvml() {
 
 State NVMLpmt_::measure() { return read_nvml(); }
 
-} // end namespace nvml
-} // end namespace pmt
+}  // end namespace nvml
+}  // end namespace pmt

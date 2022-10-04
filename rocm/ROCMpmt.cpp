@@ -15,13 +15,13 @@ namespace pmt {
 namespace rocm {
 
 class ROCMpmt_ : public ROCMpmt {
-public:
+ public:
   ROCMpmt_(const unsigned device_number);
   ~ROCMpmt_();
 
-private:
+ private:
   class ROCMState {
-  public:
+   public:
     operator State();
     double timeAtRead;
     double instantaneousPower = 0;
@@ -33,7 +33,7 @@ private:
   virtual const char *getDumpFileName() { return "/tmp/rocmpmt.out"; }
 
   virtual int getDumpInterval() {
-    return 10; // milliseconds
+    return 10;  // milliseconds
   }
 
   unsigned int _device_number;
@@ -99,5 +99,5 @@ ROCMpmt_::~ROCMpmt_() {
 
 State ROCMpmt_::measure() { return read_rocm(); }
 
-} // end namespace rocm
-} // end namespace pmt
+}  // end namespace rocm
+}  // end namespace pmt

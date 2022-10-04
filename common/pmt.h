@@ -12,14 +12,14 @@
 namespace pmt {
 
 class State {
-public:
+ public:
   double timeAtRead;
   double joulesAtRead;
   std::vector<double> misc;
 };
 
 class pmt {
-public:
+ public:
   virtual ~pmt();
 
   virtual State read();
@@ -36,7 +36,7 @@ public:
   void mark(const State &startState, const State &currentState,
             const char *name = 0, unsigned tag = 0) const;
 
-protected:
+ protected:
   virtual State measure() = 0;
 
   virtual const char *getDumpFileName() = 0;
@@ -48,13 +48,13 @@ protected:
 
   static double get_wtime();
 
-private:
+ private:
   std::thread dumpThread;
   std::unique_ptr<std::ofstream> dumpFile = nullptr;
   mutable std::mutex dumpFileMutex;
   volatile bool stop = false;
   State previousState;
 };
-} // end namespace pmt
+}  // end namespace pmt
 
 #endif
