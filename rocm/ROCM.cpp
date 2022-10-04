@@ -9,15 +9,15 @@
 
 #include "rocm_smi/rocm_smi.h"
 
-#include "ROCMpmt.h"
+#include "ROCM.h"
 
 namespace pmt {
 namespace rocm {
 
-class ROCMpmt_ : public ROCMpmt {
+class ROCM_ : public ROCM {
  public:
-  ROCMpmt_(const unsigned device_number);
-  ~ROCMpmt_();
+  ROCM_(const unsigned device_number);
+  ~ROCM_();
 
  private:
   class ROCMState {
@@ -42,24 +42,24 @@ class ROCMpmt_ : public ROCMpmt {
   ROCMState read_rocm();
 };
 
-ROCMpmt_::ROCMState::operator State() {
+ROCM_::ROCMState::operator State() {
   State state;
   state.timeAtRead = timeAtRead;
   state.joulesAtRead = consumedEnergyDevice;
   return state;
 }
 
-ROCMpmt *ROCMpmt::create(int device_number) {
+ROCM *ROCM::create(int device_number) {
   rsmi_status_t ret;
   ret = rsmi_init(0);
   if (ret == RSMI_STATUS_PERMISSION || ret != RSMI_STATUS_SUCCESS) {
     std::cout << "ROCM-SMI initialization failed" << std::endl;
     exit(EXIT_FAILURE);
   }
-  return new ROCMpmt_(device_number);
+  return new ROCM_(device_number);
 }
 
-ROCMpmt_::ROCMpmt_(const unsigned device_number) {
+ROCM_::ROCM_(const unsigned device_number) {
   _device_number = device_number;
 
   State startState = read_rocm();
@@ -79,7 +79,7 @@ float get_power(unsigned device_number) {
   return static_cast<float>(val_ui64) * 1e-6;
 }
 
-ROCMpmt_::ROCMState ROCMpmt_::read_rocm() {
+ROCM_::ROCMState ROCM_::read_rocm() {
   ROCMState state;
   state.timeAtRead = get_wtime();
   state.instantaneousPower = get_power(_device_number);
@@ -92,12 +92,12 @@ ROCMpmt_::ROCMState ROCMpmt_::read_rocm() {
   return state;
 }
 
-ROCMpmt_::~ROCMpmt_() {
+ROCM_::~ROCM_() {
   stopDumpThread();
   rsmi_shut_down();
 }
 
-State ROCMpmt_::measure() { return read_rocm(); }
+State ROCM_::measure() { return read_rocm(); }
 
 }  // end namespace rocm
 }  // end namespace pmt
