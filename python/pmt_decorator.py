@@ -31,15 +31,15 @@ def pmt(platform, device_id = 0):
                     print("NVML not installed")
                     sys.exit(1)
             elif platform == "rapl":
-                pmt = ps.Raplpmt.create()
+                pmt = ps.Rapl.create()
             elif platform == "rocm":
                 try: 
-                    pmt = ps.ROCMpmt.create(device_id)
+                    pmt = ps.ROCM.create(device_id)
                 except AttributeError:
-                    print("ROCMpmt not installed")
+                    print("ROCM not installed")
                     sys.exit(1)
             elif platform == "xilinx":
-                pmt = ps.Xilinxpmt.create()
+                pmt = ps.Xilinx.create()
             else:
                 print("Invalid Option")
                 sys.exit(1)
@@ -89,15 +89,15 @@ def pmt_dump(platform, filename, device_id = 0):
                     print("NVML not installed")
                     sys.exit(1)
             elif platform == "rapl":
-                pmt = ps.Raplpmt.create()
+                pmt = ps.Rapl.create()
             elif platform == "rocm":
                 try: 
-                    pmt = ps.ROCMpmt.create(device_id)
+                    pmt = ps.ROCM.create(device_id)
                 except AttributeError:
-                    print("ROCMpmt not installed")
+                    print("ROCM not installed")
                     sys.exit(1)
             elif platform == "xilinx":
-                pmt = ps.Xilinxpmt.create()
+                pmt = ps.Xilinx.create()
             else:
                 print("Invalid Option")
                 sys.exit(1)

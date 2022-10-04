@@ -18,13 +18,13 @@
 #include <../nvml/NVML.h>
 #endif
 
-#include <../rapl/Raplpmt.h>
+#include <../rapl/Rapl.h>
 
 #ifdef BUILD_ROCM
-#include <../rocm/ROCMpmt.h>
+#include <../rocm/ROCM.h>
 #endif
 
-#include <../xilinx/Xilinxpmt.h>
+#include <../xilinx/Xilinx.h>
 
 namespace py = pybind11;
 
@@ -98,16 +98,16 @@ PYBIND11_MODULE(pypmt, m) {
       .def("stopDumpThread", &pmt::rapl::Rapl::stopDumpThread);
 
 #ifdef BUILD_ROCM
-  py::class_<pmt::rocm::ROCMpmt>(m, "ROCMpmt")
-      .def("create", &pmt::rocm::ROCMpmt::create)
-      .def("read", &pmt::rocm::ROCMpmt::read)
-      .def("startDumpThread", &pmt::rocm::ROCMpmt::startDumpThread)
-      .def("stopDumpThread", &pmt::rocm::ROCMpmt::stopDumpThread);
+  py::class_<pmt::rocm::ROCM>(m, "ROCM")
+      .def("create", &pmt::rocm::ROCM::create)
+      .def("read", &pmt::rocm::ROCM::read)
+      .def("startDumpThread", &pmt::rocm::ROCM::startDumpThread)
+      .def("stopDumpThread", &pmt::rocm::ROCM::stopDumpThread);
 #endif
 
-  py::class_<pmt::xilinx::Xilinxpmt>(m, "Xilinxpmt")
-      .def("create", &pmt::xilinx::Xilinxpmt::create)
-      .def("read", &pmt::xilinx::Xilinxpmt::read)
-      .def("startDumpThread", &pmt::xilinx::Xilinxpmt::startDumpThread)
-      .def("stopDumpThread", &pmt::xilinx::Xilinxpmt::stopDumpThread);
+  py::class_<pmt::xilinx::Xilinx>(m, "Xilinx")
+      .def("create", &pmt::xilinx::Xilinx::create)
+      .def("read", &pmt::xilinx::Xilinx::read)
+      .def("startDumpThread", &pmt::xilinx::Xilinx::startDumpThread)
+      .def("stopDumpThread", &pmt::xilinx::Xilinx::stopDumpThread);
 }
