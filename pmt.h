@@ -11,7 +11,7 @@
 #if defined(HAVE_NVML)
 #include "pmt/NVMLpmt.h"
 #endif
-#include "pmt/AMDGPUpmt.h"
+#include "pmt/AMDGPU.h"
 #include "pmt/Xilinxpmt.h"
 #include "pmt/Jetsonpmt.h"
 */

@@ -1,6 +1,6 @@
 #include <pybind11/pybind11.h>
 
-#include <../amdgpu/AMDGPUpmt.h>
+#include <../amdgpu/AMDGPU.h>
 #include <../common/pmt.h>
 
 #ifdef BUILD_ARDUINO
@@ -49,11 +49,11 @@ PYBIND11_MODULE(pypmt, m) {
 
   py::class_<pmt::State>(m, "State");
 
-  py::class_<pmt::amdgpu::AMDGPUpmt>(m, "AMDGPUpmt")
-      .def("create", &pmt::amdgpu::AMDGPUpmt::create)
-      .def("read", &pmt::amdgpu::AMDGPUpmt::read)
-      .def("startDumpThread", &pmt::amdgpu::AMDGPUpmt::startDumpThread)
-      .def("stopDumpThread", &pmt::amdgpu::AMDGPUpmt::stopDumpThread);
+  py::class_<pmt::amdgpu::AMDGPU>(m, "AMDGPU")
+      .def("create", &pmt::amdgpu::AMDGPU::create)
+      .def("read", &pmt::amdgpu::AMDGPU::read)
+      .def("startDumpThread", &pmt::amdgpu::AMDGPU::startDumpThread)
+      .def("stopDumpThread", &pmt::amdgpu::AMDGPU::stopDumpThread);
 
 #ifdef BUILD_ARDUINO
   py::class_<pmt::arduino::Arduinopmt>(m, "Arduinopmt")

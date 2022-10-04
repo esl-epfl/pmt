@@ -98,7 +98,7 @@ add_subdirectory(common)
 # PMT library
 add_library(pmt SHARED $<TARGET_OBJECTS:pmt-common>)
 
-# AMDGPUpmt
+# AMDGPU
 add_subdirectory(amdgpu)
 
 # Arduinopmt

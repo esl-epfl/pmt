@@ -7,7 +7,7 @@ def pmt(platform, device_id = 0):
     def decorator(func):
         def wrapper(*args, **kwargs):
             if platform == "amdgpu":
-                pmt = ps.AMDGPUpmt.create(device_id)
+                pmt = ps.AMDGPU.create(device_id)
             elif platform == "arduino":
                 try:
                     pmt = ps.Arduinopmt.create(device_id)
@@ -65,7 +65,7 @@ def pmt_dump(platform, filename, device_id = 0):
     def decorator(func):
         def wrapper(*args, **kwargs):
             if platform == "amdgpu":
-                pmt = ps.AMDGPUpmt.create(device_id)
+                pmt = ps.AMDGPU.create(device_id)
             elif platform == "arduino":
                 try:
                     pmt = ps.Arduinopmt.create(device_id)

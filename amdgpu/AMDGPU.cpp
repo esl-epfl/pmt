@@ -6,14 +6,14 @@
 #include <string>
 #include <vector>
 
-#include "AMDGPUpmt.h"
+#include "AMDGPU.h"
 
 namespace pmt {
 namespace amdgpu {
 
-class AMDGPUpmt_ : public AMDGPUpmt {
+class AMDGPU_ : public AMDGPU {
  public:
-  AMDGPUpmt_(const unsigned device_number);
+  AMDGPU_(const unsigned device_number);
 
  private:
   class AMDGPUState {
@@ -38,18 +38,16 @@ class AMDGPUpmt_ : public AMDGPUpmt {
   AMDGPUState read_amdgpu();
 };
 
-AMDGPUpmt_::AMDGPUState::operator State() {
+AMDGPU_::AMDGPUState::operator State() {
   State state;
   state.timeAtRead = timeAtRead;
   state.joulesAtRead = consumedEnergyDevice;
   return state;
 }
 
-AMDGPUpmt *AMDGPUpmt::create(int device_number) {
-  return new AMDGPUpmt_(device_number);
-}
+AMDGPU *AMDGPU::create(int device_number) { return new AMDGPU_(device_number); }
 
-AMDGPUpmt_::AMDGPUpmt_(const unsigned device_number) {
+AMDGPU_::AMDGPU_(const unsigned device_number) {
   // Power consumption is read from sysfs
   const char *dri_dir = "/sys/kernel/debug/dri";
 
@@ -97,7 +95,7 @@ float get_power(std::string &filename) {
   return -1;
 }
 
-AMDGPUpmt_::AMDGPUState AMDGPUpmt_::read_amdgpu() {
+AMDGPU_::AMDGPUState AMDGPU_::read_amdgpu() {
   AMDGPUState state;
   state.timeAtRead = get_wtime();
   state.instantaneousPower = get_power(filename);
@@ -110,7 +108,7 @@ AMDGPUpmt_::AMDGPUState AMDGPUpmt_::read_amdgpu() {
   return state;
 }
 
-State AMDGPUpmt_::measure() { return read_amdgpu(); }
+State AMDGPU_::measure() { return read_amdgpu(); }
 
 }  // end namespace amdgpu
 }  // end namespace pmt

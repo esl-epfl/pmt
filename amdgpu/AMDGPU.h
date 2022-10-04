@@ -5,9 +5,9 @@
 
 namespace pmt {
 namespace amdgpu {
-class AMDGPUpmt : public pmt {
+class AMDGPU : public pmt {
 public:
-  static AMDGPUpmt *create(int device_number = 0);
+  static AMDGPU *create(int device_number = 0);
 };
 } // end namespace amdgpu
 } // end namespace pmt
