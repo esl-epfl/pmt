@@ -49,7 +49,7 @@ set_target_properties(pypmt PROPERTIES CXX_VISIBILITY_PRESET "hidden"
 install(TARGETS pypmt DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python")
 
 install(
-  FILES PythonNVMLpmtDemo.py
+  FILES PythonNVMLDemo.py
   COMPONENT python
   DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
 

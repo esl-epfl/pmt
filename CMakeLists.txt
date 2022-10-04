@@ -49,7 +49,7 @@ if(${BUILD_LIKWID_PMT})
   endif()
 endif()
 
-# Find dependencies for NVMLpmt
+# Find dependencies for NVML
 if(${BUILD_NVML_PMT})
   find_package(CUDAToolkit QUIET)
   if(${CUDAToolkit_FOUND})
@@ -114,7 +114,7 @@ if(${LIKWID_FOUND})
   add_subdirectory(likwid)
 endif()
 
-# NVMLpmt
+# NVML
 if(${CUDAToolkit_FOUND})
   add_subdirectory(nvml)
 endif()

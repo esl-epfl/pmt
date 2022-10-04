@@ -1,4 +1,4 @@
-#include "NVMLpmt.h"
+#include "NVML.h"
 
 #include <iostream>
 #include <sstream>
@@ -28,10 +28,10 @@ inline void __checkNVMLCall(nvmlReturn_t result, const char *const func,
 namespace pmt {
 namespace nvml {
 
-class NVMLpmt_ : public NVMLpmt {
+class NVML_ : public NVML {
  public:
-  NVMLpmt_(int device_number);
-  ~NVMLpmt_();
+  NVML_(int device_number);
+  ~NVML_();
 
  private:
   class NVMLState {
@@ -44,7 +44,7 @@ class NVMLpmt_ : public NVMLpmt {
 
   virtual State measure();
 
-  virtual const char *getDumpFileName() { return "/tmp/nvmlpmt.out"; }
+  virtual const char *getDumpFileName() { return "/tmp/NVML.out"; }
 
   virtual int getDumpInterval() {
     return 10;  // milliseconds
@@ -58,18 +58,16 @@ class NVMLpmt_ : public NVMLpmt {
 #endif
 };
 
-NVMLpmt_::NVMLState::operator State() {
+NVML_::NVMLState::operator State() {
   State state;
   state.timeAtRead = timeAtRead;
   state.joulesAtRead = consumedEnergyDevice * 1e-3;
   return state;
 }
 
-NVMLpmt *NVMLpmt::create(int device_number) {
-  return new NVMLpmt_(device_number);
-}
+NVML *NVML::create(int device_number) { return new NVML_(device_number); }
 
-NVMLpmt_::NVMLpmt_(int device_number) {
+NVML_::NVML_(int device_number) {
   char *cstr_pmt_device = getenv("PMT_DEVICE");
   unsigned device_number_ =
       cstr_pmt_device ? atoi(cstr_pmt_device) : device_number;
@@ -83,14 +81,14 @@ NVMLpmt_::NVMLpmt_(int device_number) {
   previousState.consumedEnergyDevice = 0;
 }
 
-NVMLpmt_::~NVMLpmt_() {
+NVML_::~NVML_() {
 #if defined(HAVE_NVML)
   stopDumpThread();
   checkNVMLCall(nvmlShutdown());
 #endif
 }
 
-NVMLpmt_::NVMLState NVMLpmt_::read_nvml() {
+NVML_::NVMLState NVML_::read_nvml() {
   NVMLState state;
   state.timeAtRead = get_wtime();
 
@@ -110,7 +108,7 @@ NVMLpmt_::NVMLState NVMLpmt_::read_nvml() {
   return state;
 }
 
-State NVMLpmt_::measure() { return read_nvml(); }
+State NVML_::measure() { return read_nvml(); }
 
 }  // end namespace nvml
 }  // end namespace pmt

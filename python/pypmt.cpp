@@ -15,7 +15,7 @@
 #endif
 
 #ifdef BUILD_NVML
-#include <../nvml/NVMLpmt.h>
+#include <../nvml/NVML.h>
 #endif
 
 #include <../rapl/Raplpmt.h>
@@ -84,11 +84,11 @@ PYBIND11_MODULE(pypmt, m) {
 #endif
 
 #ifdef BUILD_NVML
-  py::class_<pmt::nvml::NVMLpmt>(m, "NVMLpmt")
-      .def("create", &pmt::nvml::NVMLpmt::create)
-      .def("read", &pmt::nvml::NVMLpmt::read)
-      .def("startDumpThread", &pmt::nvml::NVMLpmt::startDumpThread)
-      .def("stopDumpThread", &pmt::nvml::NVMLpmt::stopDumpThread);
+  py::class_<pmt::nvml::NVML>(m, "NVML")
+      .def("create", &pmt::nvml::NVML::create)
+      .def("read", &pmt::nvml::NVML::read)
+      .def("startDumpThread", &pmt::nvml::NVML::startDumpThread)
+      .def("stopDumpThread", &pmt::nvml::NVML::stopDumpThread);
 #endif
 
   py::class_<pmt::rapl::Raplpmt>(m, "Raplpmt")

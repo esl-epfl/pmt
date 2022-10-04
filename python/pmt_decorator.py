@@ -26,9 +26,9 @@ def pmt(platform, device_id = 0):
                     sys.exit(1)
             elif platform == "nvml":
                 try:
-                    pmt = ps.NVMLpmt.create(device_id)
+                    pmt = ps.NVML.create(device_id)
                 except AttributeError:
-                    print("NVMLpmt not installed")
+                    print("NVML not installed")
                     sys.exit(1)
             elif platform == "rapl":
                 pmt = ps.Raplpmt.create()
@@ -84,9 +84,9 @@ def pmt_dump(platform, filename, device_id = 0):
                     sys.exit(1)
             elif platform == "nvml":
                 try:
-                    pmt = ps.NVMLpmt.create(device_id)
+                    pmt = ps.NVML.create(device_id)
                 except AttributeError:
-                    print("NVMLpmt not installed")
+                    print("NVML not installed")
                     sys.exit(1)
             elif platform == "rapl":
                 pmt = ps.Raplpmt.create()

@@ -9,7 +9,7 @@
 #endif
 #include "pmt/Raplpmt.h"
 #if defined(HAVE_NVML)
-#include "pmt/NVMLpmt.h"
+#include "pmt/NVML.h"
 #endif
 #include "pmt/AMDGPU.h"
 #include "pmt/Xilinxpmt.h"
