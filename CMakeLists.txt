@@ -106,7 +106,7 @@ if(${BUILD_ARDUINO_PMT})
   add_subdirectory(arduino)
 endif()
 
-# Dummypmt
+# Dummy
 add_subdirectory(dummy)
 
 # Likwidpmt

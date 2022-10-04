@@ -1,7 +1,7 @@
 #include "pmt-config.h"
 
 #include "pmt/pmt.h"
-#include "pmt/Dummypmt.h"
+#include "pmt/Dummy.h"
 /*
 #include "pmt/Arduino.h"
 #if defined(HAVE_LIKWID)

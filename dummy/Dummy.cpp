@@ -1,8 +1,8 @@
-#include "Dummypmt.h"
+#include "Dummy.h"
 
 namespace pmt {
 
-class Dummypmt_ : public Dummypmt {
+class Dummy_ : public Dummy {
  private:
   virtual State measure();
 
@@ -11,9 +11,9 @@ class Dummypmt_ : public Dummypmt {
   virtual int getDumpInterval() { return 0; }
 };
 
-Dummypmt *Dummypmt::create() { return new Dummypmt_(); }
+Dummy *Dummy::create() { return new Dummy_(); }
 
-State Dummypmt_::measure() {
+State Dummy_::measure() {
   State state;
   state.timeAtRead = pmt::get_wtime();
   state.joulesAtRead = 0;

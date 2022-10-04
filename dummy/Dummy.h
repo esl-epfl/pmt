@@ -4,9 +4,9 @@
 #include "pmt.h"
 
 namespace pmt {
-class Dummypmt : public pmt {
+class Dummy : public pmt {
 public:
-  static Dummypmt *create();
+  static Dummy *create();
 };
 } // end namespace pmt
 

@@ -15,7 +15,7 @@ def pmt(platform, device_id = 0):
                     print("Arduino not installed")
                     sys.exit(1)
             elif platform == "dummy":
-                pmt = ps.Dummypmt.create()
+                pmt = ps.Dummy.create()
             elif platform == "jetson":
                 pmt = ps.Jetsonpmt.create()
             elif platform == "likwid":
@@ -73,7 +73,7 @@ def pmt_dump(platform, filename, device_id = 0):
                     print("Arduino not installed")
                     sys.exit(1)
             elif platform == "dummy":
-                pmt = ps.Dummypmt.create()
+                pmt = ps.Dummy.create()
             elif platform == "jetson":
                 pmt = ps.Jetsonpmt.create()
             elif platform == "likwid":
