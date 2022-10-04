@@ -3,7 +3,7 @@ import time
 
 import pypmt as ps
 
-def pmt(platform, device_id = 0):
+def pmt_meas(platform, device_id = 0):
     def decorator(func):
         def wrapper(*args, **kwargs):
             if platform == "amdgpu":

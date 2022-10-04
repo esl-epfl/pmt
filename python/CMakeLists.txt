@@ -54,6 +54,6 @@ install(
   DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
 
 install(
-  FILES pmt_decorator.py
+  FILES pmt.py
   COMPONENT python
   DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python")

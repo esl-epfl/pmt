@@ -1,10 +1,10 @@
 import time
 
-from pmt_decorator import pmt
+from pmt import *
 
-@pmt('nvml')
+@pmt_meas('nvml')
 def my_kernel():
-   time.sleep(10)
+   time.sleep(1)
 
 if __name__ == "__main__":
    print(my_kernel())
