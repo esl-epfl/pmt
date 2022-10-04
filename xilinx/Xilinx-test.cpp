@@ -1,9 +1,9 @@
 #include "../common/pmt-test.h"
 
-#include "Xilinxpmt.h"
+#include "Xilinx.h"
 
 int main(int argc, char **argv) {
-  auto sensor = pmt::xilinx::Xilinxpmt::create();
+  auto sensor = pmt::xilinx::Xilinx::create();
   run(sensor, argc, argv);
   delete sensor;
 }

@@ -11,14 +11,14 @@
 #include <sstream>
 #include <vector>
 
-#include "Xilinxpmt.h"
+#include "Xilinx.h"
 
 namespace pmt {
 namespace xilinx {
 
-class Xilinxpmt_ : public Xilinxpmt {
+class Xilinx_ : public Xilinx {
  public:
-  Xilinxpmt_(int device_number);
+  Xilinx_(int device_number);
 
  private:
   class XilinxState {
@@ -43,18 +43,18 @@ class Xilinxpmt_ : public Xilinxpmt {
   XilinxState read_xilinx();
 };
 
-Xilinxpmt_::XilinxState::operator State() {
+Xilinx_::XilinxState::operator State() {
   State state;
   state.timeAtRead = timeAtRead;
   state.joulesAtRead = consumedEnergyDevice * 1e-6;
   return state;
 }
 
-Xilinxpmt *Xilinxpmt::create(int device_number) {
-  return new Xilinxpmt_(device_number);
+Xilinx *Xilinx::create(int device_number) {
+  return new Xilinx_(device_number);
 }
 
-Xilinxpmt_::Xilinxpmt_(int device_number) {
+Xilinx_::Xilinx_(int device_number) {
   char *c_str_filename = std::getenv("PMT_DEVICE");
   if (c_str_filename) {
     filename = c_str_filename;
@@ -88,7 +88,7 @@ float get_power(std::string &filename) {
   }
 }
 
-Xilinxpmt_::XilinxState Xilinxpmt_::read_xilinx() {
+Xilinx_::XilinxState Xilinx_::read_xilinx() {
   XilinxState state;
   state.timeAtRead = get_wtime();
   state.instantaneousPower = get_power(filename);
@@ -101,7 +101,7 @@ Xilinxpmt_::XilinxState Xilinxpmt_::read_xilinx() {
   return state;
 }
 
-State Xilinxpmt_::measure() { return read_xilinx(); }
+State Xilinx_::measure() { return read_xilinx(); }
 
 }  // end namespace xilinx
 }  // end namespace pmt
