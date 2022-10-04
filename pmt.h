@@ -5,7 +5,7 @@
 /*
 #include "pmt/Arduino.h"
 #if defined(HAVE_LIKWID)
-#include "pmt/Likwidpmt.h"
+#include "pmt/Likwid.h"
 #endif
 #include "pmt/Raplpmt.h"
 #if defined(HAVE_NVML)

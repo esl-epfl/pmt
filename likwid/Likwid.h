@@ -5,9 +5,9 @@
 
 namespace pmt {
 namespace likwid {
-class Likwidpmt : public pmt {
+class Likwid : public pmt {
 public:
-  static Likwidpmt *create();
+  static Likwid *create();
 };
 } // end namespace likwid
 } // end namespace pmt

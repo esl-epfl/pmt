@@ -20,9 +20,9 @@ def pmt(platform, device_id = 0):
                 pmt = ps.Jetson.create()
             elif platform == "likwid":
                 try:
-                    pmt = ps.Likwidpmt.create(device_id)
+                    pmt = ps.Likwid.create(device_id)
                 except AttributeError:
-                    print("Likwidpmt not installed")
+                    print("Likwid not installed")
                     sys.exit(1)
             elif platform == "nvml":
                 try:
@@ -78,9 +78,9 @@ def pmt_dump(platform, filename, device_id = 0):
                 pmt = ps.Jetson.create()
             elif platform == "likwid":
                 try:
-                    pmt = ps.Likwidpmt.create(device_id)
+                    pmt = ps.Likwid.create(device_id)
                 except AttributeError:
-                    print("Likwidpmt not installed")
+                    print("Likwid not installed")
                     sys.exit(1)
             elif platform == "nvml":
                 try:

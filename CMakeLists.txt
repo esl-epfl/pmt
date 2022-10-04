@@ -39,13 +39,13 @@ if(${BUILD_ARDUINO_PMT})
   set(POWERSENSOR_SOURCE ${POWERSENSOR_ROOT_DIR}/PowerSensor.cc)
 endif()
 
-# Find dependencies for Likwidpmt
+# Find dependencies for Likwid
 if(${BUILD_LIKWID_PMT})
   find_package(Likwid QUIET)
   if(${LIKWID_FOUND})
     set(HAVE_LIKWID TRUE)
   else()
-    message("Likwid was not found, Likwidpmt will not be built.")
+    message("Likwid was not found, Likwid will not be built.")
   endif()
 endif()
 
@@ -109,7 +109,7 @@ endif()
 # Dummy
 add_subdirectory(dummy)
 
-# Likwidpmt
+# Likwid
 if(${LIKWID_FOUND})
   add_subdirectory(likwid)
 endif()

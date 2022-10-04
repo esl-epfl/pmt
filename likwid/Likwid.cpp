@@ -1,4 +1,4 @@
-#include "Likwidpmt.h"
+#include "Likwid.h"
 
 #include <iostream>
 
@@ -19,17 +19,15 @@
 namespace pmt {
 namespace likwid {
 
-class Likwidpmt_ : public Likwidpmt {
+class Likwid_ : public Likwid {
  public:
-  Likwidpmt_();
-  ~Likwidpmt_();
+  Likwid_();
+  ~Likwid_();
 
  private:
   virtual State measure() override;
 
-  virtual const char *getDumpFileName() override {
-    return "/tmp/likwidpmt.out";
-  }
+  virtual const char *getDumpFileName() override { return "/tmp/Likwid.out"; }
 
   virtual int getDumpInterval() override {
     return 100;  // milliseconds
@@ -41,9 +39,9 @@ class Likwidpmt_ : public Likwidpmt {
   double joulesTotal = 0;
 };
 
-Likwidpmt *Likwidpmt::create() { return new Likwidpmt_(); }
+Likwid *Likwid::create() { return new Likwid_(); }
 
-Likwidpmt_::Likwidpmt_() {
+Likwid_::Likwid_() {
 #if defined(HAVE_LIKWID)
   // Load the topology module
   if (topology_init() < 0) {
@@ -122,7 +120,7 @@ Likwidpmt_::Likwidpmt_() {
 #endif
 }  // end constructor
 
-Likwidpmt_::~Likwidpmt_() {
+Likwid_::~Likwid_() {
 #if defined(HAVE_LIKWID)
   stopDumpThread();
   perfmon_stopCounters();
@@ -131,7 +129,7 @@ Likwidpmt_::~Likwidpmt_() {
 #endif
 }  // end destructor
 
-State Likwidpmt_::measure() {
+State Likwid_::measure() {
 #if defined(HAVE_LIKWID)
   for (int groupId = 0; groupId < nr_groups; groupId++) {
     // Read performance counters

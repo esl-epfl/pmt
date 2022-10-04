@@ -11,7 +11,7 @@
 #include <../jetson/Jetson.h>
 
 #ifdef BUILD_LIKWID
-#include <../likwid/Likwidpmt.h>
+#include <../likwid/Likwid.h>
 #endif
 
 #ifdef BUILD_NVML
@@ -76,11 +76,11 @@ PYBIND11_MODULE(pypmt, m) {
       .def("stopDumpThread", &pmt::jetson::Jetson::stopDumpThread);
 
 #ifdef BUILD_LIKWID
-  py::class_<pmt::likwid::Likwidpmt>(m, "Likwidpmt")
-      .def("create", &pmt::likwid::Likwidpmt::create)
-      .def("read", &pmt::likwid::Likwidpmt::read)
-      .def("startDumpThread", &pmt::likwid::Likwidpmt::startDumpThread)
-      .def("stopDumpThread", &pmt::likwid::Likwidpmt::stopDumpThread);
+  py::class_<pmt::likwid::Likwid>(m, "Likwid")
+      .def("create", &pmt::likwid::Likwid::create)
+      .def("read", &pmt::likwid::Likwid::read)
+      .def("startDumpThread", &pmt::likwid::Likwid::startDumpThread)
+      .def("stopDumpThread", &pmt::likwid::Likwid::stopDumpThread);
 #endif
 
 #ifdef BUILD_NVML
