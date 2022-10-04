@@ -1,0 +1,20 @@
+image: ubuntu:20.04
+
+before_script:
+ - apt-get update -qq
+ - export DEBIAN_FRONTEND=noninteractive && apt-get install -y -qq
+    cmake
+    g++
+    python3-pip
+ - pip3 install clang-format==9.0.0 cmake-format
+
+format:
+  script:
+    - ./scripts/run-format.sh
+
+pmt:
+  script:
+    - mkdir build
+    - cd build
+    - cmake  ..
+    - make
