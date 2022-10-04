@@ -5,9 +5,9 @@
 
 namespace pmt {
 namespace arduino {
-class Arduinopmt : public pmt {
+class Arduino : public pmt {
 public:
-  static Arduinopmt *create(const char *device = default_device().c_str());
+  static Arduino *create(const char *device = default_device().c_str());
 
   static std::string default_device() { return "/dev/ttyACM0"; }
 };

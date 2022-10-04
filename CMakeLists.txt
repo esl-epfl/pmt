@@ -32,7 +32,7 @@ option(BUILD_NVML_PMT "" OFF)
 option(BUILD_PYTHON_PMT "" OFF)
 option(BUILD_ROCM_PMT "" OFF)
 
-# Find dependencies for Arduinopmt
+# Find dependencies for Arduino
 if(${BUILD_ARDUINO_PMT})
   set(POWERSENSOR_ROOT_DIR ${CMAKE_SOURCE_DIR}/arduino/PowerSensor)
   set(POWERSENSOR_HEADER ${POWERSENSOR_ROOT_DIR}/PowerSensor.h)
@@ -101,7 +101,7 @@ add_library(pmt SHARED $<TARGET_OBJECTS:pmt-common>)
 # AMDGPU
 add_subdirectory(amdgpu)
 
-# Arduinopmt
+# Arduino
 if(${BUILD_ARDUINO_PMT})
   add_subdirectory(arduino)
 endif()

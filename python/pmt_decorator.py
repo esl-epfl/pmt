@@ -10,9 +10,9 @@ def pmt(platform, device_id = 0):
                 pmt = ps.AMDGPU.create(device_id)
             elif platform == "arduino":
                 try:
-                    pmt = ps.Arduinopmt.create(device_id)
+                    pmt = ps.Arduino.create(device_id)
                 except AttributeError:
-                    print("Arduinopmt not installed")
+                    print("Arduino not installed")
                     sys.exit(1)
             elif platform == "dummy":
                 pmt = ps.Dummypmt.create()
@@ -68,9 +68,9 @@ def pmt_dump(platform, filename, device_id = 0):
                 pmt = ps.AMDGPU.create(device_id)
             elif platform == "arduino":
                 try:
-                    pmt = ps.Arduinopmt.create(device_id)
+                    pmt = ps.Arduino.create(device_id)
                 except AttributeError:
-                    print("Arduinopmt not installed")
+                    print("Arduino not installed")
                     sys.exit(1)
             elif platform == "dummy":
                 pmt = ps.Dummypmt.create()

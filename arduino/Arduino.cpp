@@ -1,4 +1,4 @@
-#include "Arduinopmt.h"
+#include "Arduino.h"
 
 /*
     Include original PowerSensor header file
@@ -14,15 +14,15 @@ double (&_Joules)(const _State &, const _State &, int) = PowerSensor::Joules;
 namespace pmt {
 namespace arduino {
 
-class Arduinopmt_ : public Arduinopmt {
+class Arduino_ : public Arduino {
  public:
-  Arduinopmt_(const char *device);
-  ~Arduinopmt_();
+  Arduino_(const char *device);
+  ~Arduino_();
 
   State measure();
 
  private:
-  virtual const char *getDumpFileName() { return "/tmp/arduinopmt.out"; }
+  virtual const char *getDumpFileName() { return "/tmp/Arduino.out"; }
 
   virtual int getDumpInterval() {
     return 1;  // milliseconds
@@ -32,18 +32,16 @@ class Arduinopmt_ : public Arduinopmt {
   _State _firstState;
 };
 
-Arduinopmt *Arduinopmt::create(const char *device) {
-  return new Arduinopmt_(device);
-}
+Arduino *Arduino::create(const char *device) { return new Arduino_(device); }
 
-Arduinopmt_::Arduinopmt_(const char *device) {
+Arduino_::Arduino_(const char *device) {
   _powersensor = new _PowerSensor(device);
   _firstState = _powersensor->read();
 }
 
-Arduinopmt_::~Arduinopmt_() { delete _powersensor; }
+Arduino_::~Arduino_() { delete _powersensor; }
 
-State Arduinopmt_::measure() {
+State Arduino_::measure() {
   _State _state = _powersensor->read();
   State state;
   state.timeAtRead = _seconds(_firstState, _state);

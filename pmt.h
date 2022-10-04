@@ -3,7 +3,7 @@
 #include "pmt/pmt.h"
 #include "pmt/Dummypmt.h"
 /*
-#include "pmt/Arduinopmt.h"
+#include "pmt/Arduino.h"
 #if defined(HAVE_LIKWID)
 #include "pmt/Likwidpmt.h"
 #endif

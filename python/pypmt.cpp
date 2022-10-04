@@ -4,7 +4,7 @@
 #include <../common/pmt.h>
 
 #ifdef BUILD_ARDUINO
-#include <../arduino/Arduinopmt.h>
+#include <../arduino/Arduino.h>
 #endif
 
 #include <../dummy/Dummypmt.h>
@@ -56,11 +56,11 @@ PYBIND11_MODULE(pypmt, m) {
       .def("stopDumpThread", &pmt::amdgpu::AMDGPU::stopDumpThread);
 
 #ifdef BUILD_ARDUINO
-  py::class_<pmt::arduino::Arduinopmt>(m, "Arduinopmt")
-      .def("create", &pmt::arduino::Arduinopmt::create)
-      .def("read", &pmt::arduino::Arduinopmt::read)
-      .def("startDumpThread", &pmt::arduino::Arduinopmt::startDumpThread)
-      .def("stopDumpThread", &pmt::arduino::Arduinopmt::stopDumpThread);
+  py::class_<pmt::arduino::Arduino>(m, "Arduino")
+      .def("create", &pmt::arduino::Arduino::create)
+      .def("read", &pmt::arduino::Arduino::read)
+      .def("startDumpThread", &pmt::arduino::Arduino::startDumpThread)
+      .def("stopDumpThread", &pmt::arduino::Arduino::stopDumpThread);
 #endif
 
   py::class_<pmt::Dummypmt>(m, "Dummypmt")
