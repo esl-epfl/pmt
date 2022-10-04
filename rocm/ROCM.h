@@ -6,10 +6,10 @@
 namespace pmt {
 namespace rocm {
 class ROCM : public pmt {
-public:
+ public:
   static ROCM *create(int device_number = 0);
 };
-} // end namespace rocm
-} // end namespace pmt
+}  // end namespace rocm
+}  // end namespace pmt
 
 #endif

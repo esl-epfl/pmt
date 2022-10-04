@@ -6,9 +6,9 @@
 namespace pmt {
 namespace xilinx {
 class Xilinx : public pmt {
-public:
+ public:
   static Xilinx *create(int device_number = 0);
 };
-} // end namespace xilinx
-} // end namespace pmt
+}  // end namespace xilinx
+}  // end namespace pmt
 #endif
