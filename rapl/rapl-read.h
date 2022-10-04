@@ -1,6 +1,7 @@
 #ifndef RAPL_READ_H_
 #define RAPL_READ_H_
 
+namespace raplread {
 class Rapl {
 public:
   Rapl();
@@ -20,5 +21,7 @@ private:
   int total_packages = 0;
   int package_map[MAX_PACKAGES];
 };
+
+} // end namespace raplread
 
 #endif

@@ -91,11 +91,11 @@ PYBIND11_MODULE(pypmt, m) {
       .def("stopDumpThread", &pmt::nvml::NVML::stopDumpThread);
 #endif
 
-  py::class_<pmt::rapl::Raplpmt>(m, "Raplpmt")
-      .def("create", &pmt::rapl::Raplpmt::create)
-      .def("read", &pmt::rapl::Raplpmt::read)
-      .def("startDumpThread", &pmt::rapl::Raplpmt::startDumpThread)
-      .def("stopDumpThread", &pmt::rapl::Raplpmt::stopDumpThread);
+  py::class_<pmt::rapl::Rapl>(m, "Rapl")
+      .def("create", &pmt::rapl::Rapl::create)
+      .def("read", &pmt::rapl::Rapl::read)
+      .def("startDumpThread", &pmt::rapl::Rapl::startDumpThread)
+      .def("stopDumpThread", &pmt::rapl::Rapl::stopDumpThread);
 
 #ifdef BUILD_ROCM
   py::class_<pmt::rocm::ROCMpmt>(m, "ROCMpmt")

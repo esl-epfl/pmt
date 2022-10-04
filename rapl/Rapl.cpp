@@ -1,10 +1,10 @@
-#include "Raplpmt.h"
+#include "Rapl.h"
 #include "rapl-read.h"
 
 namespace pmt {
 namespace rapl {
 
-class Raplpmt_ : public Raplpmt {
+class Rapl_ : public Rapl {
  private:
   virtual State measure();
 
@@ -14,12 +14,12 @@ class Raplpmt_ : public Raplpmt {
     return 500;  // milliseconds
   }
 
-  Rapl rapl;
+  raplread::Rapl rapl;
 };
 
-Raplpmt *Raplpmt::create() { return new Raplpmt_(); }
+Rapl *Rapl::create() { return new Rapl_(); }
 
-State Raplpmt_::measure() {
+State Rapl_::measure() {
   State state;
   state.timeAtRead = get_wtime();
   state.joulesAtRead = rapl.measure();

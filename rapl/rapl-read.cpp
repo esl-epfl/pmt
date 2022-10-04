@@ -53,6 +53,8 @@
 
 #define CPU_AMD_FAM17H 0xc000
 
+using namespace raplread;
+
 Rapl::Rapl() {
   // Detect cpu and packages
   detect_cpu();

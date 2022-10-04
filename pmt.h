@@ -7,7 +7,7 @@
 #if defined(HAVE_LIKWID)
 #include "pmt/Likwid.h"
 #endif
-#include "pmt/Raplpmt.h"
+#include "pmt/Rapl.h"
 #if defined(HAVE_NVML)
 #include "pmt/NVML.h"
 #endif

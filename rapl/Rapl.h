@@ -5,9 +5,9 @@
 
 namespace pmt {
 namespace rapl {
-class Raplpmt : public pmt {
+class Rapl : public pmt {
 public:
-  static Raplpmt *create();
+  static Rapl *create();
 };
 } // end namespace rapl
 } // end namespace pmt
