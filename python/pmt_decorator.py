@@ -17,7 +17,7 @@ def pmt(platform, device_id = 0):
             elif platform == "dummy":
                 pmt = ps.Dummy.create()
             elif platform == "jetson":
-                pmt = ps.Jetsonpmt.create()
+                pmt = ps.Jetson.create()
             elif platform == "likwid":
                 try:
                     pmt = ps.Likwidpmt.create(device_id)
@@ -75,7 +75,7 @@ def pmt_dump(platform, filename, device_id = 0):
             elif platform == "dummy":
                 pmt = ps.Dummy.create()
             elif platform == "jetson":
-                pmt = ps.Jetsonpmt.create()
+                pmt = ps.Jetson.create()
             elif platform == "likwid":
                 try:
                     pmt = ps.Likwidpmt.create(device_id)

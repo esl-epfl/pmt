@@ -8,7 +8,7 @@
 #endif
 
 #include <../dummy/Dummy.h>
-#include <../jetson/Jetsonpmt.h>
+#include <../jetson/Jetson.h>
 
 #ifdef BUILD_LIKWID
 #include <../likwid/Likwidpmt.h>
@@ -69,11 +69,11 @@ PYBIND11_MODULE(pypmt, m) {
       .def("startDumpThread", &pmt::Dummy::startDumpThread)
       .def("stopDumpThread", &pmt::Dummy::stopDumpThread);
 
-  py::class_<pmt::jetson::Jetsonpmt>(m, "Jetsonpmt")
-      .def("create", &pmt::jetson::Jetsonpmt::create)
-      .def("read", &pmt::jetson::Jetsonpmt::read)
-      .def("startDumpThread", &pmt::jetson::Jetsonpmt::startDumpThread)
-      .def("stopDumpThread", &pmt::jetson::Jetsonpmt::stopDumpThread);
+  py::class_<pmt::jetson::Jetson>(m, "Jetson")
+      .def("create", &pmt::jetson::Jetson::create)
+      .def("read", &pmt::jetson::Jetson::read)
+      .def("startDumpThread", &pmt::jetson::Jetson::startDumpThread)
+      .def("stopDumpThread", &pmt::jetson::Jetson::stopDumpThread);
 
 #ifdef BUILD_LIKWID
   py::class_<pmt::likwid::Likwidpmt>(m, "Likwidpmt")

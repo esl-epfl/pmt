@@ -119,7 +119,7 @@ if(${CUDAToolkit_FOUND})
   add_subdirectory(nvml)
 endif()
 
-# Jetsonpmt
+# Jetson
 add_subdirectory(jetson)
 
 #Python Bindings

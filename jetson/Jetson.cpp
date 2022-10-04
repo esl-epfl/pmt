@@ -4,14 +4,14 @@
 #include <omp.h>
 #include <unistd.h>
 
-#include "Jetsonpmt.h"
+#include "Jetson.h"
 
 namespace pmt {
 namespace jetson {
 
-class Jetsonpmt_ : public Jetsonpmt {
+class Jetson_ : public Jetson {
  public:
-  Jetsonpmt_();
+  Jetson_();
 
  private:
   class JetsonState {
@@ -30,7 +30,7 @@ class Jetsonpmt_ : public Jetsonpmt {
 
   virtual State measure();
 
-  virtual const char *getDumpFileName() { return "/tmp/jetsonpmt.out"; }
+  virtual const char *getDumpFileName() { return "/tmp/Jetson.out"; }
 
   virtual int getDumpInterval() {
     return 50;  // milliseconds
@@ -40,7 +40,7 @@ class Jetsonpmt_ : public Jetsonpmt {
   JetsonState read_jetson();
 };
 
-Jetsonpmt_::JetsonState::operator State() {
+Jetson_::JetsonState::operator State() {
   State state;
   state.timeAtRead = timeAtRead;
   state.joulesAtRead = consumedEnergyTotal * 1e-3;
@@ -57,14 +57,14 @@ Jetsonpmt_::JetsonState::operator State() {
   return state;
 }
 
-Jetsonpmt *Jetsonpmt::create() { return new Jetsonpmt_(); }
+Jetson *Jetson::create() { return new Jetson_(); }
 
-Jetsonpmt_::Jetsonpmt_() {
+Jetson_::Jetson_() {
   previousState = read_jetson();
   previousState.consumedEnergyTotal = 0;
 }
 
-Jetsonpmt_::JetsonState Jetsonpmt_::read_jetson() {
+Jetson_::JetsonState Jetson_::read_jetson() {
   JetsonState state;
   state.timeAtRead = get_wtime();
 
@@ -142,7 +142,7 @@ Jetsonpmt_::JetsonState Jetsonpmt_::read_jetson() {
   return state;
 }
 
-State Jetsonpmt_::measure() { return read_jetson(); }
+State Jetson_::measure() { return read_jetson(); }
 
 }  // end namespace jetson
 }  // end namespace pmt
