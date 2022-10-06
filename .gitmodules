@@ -1,0 +1,3 @@
+[submodule "arduino/PowerSensor"]
+	path = arduino/PowerSensor
+	url = git@gitlab.com:astron-misc/PowerSensor.git
