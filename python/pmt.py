@@ -3,7 +3,7 @@ import time
 
 import pypmt as ps
 
-def pmt_meas(platform, device_id = 0):
+def measure(platform, device_id = 0):
     def decorator(func):
         def wrapper(*args, **kwargs):
             if platform == "amdgpu":
@@ -61,7 +61,7 @@ def pmt_meas(platform, device_id = 0):
         return wrapper
     return decorator
 
-def pmt_dump(platform, filename, device_id = 0):
+def dump(platform, filename, device_id = 0):
     def decorator(func):
         def wrapper(*args, **kwargs):
             if platform == "amdgpu":

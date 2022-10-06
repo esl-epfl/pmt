@@ -1,8 +1,8 @@
 import time
 
-from pmt import *
+import pmt
 
-@pmt_meas('nvml')
+@pmt.measure('nvml')
 def my_kernel():
    time.sleep(1)
 
