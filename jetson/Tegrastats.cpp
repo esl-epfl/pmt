@@ -136,10 +136,11 @@ std::vector<std::pair<std::string, int>> read_power_measurements(
 
 namespace tegrastats {
 
-void signal_callback_handler(int signal) {
+void signal_callback_handler(int num) {
   const std::string logfile = detail::find_logfile();
   detail::stop_tegrastats(logfile);
-  exit(signal);
+  signal(SIGINT, SIG_DFL);
+  raise(num);
 }
 
 Tegrastats::Tegrastats() {
