@@ -11,7 +11,9 @@ class Dummy_ : public Dummy {
   virtual int getDumpInterval() { return 0; }
 };
 
-Dummy *Dummy::create() { return new Dummy_(); }
+std::unique_ptr<Dummy> Dummy::create() {
+  return std::unique_ptr<Dummy>(new Dummy_());
+}
 
 State Dummy_::measure() {
   State state;

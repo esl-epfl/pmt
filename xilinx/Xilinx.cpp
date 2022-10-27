@@ -50,7 +50,9 @@ Xilinx_::XilinxState::operator State() {
   return state;
 }
 
-Xilinx *Xilinx::create(int device_number) { return new Xilinx_(device_number); }
+std::unique_ptr<Xilinx> Xilinx::create(int device_number) {
+  return std::unique_ptr<Xilinx>(new Xilinx_(device_number));
+}
 
 Xilinx_::Xilinx_(int device_number) {
   char *c_str_filename = std::getenv("PMT_DEVICE");

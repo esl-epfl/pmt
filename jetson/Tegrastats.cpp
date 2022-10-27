@@ -9,6 +9,8 @@
 #include <sstream>
 #include <vector>
 
+#include <signal.h>
+
 namespace detail {
 bool file_exists(const std::string& name) {
   if (FILE* file = fopen(name.c_str(), "r")) {
@@ -31,6 +33,43 @@ std::string exec(const std::string& commandline) {
     result += buffer.data();
   }
   return result;
+}
+
+std::vector<std::string> split_string(const std::string& string,
+                                      std::string delimiter = " ") {
+  std::vector<std::string> substrings;
+  int start = 0;
+  int end = string.find_first_of(" \n");
+  ;
+  while (end != -1) {
+    start = end + delimiter.size();
+    end = string.find(delimiter, start);
+    substrings.push_back(string.substr(start, end - start));
+  }
+  substrings.push_back(string.substr(start, end - start));
+  return substrings;
+}
+
+std::string find_logfile() {
+  const std::string ps = exec("ps aux | grep tegrastats");
+  std::vector<std::string> substrings = split_string(ps);
+  bool have_tegrastats = false;
+  int index_logfile = -1;
+  for (size_t i = 0; i < substrings.size(); ++i) {
+    if (substrings[i].compare("tegrastats") == 0 ||
+        substrings[i].compare("/usr/bin/tegrastats") == 0) {
+      have_tegrastats = true;
+    }
+    if (substrings[i].compare("--logfile") == 0) {
+      index_logfile = i + 1;
+      break;
+    }
+  }
+  if (have_tegrastats && index_logfile > 0) {
+    return substrings[index_logfile];
+  } else {
+    return "";
+  }
 }
 
 std::string start_tegrastats(int interval) {
@@ -95,9 +134,16 @@ std::vector<std::pair<std::string, int>> read_power_measurements(
 }
 }  // end namespace detail
 
-#include <iostream>
 namespace tegrastats {
+
+void signal_callback_handler(int signal) {
+  const std::string logfile = detail::find_logfile();
+  detail::stop_tegrastats(logfile);
+  exit(signal);
+}
+
 Tegrastats::Tegrastats() {
+  logfile = detail::find_logfile();
   if (detail::file_exists(logfile)) {
     throw std::runtime_error("tegrastats is running, but log file " + logfile +
                              " could not be read.");
@@ -105,6 +151,7 @@ Tegrastats::Tegrastats() {
     detail::stop_tegrastats(logfile);
     logfile = detail::start_tegrastats(interval);
     started_tegrastats = true;
+    signal(SIGINT, signal_callback_handler);
   }
 }
 

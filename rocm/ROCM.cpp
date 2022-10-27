@@ -49,14 +49,14 @@ ROCM_::ROCMState::operator State() {
   return state;
 }
 
-ROCM *ROCM::create(int device_number) {
+std::unique_ptr<ROCM> ROCM::create(int device_number) {
   rsmi_status_t ret;
   ret = rsmi_init(0);
   if (ret == RSMI_STATUS_PERMISSION || ret != RSMI_STATUS_SUCCESS) {
     std::cout << "ROCM-SMI initialization failed" << std::endl;
     exit(EXIT_FAILURE);
   }
-  return new ROCM_(device_number);
+  return std::unique_ptr<ROCM>(new ROCM_(device_number));
 }
 
 ROCM_::ROCM_(const unsigned device_number) {

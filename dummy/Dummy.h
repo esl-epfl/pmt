@@ -6,7 +6,7 @@
 namespace pmt {
 class Dummy : public PMT {
 public:
-  static Dummy *create();
+  static std::unique_ptr<Dummy> create();
 };
 } // end namespace pmt
 

@@ -4,6 +4,5 @@
 
 int main(int argc, char **argv) {
   auto sensor = pmt::nvml::NVML::create();
-  run(sensor, argc, argv);
-  delete sensor;
+  run(*sensor, argc, argv);
 }

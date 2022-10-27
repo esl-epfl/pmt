@@ -7,7 +7,7 @@ namespace pmt {
 namespace likwid {
 class Likwid : public PMT {
 public:
-  static Likwid *create();
+  static std::unique_ptr<Likwid> create();
 };
 } // end namespace likwid
 } // end namespace pmt

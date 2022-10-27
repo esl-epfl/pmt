@@ -7,7 +7,7 @@ namespace pmt {
 namespace jetson {
 class Jetson : public PMT {
 public:
-  static Jetson *create();
+  static std::unique_ptr<Jetson> create();
 };
 } // end namespace jetson
 } // end namespace pmt
