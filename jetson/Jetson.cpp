@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 #include "Jetson.h"
+#include "Tegrastats.h"
 
 namespace pmt {
 namespace jetson {
@@ -18,12 +19,7 @@ class Jetson_ : public Jetson {
    public:
     operator State();
     double timeAtRead;
-    unsigned int instantaneousPowerGPU = 0;
-    unsigned int instantaneousPowerCPU = 0;
-    unsigned int instantaneousPowerSOC = 0;
-    unsigned int instantaneousPowerCV = 0;
-    unsigned int instantaneousPowerDDR = 0;
-    unsigned int instantaneousPowerSYS5V = 0;
+    std::vector<std::pair<std::string, int>> measurements;
     unsigned int instantaneousPowerTotal = 0;
     unsigned int consumedEnergyTotal = 0;
   };
@@ -33,9 +29,10 @@ class Jetson_ : public Jetson {
   virtual const char *getDumpFileName() { return "/tmp/Jetson.out"; }
 
   virtual int getDumpInterval() {
-    return 50;  // milliseconds
+    return 100;  // milliseconds
   }
 
+  tegrastats::Tegrastats tegrastats;
   JetsonState previousState;
   JetsonState read_jetson();
 };
@@ -45,14 +42,10 @@ Jetson_::JetsonState::operator State() {
   state.timeAtRead = timeAtRead;
   state.joulesAtRead = consumedEnergyTotal * 1e-3;
 
-  state.misc.reserve(7);
-  state.misc.push_back(instantaneousPowerGPU);
-  state.misc.push_back(instantaneousPowerCPU);
-  state.misc.push_back(instantaneousPowerSOC);
-  state.misc.push_back(instantaneousPowerCV);
-  state.misc.push_back(instantaneousPowerDDR);
-  state.misc.push_back(instantaneousPowerSYS5V);
-  state.misc.push_back(instantaneousPowerTotal);
+  state.misc.reserve(measurements.size());
+  for (auto &measurement : measurements) {
+    state.misc.push_back(measurement.second);
+  }
 
   return state;
 }
@@ -67,68 +60,24 @@ Jetson_::Jetson_() {
 Jetson_::JetsonState Jetson_::read_jetson() {
   JetsonState state;
   state.timeAtRead = get_wtime();
+  state.measurements = tegrastats.measure();
 
-  std::ifstream gpuPowerFile, cpuPowerFile, SOCPowerFile, CVPowerFile,
-      DDRPowerFile, SYS5VPowerFile;
-  gpuPowerFile.open(
-      "/sys/bus/i2c/drivers/ina3221x/1-0040/iio:device0/in_power0_input");
-  cpuPowerFile.open(
-      "/sys/bus/i2c/drivers/ina3221x/1-0040/iio:device0/in_power1_input");
-  SOCPowerFile.open(
-      "/sys/bus/i2c/drivers/ina3221x/1-0040/iio:device0/in_power2_input");
-  CVPowerFile.open(
-      "/sys/bus/i2c/drivers/ina3221x/1-0041/iio:device1/in_power0_input");
-  DDRPowerFile.open(
-      "/sys/bus/i2c/drivers/ina3221x/1-0041/iio:device1/in_power1_input");
-  SYS5VPowerFile.open(
-      "/sys/bus/i2c/drivers/ina3221x/1-0041/iio:device1/in_power2_input");
-
-  std::string powerLine;
-
-  // GPU power
-  gpuPowerFile >> powerLine;
-  state.instantaneousPowerGPU = atoi(powerLine.c_str());
-  powerLine.clear();
-
-  // CPU power
-  cpuPowerFile >> powerLine;
-  state.instantaneousPowerCPU = atoi(powerLine.c_str());
-  powerLine.clear();
-
-  // SOC power
-  SOCPowerFile >> powerLine;
-  state.instantaneousPowerSOC = atoi(powerLine.c_str());
-  powerLine.clear();
-
-  // CV power
-  CVPowerFile >> powerLine;
-  state.instantaneousPowerCV = atoi(powerLine.c_str());
-  powerLine.clear();
-
-  // DDR power
-  DDRPowerFile >> powerLine;
-  state.instantaneousPowerDDR = atoi(powerLine.c_str());
-  powerLine.clear();
-
-  // SYS5V power
-  SYS5VPowerFile >> powerLine;
-  state.instantaneousPowerSYS5V = atoi(powerLine.c_str());
-  powerLine.clear();
-
-  gpuPowerFile.close();
-  cpuPowerFile.close();
-  SOCPowerFile.close();
-  CVPowerFile.close();
-  DDRPowerFile.close();
-  SYS5VPowerFile.close();
-
+  // Compute total power consumption as sum of SOC (CPU + DRAM) and GPU.
+  // Which individual measurements to use differ per platform.
   state.instantaneousPowerTotal = 0;
-  state.instantaneousPowerTotal += state.instantaneousPowerGPU;
-  state.instantaneousPowerTotal += state.instantaneousPowerCPU;
-  state.instantaneousPowerTotal += state.instantaneousPowerSOC;
-  state.instantaneousPowerTotal += state.instantaneousPowerCV;
-  state.instantaneousPowerTotal += state.instantaneousPowerDDR;
-  state.instantaneousPowerTotal += state.instantaneousPowerSYS5V;
+  if (state.measurements.size() == 6 &&
+      state.measurements[0].first.compare("GPU") == 0 &&
+      state.measurements[2].first.compare("SOC") == 0) {
+    // AGX Xavier
+    state.instantaneousPowerTotal =
+        state.measurements[0].second + state.measurements[2].second;
+  } else if (state.measurements.size() == 6 &&
+             state.measurements[0].first.compare("VDD_GPU_SOC") == 0 &&
+             state.measurements[1].first.compare("VDD_CPU_CV") == 0) {
+    // AGX Orin
+    state.instantaneousPowerTotal =
+        state.measurements[0].second + state.measurements[1].second;
+  }
 
   state.consumedEnergyTotal = previousState.consumedEnergyTotal;
   float averagePower =

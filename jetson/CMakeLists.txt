@@ -1,6 +1,6 @@
 project(jetson)
 
-add_library(pmt-jetson OBJECT Jetson.cpp)
+add_library(pmt-jetson OBJECT Jetson.cpp Tegrastats.cpp)
 
 target_link_libraries(pmt-jetson Threads::Threads)
 
