@@ -53,8 +53,7 @@ std::unique_ptr<ROCM> ROCM::create(int device_number) {
   rsmi_status_t ret;
   ret = rsmi_init(0);
   if (ret == RSMI_STATUS_PERMISSION || ret != RSMI_STATUS_SUCCESS) {
-    std::cout << "ROCM-SMI initialization failed" << std::endl;
-    exit(EXIT_FAILURE);
+    throw std::runtime_error("ROCM-SMI initialization failed");
   }
   return std::unique_ptr<ROCM>(new ROCM_(device_number));
 }
@@ -72,8 +71,7 @@ float get_power(unsigned device_number) {
   ret = rsmi_dev_power_ave_get(device_number, 0, &val_ui64);
 
   if (ret == RSMI_STATUS_PERMISSION || ret != RSMI_STATUS_SUCCESS) {
-    std::cout << "ROCM-SMI read failed" << std::endl;
-    exit(EXIT_FAILURE);
+    throw std::runtime_error("ROCM-SMI read failed");
   }
 
   return static_cast<float>(val_ui64) * 1e-6;

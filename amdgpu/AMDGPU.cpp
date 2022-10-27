@@ -72,8 +72,8 @@ AMDGPU_::AMDGPU_(const unsigned device_number) {
     }
     closedir(d);
   } else {
-    fprintf(stderr, "Could not open directory: %s\n", dri_dir);
-    exit(1);
+    throw std::runtime_error("Could not open directory: " +
+                             std::string(dri_dir));
   }
 
   // Select the file to read power consumption from

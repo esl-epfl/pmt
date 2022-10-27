@@ -8,6 +8,8 @@
     https://github.com/deater/uarch-configure/blob/master/rapl-read/rapl-read.c
 */
 
+#include <stdexcept>
+
 #include <errno.h>
 #include <fcntl.h>
 #include <inttypes.h>
@@ -177,8 +179,7 @@ void Rapl::detect_cpu() {
   if (vendor == CPU_VENDOR_AMD) {
     if (!(family == 23 ||   // Zen, Zen+, Zen2
           family == 25)) {  // Zen 3
-      printf("Wrong CPU family %d\n", family);
-      exit(1);
+      throw std::runtime_error("Wrong CPU family: " + family);
     }
     model = CPU_AMD_FAM17H;
   }
