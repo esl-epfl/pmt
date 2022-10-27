@@ -15,7 +15,7 @@ Dummy *Dummy::create() { return new Dummy_(); }
 
 State Dummy_::measure() {
   State state;
-  state.timeAtRead = pmt::get_wtime();
+  state.timeAtRead = PMT::get_wtime();
   state.joulesAtRead = 0;
   return state;
 }

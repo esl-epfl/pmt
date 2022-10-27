@@ -18,9 +18,9 @@ class State {
   std::vector<double> misc;
 };
 
-class pmt {
+class PMT {
  public:
-  virtual ~pmt();
+  virtual ~PMT();
 
   virtual State read();
 

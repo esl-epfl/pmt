@@ -4,7 +4,7 @@
 #include "pmt.h"
 
 namespace pmt {
-class Dummy : public pmt {
+class Dummy : public PMT {
 public:
   static Dummy *create();
 };

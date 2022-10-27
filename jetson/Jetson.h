@@ -5,7 +5,7 @@
 
 namespace pmt {
 namespace jetson {
-class Jetson : public pmt {
+class Jetson : public PMT {
 public:
   static Jetson *create();
 };

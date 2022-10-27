@@ -5,7 +5,7 @@
 
 namespace pmt {
 namespace rocm {
-class ROCM : public pmt {
+class ROCM : public PMT {
  public:
   static ROCM *create(int device_number = 0);
 };

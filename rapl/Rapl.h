@@ -5,7 +5,7 @@
 
 namespace pmt {
 namespace rapl {
-class Rapl : public pmt {
+class Rapl : public PMT {
 public:
   static Rapl *create();
 };

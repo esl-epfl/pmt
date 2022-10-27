@@ -5,7 +5,7 @@
 
 #include "pmt-test.h"
 
-void run(pmt::pmt *sensor, int argc, char *argv[]) {
+void run(pmt::PMT *sensor, int argc, char *argv[]) {
   char *dumpFileName = std::getenv("PMT_DUMPFILE");
   sensor->startDumpThread(dumpFileName);
 
@@ -15,12 +15,12 @@ void run(pmt::pmt *sensor, int argc, char *argv[]) {
       auto start = sensor->read();
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
       auto end = sensor->read();
-      std::cout << pmt::pmt::seconds(start, end) << " s, ";
-      std::cout << pmt::pmt::joules(start, end) << " J, ";
-      std::cout << pmt::pmt::watts(start, end) << " W, ";
-      std::cout << pmt::pmt::seconds(first, end) << " s (total), ";
-      std::cout << pmt::pmt::joules(first, end) << " J (total), ";
-      std::cout << pmt::pmt::watts(first, end) << " W (average)";
+      std::cout << pmt::PMT::seconds(start, end) << " s, ";
+      std::cout << pmt::PMT::joules(start, end) << " J, ";
+      std::cout << pmt::PMT::watts(start, end) << " W, ";
+      std::cout << pmt::PMT::seconds(first, end) << " s (total), ";
+      std::cout << pmt::PMT::joules(first, end) << " J (total), ";
+      std::cout << pmt::PMT::watts(first, end) << " W (average)";
       std::cout << std::endl;
     }
   } else {
@@ -36,10 +36,10 @@ void run(pmt::pmt *sensor, int argc, char *argv[]) {
       perror(command.str().c_str());
     }
     auto end = sensor->read();
-    std::cout << "Runtime: " << pmt::pmt::seconds(start, end) << " s"
+    std::cout << "Runtime: " << pmt::PMT::seconds(start, end) << " s"
               << std::endl;
-    std::cout << "Joules: " << pmt::pmt::joules(start, end) << " J"
+    std::cout << "Joules: " << pmt::PMT::joules(start, end) << " J"
               << std::endl;
-    std::cout << "Watt: " << pmt::pmt::watts(start, end) << " W" << std::endl;
+    std::cout << "Watt: " << pmt::PMT::watts(start, end) << " W" << std::endl;
   }
 }

@@ -5,7 +5,7 @@
 
 namespace pmt {
 namespace arduino {
-class Arduino : public pmt {
+class Arduino : public PMT {
 public:
   static Arduino *create(const char *device = default_device().c_str());
 

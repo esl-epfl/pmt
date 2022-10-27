@@ -5,7 +5,7 @@
 
 namespace pmt {
 namespace nvml {
-class NVML : public pmt {
+class NVML : public PMT {
 public:
   static NVML *create(int device_number = 0);
 };
