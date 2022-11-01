@@ -65,7 +65,9 @@ NVML_::NVMLState::operator State() {
   return state;
 }
 
-NVML *NVML::create(int device_number) { return new NVML_(device_number); }
+std::unique_ptr<NVML> NVML::create(int device_number) {
+  return std::unique_ptr<NVML>(new NVML_(device_number));
+}
 
 NVML_::NVML_(int device_number) {
   char *cstr_pmt_device = getenv("PMT_DEVICE");

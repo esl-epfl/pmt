@@ -5,9 +5,9 @@
 
 namespace pmt {
 namespace rapl {
-class Rapl : public pmt {
+class Rapl : public PMT {
 public:
-  static Rapl *create();
+  static std::unique_ptr<Rapl> create();
 };
 } // end namespace rapl
 } // end namespace pmt

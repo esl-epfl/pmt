@@ -3,21 +3,21 @@
 
 namespace pmt {
 
-pmt::~pmt() { stopDumpThread(); };
+PMT::~PMT() { stopDumpThread(); };
 
-double pmt::seconds(const State &firstState, const State &secondState) {
+double PMT::seconds(const State &firstState, const State &secondState) {
   return secondState.timeAtRead - firstState.timeAtRead;
 }
 
-double pmt::joules(const State &firstState, const State &secondState) {
+double PMT::joules(const State &firstState, const State &secondState) {
   return secondState.joulesAtRead - firstState.joulesAtRead;
 }
 
-double pmt::watts(const State &firstState, const State &secondState) {
+double PMT::watts(const State &firstState, const State &secondState) {
   return joules(firstState, secondState) / seconds(firstState, secondState);
 }
 
-void pmt::startDumpThread(const char *dumpFileName) {
+void PMT::startDumpThread(const char *dumpFileName) {
   if (!dumpFileName) {
     dumpFileName = getDumpFileName();
   }
@@ -36,14 +36,14 @@ void pmt::startDumpThread(const char *dumpFileName) {
   });
 }
 
-void pmt::stopDumpThread() {
+void PMT::stopDumpThread() {
   stop = true;
   if (dumpThread.joinable()) {
     dumpThread.join();
   }
 }
 
-void pmt::dump(const State &startState, const State &firstState,
+void PMT::dump(const State &startState, const State &firstState,
                const State &secondState) {
   if (dumpFile != nullptr) {
     std::unique_lock<std::mutex> lock(dumpFileMutex);
@@ -59,7 +59,7 @@ void pmt::dump(const State &startState, const State &firstState,
   }
 }
 
-void pmt::mark(const State &startState, const State &currentState,
+void PMT::mark(const State &startState, const State &currentState,
                const char *name, unsigned tag) const {
   if (dumpFile != nullptr) {
     std::unique_lock<std::mutex> lock(dumpFileMutex);
@@ -69,13 +69,13 @@ void pmt::mark(const State &startState, const State &currentState,
   }
 }
 
-double pmt::get_wtime() {
+double PMT::get_wtime() {
   return std::chrono::duration_cast<std::chrono::microseconds>(
              std::chrono::system_clock::now().time_since_epoch())
              .count() /
          1.0e6;
 }
 
-State pmt::read() { return stop ? previousState : measure(); }
+State PMT::read() { return stop ? previousState : measure(); }
 
 }  // end namespace pmt

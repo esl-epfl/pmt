@@ -5,9 +5,9 @@
 
 namespace pmt {
 namespace xilinx {
-class Xilinx : public pmt {
+class Xilinx : public PMT {
  public:
-  static Xilinx *create(int device_number = 0);
+  static std::unique_ptr<Xilinx> create(int device_number = 0);
 };
 }  // end namespace xilinx
 }  // end namespace pmt

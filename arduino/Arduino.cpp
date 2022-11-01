@@ -32,7 +32,9 @@ class Arduino_ : public Arduino {
   _State _firstState;
 };
 
-Arduino *Arduino::create(const char *device) { return new Arduino_(device); }
+std::unique_ptr<Arduino> Arduino::create(const char *device) {
+  return std::unique_ptr<Arduino>(new Arduino_(device_number));
+}
 
 Arduino_::Arduino_(const char *device) {
   _powersensor = new _PowerSensor(device);

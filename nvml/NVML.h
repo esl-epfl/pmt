@@ -5,9 +5,9 @@
 
 namespace pmt {
 namespace nvml {
-class NVML : public pmt {
+class NVML : public PMT {
 public:
-  static NVML *create(int device_number = 0);
+  static std::unique_ptr<NVML> create(int device_number = 0);
 };
 } // end namespace nvml
 } // end namespace pmt

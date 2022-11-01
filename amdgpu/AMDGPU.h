@@ -5,9 +5,9 @@
 
 namespace pmt {
 namespace amdgpu {
-class AMDGPU : public pmt {
+class AMDGPU : public PMT {
 public:
-  static AMDGPU *create(int device_number = 0);
+  static std::unique_ptr<AMDGPU> create(int device_number = 0);
 };
 } // end namespace amdgpu
 } // end namespace pmt

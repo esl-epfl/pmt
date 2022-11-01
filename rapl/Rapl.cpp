@@ -17,7 +17,9 @@ class Rapl_ : public Rapl {
   raplread::Rapl rapl;
 };
 
-Rapl *Rapl::create() { return new Rapl_(); }
+std::unique_ptr<Rapl> Rapl::create() {
+  return std::unique_ptr<Rapl>(new Rapl_());
+}
 
 State Rapl_::measure() {
   State state;

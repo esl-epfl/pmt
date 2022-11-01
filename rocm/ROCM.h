@@ -5,9 +5,9 @@
 
 namespace pmt {
 namespace rocm {
-class ROCM : public pmt {
+class ROCM : public PMT {
  public:
-  static ROCM *create(int device_number = 0);
+  static std::unique_ptr<ROCM> create(int device_number = 0);
 };
 }  // end namespace rocm
 }  // end namespace pmt

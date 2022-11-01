@@ -39,7 +39,9 @@ class Likwid_ : public Likwid {
   double joulesTotal = 0;
 };
 
-Likwid *Likwid::create() { return new Likwid_(); }
+std::unique_ptr<Likwid> Likwid::create() {
+  return std::unique_ptr<Likwid>(new Likwid_());
+}
 
 Likwid_::Likwid_() {
 #if defined(HAVE_LIKWID)

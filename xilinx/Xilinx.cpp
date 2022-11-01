@@ -50,15 +50,16 @@ Xilinx_::XilinxState::operator State() {
   return state;
 }
 
-Xilinx *Xilinx::create(int device_number) { return new Xilinx_(device_number); }
+std::unique_ptr<Xilinx> Xilinx::create(int device_number) {
+  return std::unique_ptr<Xilinx>(new Xilinx_(device_number));
+}
 
 Xilinx_::Xilinx_(int device_number) {
   char *c_str_filename = std::getenv("PMT_DEVICE");
   if (c_str_filename) {
     filename = c_str_filename;
   } else {
-    fprintf(stderr, "No PMT_DEVICE specified.\n");
-    exit(1);
+    throw std::runtime_error("No PMT_DEVICE specified");
   }
 
   previousState = read_xilinx();
@@ -71,8 +72,7 @@ float get_power(std::string &filename) {
   // /sys/devices/pci0000:a0/0000:a0:03.1/0000:a1:00.0/hwmon/hwmon2/power1_input
   std::ifstream file(filename, std::ios::in | std::ios::binary);
   if (errno != 0) {
-    std::cerr << "Could not open: " << filename << std::endl;
-    exit(EXIT_FAILURE);
+    throw std::runtime_error("Could not open: " + filename);
   }
 
   // This file has one line with instantenous power consumption in uW
@@ -81,8 +81,7 @@ float get_power(std::string &filename) {
   try {
     return stoi(line);
   } catch (std::invalid_argument &e) {
-    std::cerr << "Could not parse: " << line << std::endl;
-    exit(EXIT_FAILURE);
+    throw std::runtime_error("Could not parse: " + line);
   }
 }
 

@@ -5,22 +5,22 @@
 
 #include "pmt-test.h"
 
-void run(pmt::pmt *sensor, int argc, char *argv[]) {
+void run(pmt::PMT &sensor, int argc, char *argv[]) {
   char *dumpFileName = std::getenv("PMT_DUMPFILE");
-  sensor->startDumpThread(dumpFileName);
+  sensor.startDumpThread(dumpFileName);
 
   if (argc == 1) {
-    auto first = sensor->read();
+    auto first = sensor.read();
     while (true) {
-      auto start = sensor->read();
+      auto start = sensor.read();
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
-      auto end = sensor->read();
-      std::cout << pmt::pmt::seconds(start, end) << " s, ";
-      std::cout << pmt::pmt::joules(start, end) << " J, ";
-      std::cout << pmt::pmt::watts(start, end) << " W, ";
-      std::cout << pmt::pmt::seconds(first, end) << " s (total), ";
-      std::cout << pmt::pmt::joules(first, end) << " J (total), ";
-      std::cout << pmt::pmt::watts(first, end) << " W (average)";
+      auto end = sensor.read();
+      std::cout << pmt::PMT::seconds(start, end) << " s, ";
+      std::cout << pmt::PMT::joules(start, end) << " J, ";
+      std::cout << pmt::PMT::watts(start, end) << " W, ";
+      std::cout << pmt::PMT::seconds(first, end) << " s (total), ";
+      std::cout << pmt::PMT::joules(first, end) << " J (total), ";
+      std::cout << pmt::PMT::watts(first, end) << " W (average)";
       std::cout << std::endl;
     }
   } else {
@@ -31,15 +31,15 @@ void run(pmt::pmt *sensor, int argc, char *argv[]) {
       }
       command << argv[i];
     }
-    auto start = sensor->read();
+    auto start = sensor.read();
     if (system(command.str().c_str()) != 0) {
       perror(command.str().c_str());
     }
-    auto end = sensor->read();
-    std::cout << "Runtime: " << pmt::pmt::seconds(start, end) << " s"
+    auto end = sensor.read();
+    std::cout << "Runtime: " << pmt::PMT::seconds(start, end) << " s"
               << std::endl;
-    std::cout << "Joules: " << pmt::pmt::joules(start, end) << " J"
+    std::cout << "Joules: " << pmt::PMT::joules(start, end) << " J"
               << std::endl;
-    std::cout << "Watt: " << pmt::pmt::watts(start, end) << " W" << std::endl;
+    std::cout << "Watt: " << pmt::PMT::watts(start, end) << " W" << std::endl;
   }
 }

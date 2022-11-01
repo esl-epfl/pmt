@@ -45,7 +45,9 @@ AMDGPU_::AMDGPUState::operator State() {
   return state;
 }
 
-AMDGPU *AMDGPU::create(int device_number) { return new AMDGPU_(device_number); }
+std::unique_ptr<AMDGPU> AMDGPU::create(int device_number) {
+  return std::unique_ptr<AMDGPU>(new AMDGPU_(device_number));
+}
 
 AMDGPU_::AMDGPU_(const unsigned device_number) {
   // Power consumption is read from sysfs
@@ -70,8 +72,8 @@ AMDGPU_::AMDGPU_(const unsigned device_number) {
     }
     closedir(d);
   } else {
-    fprintf(stderr, "Could not open directory: %s\n", dri_dir);
-    exit(1);
+    throw std::runtime_error("Could not open directory: " +
+                             std::string(dri_dir));
   }
 
   // Select the file to read power consumption from
