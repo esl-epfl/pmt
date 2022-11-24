@@ -69,16 +69,26 @@ Jetson_::JetsonState Jetson_::read_jetson() {
   state.instantaneousPowerTotal = 0;
   if (state.measurements.size() == 6 &&
       state.measurements[0].first.compare("GPU") == 0 &&
-      state.measurements[2].first.compare("SOC") == 0) {
+      state.measurements[1].first.compare("CPU") == 0 &&
+      state.measurements[2].first.compare("SOC") == 0 &&
+      state.measurements[3].first.compare("CV") == 0 &&
+      state.measurements[4].first.compare("VDDRQ") == 0 &&
+      state.measurements[5].first.compare("SYS5V") == 0) {
     // AGX Xavier
-    state.instantaneousPowerTotal =
-        state.measurements[0].second + state.measurements[2].second;
+    for (auto &measurement : state.measurements) {
+      state.instantaneousPowerTotal += measurement.second;
+    }
   } else if (state.measurements.size() == 6 &&
              state.measurements[0].first.compare("VDD_GPU_SOC") == 0 &&
-             state.measurements[1].first.compare("VDD_CPU_CV") == 0) {
+             state.measurements[1].first.compare("VDD_CPU_CV") == 0 &&
+             state.measurements[2].first.compare("VIN_SYS_5V0") == 0 &&
+             state.measurements[3].first.compare("NC") == 0 &&
+             state.measurements[4].first.compare("VDDQ_VDD2_1V8AO") == 0 &&
+             state.measurements[5].first.compare("NC") == 0) {
     // AGX Orin
-    state.instantaneousPowerTotal =
-        state.measurements[0].second + state.measurements[1].second;
+    for (auto &measurement : state.measurements) {
+      state.instantaneousPowerTotal += measurement.second;
+    }
   }
 
   state.consumedEnergyTotal = previousState.consumedEnergyTotal;
