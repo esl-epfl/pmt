@@ -1,115 +1,82 @@
-import sys
-import time
+import pypmt
+from pypmt import joules, seconds, watts
 
-import pypmt as ps
 
-def measure(platform, device_id = 0):
+def get_pmt(platform, device_id=0):
+    if platform == "amdgpu":
+        return pypmt.AMDGPU.create(device_id)
+    elif platform == "arduino":
+        try:
+            return pypmt.Arduino.create(device_id)
+        except AttributeError:
+            raise Exception("Arduino not installed")
+    elif platform == "dummy":
+        return pypmt.Dummy.create()
+    elif platform == "jetson":
+        return pypmt.Jetson.create()
+    elif platform == "likwid":
+        try:
+            return pypmt.Likwid.create(device_id)
+        except AttributeError:
+            raise Exception("Likwid not installed")
+    elif platform == "nvml":
+        try:
+            return pypmt.NVML.create(device_id)
+        except AttributeError:
+            raise Exception("NVML not installed")
+    elif platform == "rapl":
+        return pypmt.Rapl.create()
+    elif platform == "rocm":
+        try:
+            return pypmt.ROCM.create(device_id)
+        except AttributeError:
+            raise Exception("ROCM not installed")
+    elif platform == "xilinx":
+        return pypmt.Xilinx.create()
+    else:
+        raise Exception(f"Invalid platform: {platform}")
+
+
+def measure(platform, device_id=0):
     def decorator(func):
         def wrapper(*args, **kwargs):
-            if platform == "amdgpu":
-                pmt = ps.AMDGPU.create(device_id)
-            elif platform == "arduino":
-                try:
-                    pmt = ps.Arduino.create(device_id)
-                except AttributeError:
-                    print("Arduino not installed")
-                    sys.exit(1)
-            elif platform == "dummy":
-                pmt = ps.Dummy.create()
-            elif platform == "jetson":
-                pmt = ps.Jetson.create()
-            elif platform == "likwid":
-                try:
-                    pmt = ps.Likwid.create(device_id)
-                except AttributeError:
-                    print("Likwid not installed")
-                    sys.exit(1)
-            elif platform == "nvml":
-                try:
-                    pmt = ps.NVML.create(device_id)
-                except AttributeError:
-                    print("NVML not installed")
-                    sys.exit(1)
-            elif platform == "rapl":
-                pmt = ps.Rapl.create()
-            elif platform == "rocm":
-                try: 
-                    pmt = ps.ROCM.create(device_id)
-                except AttributeError:
-                    print("ROCM not installed")
-                    sys.exit(1)
-            elif platform == "xilinx":
-                pmt = ps.Xilinx.create()
-            else:
-                print("Invalid Option")
-                sys.exit(1)
+            pmt = get_pmt(platform, device_id)
 
             start = pmt.read()
-            prev_results = func(*args, **kwargs)
+            func_results = func(*args, **kwargs)
             end = pmt.read()
 
             results = []
-            if prev_results is not None:
-                results.append(prev_results[0])
-            curr_results = {"platform" : platform,  \
-                            "joules" : format(ps.joules(start, end),".3f"),  \
-                            "seconds" : format(ps.seconds(start, end),".3f"), \
-                            "watt" : format(ps.watts(start, end),".3f")}
-            results.append(curr_results)
+            if func_results is not None:
+                results.append(func_results)
+            pmt_results = {
+                "platform": platform,
+                "joules": format(pypmt.joules(start, end), ".3f"),
+                "seconds": format(pypmt.seconds(start, end), ".3f"),
+                "watt": format(pypmt.watts(start, end), ".3f"),
+            }
+            results.append(pmt_results)
 
             return results
+
         return wrapper
+
     return decorator
 
-def dump(platform, filename, device_id = 0):
+
+def dump(platform, filename, device_id=0):
     def decorator(func):
         def wrapper(*args, **kwargs):
-            if platform == "amdgpu":
-                pmt = ps.AMDGPU.create(device_id)
-            elif platform == "arduino":
-                try:
-                    pmt = ps.Arduino.create(device_id)
-                except AttributeError:
-                    print("Arduino not installed")
-                    sys.exit(1)
-            elif platform == "dummy":
-                pmt = ps.Dummy.create()
-            elif platform == "jetson":
-                pmt = ps.Jetson.create()
-            elif platform == "likwid":
-                try:
-                    pmt = ps.Likwid.create(device_id)
-                except AttributeError:
-                    print("Likwid not installed")
-                    sys.exit(1)
-            elif platform == "nvml":
-                try:
-                    pmt = ps.NVML.create(device_id)
-                except AttributeError:
-                    print("NVML not installed")
-                    sys.exit(1)
-            elif platform == "rapl":
-                pmt = ps.Rapl.create()
-            elif platform == "rocm":
-                try: 
-                    pmt = ps.ROCM.create(device_id)
-                except AttributeError:
-                    print("ROCM not installed")
-                    sys.exit(1)
-            elif platform == "xilinx":
-                pmt = ps.Xilinx.create()
-            else:
-                print("Invalid Option")
-                sys.exit(1)
+            pmt = get_pmt(platform, device_id)
 
-            if(not filename):
-                print("Please provide a filename to dump the results")
-                sys.exit(1)
-            start = pmt.startDumpThread(filename)
-            prev_results = func(*args, **kwargs)
-            end = pmt.stopDumpThread()
+            if not filename:
+                raise Exception("Please provide a filename to dump the results")
+            pmt.startDumpThread(filename)
+            func(*args, **kwargs)
+            pmt.stopDumpThread()
 
             return
-        return wrapper
-    return decorator
 
+        return wrapper
+
+    return decorator
