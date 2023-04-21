@@ -33,7 +33,7 @@ class Arduino_ : public Arduino {
 };
 
 std::unique_ptr<Arduino> Arduino::create(const char *device) {
-  return std::unique_ptr<Arduino>(new Arduino_(device_number));
+  return std::unique_ptr<Arduino>(new Arduino_(device));
 }
 
 Arduino_::Arduino_(const char *device) {
