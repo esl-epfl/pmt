@@ -37,6 +37,7 @@ if(${BUILD_ARDUINO_PMT})
   set(POWERSENSOR_ROOT_DIR ${CMAKE_SOURCE_DIR}/arduino/PowerSensor)
   set(POWERSENSOR_HEADER ${POWERSENSOR_ROOT_DIR}/PowerSensor.h)
   set(POWERSENSOR_SOURCE ${POWERSENSOR_ROOT_DIR}/PowerSensor.cc)
+  set(HAVE_ARDUINO TRUE)
 endif()
 
 # Find dependencies for Likwid
