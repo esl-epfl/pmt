@@ -46,7 +46,7 @@ AMDGPU_::AMDGPUState::operator State() {
 }
 
 std::unique_ptr<AMDGPU> AMDGPU::create(int device_number) {
-  return std::unique_ptr<AMDGPU>(new AMDGPU_(device_number));
+  return std::make_unique<AMDGPU_>(device_number);
 }
 
 AMDGPU_::AMDGPU_(const unsigned device_number) {
