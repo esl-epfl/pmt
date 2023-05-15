@@ -50,9 +50,7 @@ Jetson_::JetsonState::operator State() {
   return state;
 }
 
-std::unique_ptr<Jetson> Jetson::create() {
-  return std::unique_ptr<Jetson>(new Jetson_());
-}
+std::unique_ptr<Jetson> Jetson::create() { return std::make_unique<Jetson_>(); }
 
 Jetson_::Jetson_() {
   previousState = read_jetson();

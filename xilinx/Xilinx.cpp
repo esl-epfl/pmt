@@ -51,7 +51,7 @@ Xilinx_::XilinxState::operator State() {
 }
 
 std::unique_ptr<Xilinx> Xilinx::create(int device_number) {
-  return std::unique_ptr<Xilinx>(new Xilinx_(device_number));
+  return std::make_unique<Xilinx_>(device_number);
 }
 
 Xilinx_::Xilinx_(int device_number) {

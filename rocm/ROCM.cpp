@@ -55,7 +55,7 @@ std::unique_ptr<ROCM> ROCM::create(int device_number) {
   if (ret == RSMI_STATUS_PERMISSION || ret != RSMI_STATUS_SUCCESS) {
     throw std::runtime_error("ROCM-SMI initialization failed");
   }
-  return std::unique_ptr<ROCM>(new ROCM_(device_number));
+  return std::make_unique<ROCM_>(device_number);
 }
 
 ROCM_::ROCM_(const unsigned device_number) {
