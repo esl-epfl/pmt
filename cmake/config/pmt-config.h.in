@@ -1,6 +1,7 @@
 #ifndef PMT_CONFIG_H_
 #define PMT_CONFIG_H_
 
+#cmakedefine HAVE_ARDUINO
 #cmakedefine HAVE_LIKWID
 #cmakedefine HAVE_NVML
 #cmakedefine HAVE_ROCM-smi
