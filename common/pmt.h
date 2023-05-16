@@ -11,6 +11,9 @@
 
 namespace pmt {
 
+const std::string kDumpFilenameVariable = "PMT_DUMP_FILE";
+const std::string kDumpIntervalVariable = "PMT_DUMP_INTERVAL";
+
 class State {
  public:
   double timeAtRead;
@@ -30,7 +33,7 @@ class PMT {
 
   static double watts(const State &firstState, const State &secondState);
 
-  void startDumpThread(const char *dumpFileName);
+  void startDumpThread(const char *dumpFileName = nullptr);
   void stopDumpThread();
 
   void mark(const State &startState, const State &currentState,
@@ -39,9 +42,11 @@ class PMT {
  protected:
   virtual State measure() = 0;
 
+  virtual int getMeasurementInterval() = 0;  // in milliseconds
+
   virtual const char *getDumpFileName() = 0;
 
-  virtual int getDumpInterval() = 0;
+  virtual float getDumpInterval();  // in seconds
 
   void dump(const State &startState, const State &firstState,
             const State &secondState);

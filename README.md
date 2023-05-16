@@ -1,4 +1,7 @@
-# PMT: Power Measurement Toolkit
+# PMT: Power Measurement Toolkit 
+[![pipeline status](https://git.astron.nl/RD/pmt/badges/master/pipeline.svg)](https://git.astron.nl/RD/pmt/-/commits/master)
+[![Latest Release](https://git.astron.nl/RD/pmt/-/badges/release.svg)](https://git.astron.nl/RD/pmt/-/releases)
+
 PMT is a high-level software library capable of collecting power consumption measurements on various hardware. The library provides a standard interface to easily measure the energy use of devices such as CPUs and GPUs in critical application sections.
 
 # Installation
@@ -40,7 +43,7 @@ std::cout<<sensor−>seconds(start, end)<<” [S]“<<std::endl;
 ```
 
 # pmt-test
-PMT-test executables might be used direclty to read the values of a PowerSensor at a regular interval. The PMT-test executables are available in the install directory `/bin`.
+PMT-test executables might be used directly to read the values of a PowerSensor at a regular interval. The PMT-test executables are available in the install directory `/bin`.
 
 # Acknowledgement
 If you decide to use PMT in your research, please cite the following reference:

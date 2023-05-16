@@ -30,9 +30,9 @@ class ROCM_ : public ROCM {
 
   virtual State measure();
 
-  virtual const char *getDumpFileName() { return "/tmp/rocmpmt.out"; }
+  virtual const char *getDumpFileName() { return "/tmp/pmt_rocm.out"; }
 
-  virtual int getDumpInterval() {
+  virtual int getMeasurementInterval() {
     return 10;  // milliseconds
   }
 

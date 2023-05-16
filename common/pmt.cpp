@@ -1,6 +1,7 @@
-#include "pmt.h"
+#include <cassert>
 #include <iostream>
 
+#include "pmt.h"
 namespace pmt {
 
 PMT::~PMT() { stopDumpThread(); };
@@ -17,20 +18,40 @@ double PMT::watts(const State &firstState, const State &secondState) {
   return joules(firstState, secondState) / seconds(firstState, secondState);
 }
 
+float PMT::getDumpInterval() {
+  const char *dumpIntervalStr = std::getenv(kDumpIntervalVariable.c_str());
+  return dumpIntervalStr ? std::stoi(dumpIntervalStr)
+                         : static_cast<float>(getMeasurementInterval()) * 1e-3;
+}
+
 void PMT::startDumpThread(const char *dumpFileName) {
   if (!dumpFileName) {
     dumpFileName = getDumpFileName();
   }
-  dumpFile = std::unique_ptr<std::ofstream>(new std::ofstream(dumpFileName));
+  assert(dumpFileName);
+  dumpFile = std::make_unique<std::ofstream>(dumpFileName);
 
   dumpThread = std::thread([&] {
-    State startState = read(), currentState = startState;
+    const int measurementInterval =
+        getMeasurementInterval();                  // in milliseconds
+    const float dumpInterval = getDumpInterval();  // in seconds
+    assert(dumpInterval);
+
+    const State startState = read();
+    State currentState = startState;
     previousState = startState;
+    State dumpState = startState;
 
     while (!stop) {
-      std::this_thread::sleep_for(std::chrono::milliseconds(getDumpInterval()));
+      assert(dumpInterval > 0);
+      std::this_thread::sleep_for(
+          std::chrono::milliseconds(measurementInterval));
       currentState = read();
-      dump(startState, previousState, currentState);
+      const float elapsedTime = seconds(dumpState, currentState);
+      if (stop || (elapsedTime > dumpInterval)) {
+        dump(startState, dumpState, currentState);
+        dumpState = currentState;
+      }
       previousState = currentState;
     }
   });

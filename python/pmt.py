@@ -72,10 +72,10 @@ def dump(platform, filename, device_id=0):
             if not filename:
                 raise Exception("Please provide a filename to dump the results")
             pmt.startDumpThread(filename)
-            func(*args, **kwargs)
+            result = func(*args, **kwargs)
             pmt.stopDumpThread()
 
-            return
+            return result
 
         return wrapper
 

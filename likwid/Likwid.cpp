@@ -27,9 +27,11 @@ class Likwid_ : public Likwid {
  private:
   virtual State measure() override;
 
-  virtual const char *getDumpFileName() override { return "/tmp/Likwid.out"; }
+  virtual const char *getDumpFileName() override {
+    return "/tmp/pmt_likwid.out";
+  }
 
-  virtual int getDumpInterval() override {
+  virtual int getMeasurementInterval() override {
     return 100;  // milliseconds
   }
 
