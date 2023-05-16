@@ -8,9 +8,9 @@ class Rapl_ : public Rapl {
  private:
   virtual State measure();
 
-  virtual const char *getDumpFileName() { return "/tmp/raplpmt.out"; }
+  virtual const char *getDumpFileName() { return "/tmp/pmt_rapl.out"; }
 
-  virtual int getDumpInterval() {
+  virtual int getMeasurementInterval() {
     return 500;  // milliseconds
   }
 

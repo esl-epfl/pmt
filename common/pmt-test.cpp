@@ -6,7 +6,7 @@
 #include "pmt-test.h"
 
 void run(pmt::PMT &sensor, int argc, char *argv[]) {
-  char *dumpFileName = std::getenv("PMT_DUMPFILE");
+  const char *dumpFileName = std::getenv(pmt::kDumpFilenameVariable.c_str());
   sensor.startDumpThread(dumpFileName);
 
   if (argc == 1) {

@@ -8,7 +8,7 @@ class Dummy_ : public Dummy {
 
   virtual const char *getDumpFileName() { return nullptr; }
 
-  virtual int getDumpInterval() { return 0; }
+  virtual int getMeasurementInterval() { return 0; }
 };
 
 std::unique_ptr<Dummy> Dummy::create() { return std::make_unique<Dummy_>(); }

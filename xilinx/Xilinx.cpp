@@ -31,9 +31,9 @@ class Xilinx_ : public Xilinx {
 
   virtual State measure();
 
-  virtual const char *getDumpFileName() { return "/tmp/xilinxpmt.out"; }
+  virtual const char *getDumpFileName() { return "/tmp/pmt_xilinx.out"; }
 
-  virtual int getDumpInterval() {
+  virtual int getMeasurementInterval() {
     return 100;  // milliseconds
   }
 

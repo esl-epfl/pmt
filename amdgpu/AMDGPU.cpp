@@ -26,9 +26,9 @@ class AMDGPU_ : public AMDGPU {
 
   virtual State measure();
 
-  virtual const char *getDumpFileName() { return "/tmp/xilinxpmt.out"; }
+  virtual const char *getDumpFileName() { return "/tmp/pmt_amdgpu.out"; }
 
-  virtual int getDumpInterval() {
+  virtual int getMeasurementInterval() {
     return 100;  // milliseconds
   }
 

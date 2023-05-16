@@ -44,9 +44,9 @@ class NVML_ : public NVML {
 
   virtual State measure();
 
-  virtual const char *getDumpFileName() { return "/tmp/NVML.out"; }
+  virtual const char *getDumpFileName() { return "/tmp/pmt_nvml.out"; }
 
-  virtual int getDumpInterval() {
+  virtual int getMeasurementInterval() {
     return 10;  // milliseconds
   }
 

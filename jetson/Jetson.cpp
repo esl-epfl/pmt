@@ -26,9 +26,9 @@ class Jetson_ : public Jetson {
 
   virtual State measure();
 
-  virtual const char *getDumpFileName() { return "/tmp/Jetson.out"; }
+  virtual const char *getDumpFileName() { return "/tmp/pmt_jetson.out"; }
 
-  virtual int getDumpInterval() {
+  virtual int getMeasurementInterval() {
     return 100;  // milliseconds
   }
 

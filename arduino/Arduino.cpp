@@ -22,9 +22,9 @@ class Arduino_ : public Arduino {
   State measure();
 
  private:
-  virtual const char *getDumpFileName() { return "/tmp/Arduino.out"; }
+  virtual const char *getDumpFileName() { return "/tmp/pmt_arduino.out"; }
 
-  virtual int getDumpInterval() {
+  virtual int getMeasurementInterval() {
     return 1;  // milliseconds
   }
 
