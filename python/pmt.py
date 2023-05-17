@@ -5,9 +5,14 @@ from pypmt import joules, seconds, watts
 def get_pmt(platform, device_id=0):
     if platform == "amdgpu":
         return pypmt.AMDGPU.create(device_id)
-    elif platform == "arduino":
+    elif platform in ['arduino', 'arduino-v2']:
         try:
-            return pypmt.Arduino.create(device_id)
+            return pypmt.Arduino.create(device_id, 2)
+        except AttributeError:
+            raise Exception("Arduino not installed")
+    elif platform == 'arduino-v3':
+        try:
+            return pypmt.Arduino.create(device_id, 3)
         except AttributeError:
             raise Exception("Arduino not installed")
     elif platform == "dummy":
