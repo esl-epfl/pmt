@@ -1,3 +1,6 @@
 [submodule "arduino/PowerSensor"]
 	path = arduino/PowerSensor
-	url = https://gitlab.com/astron-misc/PowerSensor.git
+	url = https://git.astron.nl/RD/PowerSensor2
+[submodule "powersensor/PowerSensor3"]
+	path = arduino/PowerSensor3
+	url = https://github.com/nlesc-recruit/PowerSensor3

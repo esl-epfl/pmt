@@ -10,7 +10,7 @@ SOURCE_DIR=$(dirname "$0")/..
 
 #Directories that must be excluded from formatting. These paths are
 #relative to SOURCE_DIR.
-EXCLUDE_DIRS=(external build CMake)
+EXCLUDE_DIRS=(external build CMake arduino/PowerSensor arduino/PowerSensor3)
 
 #The patterns of the C++ source files, which clang-format should format.
 CXX_SOURCES=(*.cpp *.h)

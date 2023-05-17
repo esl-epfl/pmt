@@ -13,7 +13,7 @@ format:
     - apt-get update -qq
     - apt-get install -y -qq
        python3-pip
-    - pip3 install clang-format==9.0.0 cmake-format
+    - pip3 install clang-format==14.0.0 cmake-format
   script:
     - ./scripts/run-format.sh
 

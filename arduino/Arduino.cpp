@@ -5,21 +5,45 @@
     The _ prefixed aliases prevents class and
     namespace conflicts.
 */
-#include POWERSENSOR_HEADER
-using _PowerSensor = PowerSensor::PowerSensor;
-using _State = PowerSensor::State;
-double (&_seconds)(const _State &, const _State &) = PowerSensor::seconds;
-double (&_Joules)(const _State &, const _State &, int) = PowerSensor::Joules;
+#include POWERSENSOR2_HEADER
+#include POWERSENSOR3_HEADER
 
-namespace pmt {
-namespace arduino {
+double Seconds_(const PowerSensor::State &first,
+                const PowerSensor::State &second) {
+  return PowerSensor::seconds(first, second);
+}
+double Seconds_(const PowerSensor3::State &first,
+                const PowerSensor3::State &second) {
+  return PowerSensor3::seconds(first, second);
+}
 
-class Arduino_ : public Arduino {
+double Joules_(const PowerSensor::State &first,
+               const PowerSensor::State &second, int pairID) {
+  return PowerSensor::Joules(first, second, pairID);
+}
+double Joules_(const PowerSensor3::State &first,
+               const PowerSensor3::State &second, int pairID) {
+  return PowerSensor3::Joules(first, second, pairID);
+}
+
+namespace pmt::arduino {
+
+template <typename PowerSensor, typename PowerSensorState>
+class ArduinoImpl : public Arduino {
  public:
-  Arduino_(const char *device);
-  ~Arduino_();
+  ArduinoImpl(const char *device) {
+    powersensor_ = new PowerSensor(device);
+    firstState_ = powersensor_->read();
+  }
+  ~ArduinoImpl() { delete powersensor_; };
 
-  State measure();
+  State measure() {
+    PowerSensorState psState = powersensor_->read();
+    State state;
+    state.timeAtRead = Seconds_(firstState_, psState);
+    state.joulesAtRead = Joules_(firstState_, psState, -1);
+    return state;
+  }
 
  private:
   virtual const char *getDumpFileName() { return "/tmp/pmt_arduino.out"; }
@@ -28,28 +52,22 @@ class Arduino_ : public Arduino {
     return 1;  // milliseconds
   }
 
-  _PowerSensor *_powersensor;
-  _State _firstState;
+  PowerSensor *powersensor_{};
+  PowerSensorState firstState_{};
 };
 
-std::unique_ptr<Arduino> Arduino::create(const char *device) {
-  return std::make_unique<Arduino_>(device);
+std::unique_ptr<Arduino> Arduino::create(const char *device,
+                                         POWERSENSOR_VERSION version) {
+  if (version == V2) {
+    return std::make_unique<
+        ArduinoImpl<PowerSensor::PowerSensor, PowerSensor::State>>(device);
+  } else if (version == V3) {
+    return std::make_unique<
+        ArduinoImpl<PowerSensor3::PowerSensor, PowerSensor3::State>>(device);
+  } else {
+    throw std::invalid_argument("Unknown PowerSensor version " +
+                                std::to_string(version));
+  }
 }
 
-Arduino_::Arduino_(const char *device) {
-  _powersensor = new _PowerSensor(device);
-  _firstState = _powersensor->read();
-}
-
-Arduino_::~Arduino_() { delete _powersensor; }
-
-State Arduino_::measure() {
-  _State _state = _powersensor->read();
-  State state;
-  state.timeAtRead = _seconds(_firstState, _state);
-  state.joulesAtRead = _Joules(_firstState, _state, -1);
-  return state;
-}
-
-}  // end namespace arduino
-}  // end namespace pmt
+}  // end namespace pmt::arduino
