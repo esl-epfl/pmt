@@ -49,21 +49,14 @@ PMT-test executables might be used directly to read the values of a PowerSensor 
 If you decide to use PMT in your research, please cite the following reference:
 
 ```
-@misc{https://doi.org/10.48550/arxiv.2210.03724,
-  doi = {10.48550/ARXIV.2210.03724},
-  
-  url = {https://arxiv.org/abs/2210.03724},
-  
-  author = {Corda, Stefano and Veenboer, Bram and Tolley, Emma},
-  
-  keywords = {Performance (cs.PF), FOS: Computer and information sciences, FOS: Computer and information sciences},
-  
-  title = {PMT: Power Measurement Toolkit},
-  
-  publisher = {arXiv},
-  
-  year = {2022},
-  
-  copyright = {arXiv.org perpetual, non-exclusive license}
+@INPROCEEDINGS{10027520,
+  author={Corda, Stefano and Veenboer, Bram and Tolley, Emma},
+  booktitle={2022 IEEE/ACM International Workshop on HPC User Support Tools (HUST)}, 
+  title={PMT: Power Measurement Toolkit}, 
+  year={2022},
+  volume={},
+  number={},
+  pages={44-47},
+  doi={10.1109/HUST56722.2022.00011}
 }
 ```
