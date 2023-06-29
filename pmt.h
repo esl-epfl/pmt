@@ -2,8 +2,11 @@
 
 #include "pmt/pmt.h"
 #include "pmt/AMDGPU.h"
-#if defined(HAVE_ARDUINO)
-#include "pmt/Arduino.h"
+#if defined(HAVE_POWERSENSOR2)
+#include "pmt/PowerSensor2.h"
+#endif
+#if defined(HAVE_POWERSENSOR3)
+#include "pmt/PowerSensor3.h"
 #endif
 #include "pmt/Dummy.h"
 #include "pmt/Jetson.h"

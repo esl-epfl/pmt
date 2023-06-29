@@ -5,16 +5,16 @@ from pypmt import joules, seconds, watts
 def get_pmt(platform, device_id=0):
     if platform == "amdgpu":
         return pypmt.AMDGPU.create(device_id)
-    elif platform in ['arduino', 'arduino-v2']:
+    elif platform in ['powersensor2', 'powersensor3']:
         try:
-            return pypmt.Arduino.create(device_id, 2)
+            return pypmt.PowerSensor_.create(device_id, 2)
         except AttributeError:
-            raise Exception("Arduino not installed")
-    elif platform == 'arduino-v3':
+            raise Exception("PowerSensor2 not installed")
+    elif platform == 'powersensor3':
         try:
-            return pypmt.Arduino.create(device_id, 3)
+            return pypmt.PowerSensor_.create(device_id, 3)
         except AttributeError:
-            raise Exception("Arduino not installed")
+            raise Exception("PowerSensor3 not installed")
     elif platform == "dummy":
         return pypmt.Dummy.create()
     elif platform == "jetson":

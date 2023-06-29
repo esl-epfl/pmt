@@ -14,9 +14,14 @@ target_link_libraries(
           pmt-rapl
           pmt-xilinx)
 
-if(${BUILD_ARDUINO_PMT})
-  add_definitions(-DBUILD_ARDUINO)
-  target_link_libraries(pypmt PRIVATE pmt-arduino)
+if(${BUILD_POWERSENSOR2_PMT})
+  add_definitions(-DBUILD_POWERSENSOR2)
+  target_link_libraries(pypmt PRIVATE pmt-powersensor2)
+endif()
+
+if(${BUILD_POWERSENSOR3_PMT})
+  add_definitions(-DBUILD_POWERSENSOR3)
+  target_link_libraries(pypmt PRIVATE pmt-powersensor3)
 endif()
 
 if(${LIKWID_FOUND})
