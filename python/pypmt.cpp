@@ -3,8 +3,12 @@
 #include <../amdgpu/AMDGPU.h>
 #include <../common/pmt.h>
 
-#ifdef BUILD_ARDUINO
-#include <../arduino/Arduino.h>
+#ifdef BUILD_POWERSENSOR2
+#include <../powersensor2/PowerSensor2.h>
+#endif
+
+#ifdef BUILD_POWERSENSOR3
+#include <../powersensor3/PowerSensor3.h>
 #endif
 
 #include <../dummy/Dummy.h>
@@ -55,12 +59,20 @@ PYBIND11_MODULE(pypmt, m) {
       .def("startDumpThread", &pmt::amdgpu::AMDGPU::startDumpThread)
       .def("stopDumpThread", &pmt::amdgpu::AMDGPU::stopDumpThread);
 
-#ifdef BUILD_ARDUINO
-  py::class_<pmt::arduino::Arduino>(m, "Arduino")
-      .def("create", &pmt::arduino::Arduino::create)
-      .def("read", &pmt::arduino::Arduino::read)
-      .def("startDumpThread", &pmt::arduino::Arduino::startDumpThread)
-      .def("stopDumpThread", &pmt::arduino::Arduino::stopDumpThread);
+#ifdef BUILD_POWERSENSOR2
+  py::class_<pmt::powersensor2::PowerSensor2>(m, "PowerSensor2")
+      .def("create", &pmt::powersensor2::PowerSensor2::create)
+      .def("read", &pmt::powersensor2::PowerSensor2::read)
+      .def("startDumpThread", &pmt::powersensor2::PowerSensor2::startDumpThread)
+      .def("stopDumpThread", &pmt::powersensor2::PowerSensor2::stopDumpThread);
+#endif
+
+#ifdef BUILD_POWERSENSOR3
+  py::class_<pmt::powersensor3::PowerSensor3>(m, "PowerSensor3")
+      .def("create", &pmt::powersensor3::PowerSensor3::create)
+      .def("read", &pmt::powersensor3::PowerSensor3::read)
+      .def("startDumpThread", &pmt::powersensor3::PowerSensor3::startDumpThread)
+      .def("stopDumpThread", &pmt::powersensor3::PowerSensor3::stopDumpThread);
 #endif
 
   py::class_<pmt::Dummy>(m, "Dummy")

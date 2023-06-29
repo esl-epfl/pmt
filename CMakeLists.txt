@@ -26,27 +26,30 @@ include_directories(${CMAKE_SOURCE_DIR}/common)
 
 # Options to disable implementations
 # that require external dependencies
-option(BUILD_ARDUINO_PMT "" OFF)
+option(BUILD_POWERSENSOR2_PMT "" OFF)
 option(BUILD_LIKWID_PMT "" OFF)
 option(BUILD_NVML_PMT "" OFF)
 option(BUILD_POWERSENSOR3_PMT "" OFF)
 option(BUILD_PYTHON_PMT "" OFF)
 option(BUILD_ROCM_PMT "" OFF)
 
-# Find dependencies for Arduino
-if(${BUILD_ARDUINO_PMT})
-  set(POWERSENSOR_ROOT_DIR ${CMAKE_SOURCE_DIR}/arduino/PowerSensor)
-  set(POWERSENSOR_HEADER ${POWERSENSOR_ROOT_DIR}/PowerSensor.h)
-  set(POWERSENSOR_SOURCE ${POWERSENSOR_ROOT_DIR}/PowerSensor.cc)
+# Find dependencies for PowerSensor
+if(${BUILD_POWERSENSOR2_PMT})
+  set(POWERSENSOR2_ROOT_DIR ${CMAKE_SOURCE_DIR}/powersensor2/PowerSensor2)
+  set(POWERSENSOR2_HEADER ${POWERSENSOR2_ROOT_DIR}/PowerSensor.h)
+  set(POWERSENSOR2_SOURCE ${POWERSENSOR2_ROOT_DIR}/PowerSensor.cc)
+  set(HAVE_POWERSENSOR2 TRUE)
+endif()
 
+if(${BUILD_POWERSENSOR3_PMT})
   set(POWERSENSOR3_ROOT_SRC_DIR
-      ${CMAKE_SOURCE_DIR}/arduino/PowerSensor3/host/src)
+      ${CMAKE_SOURCE_DIR}/powersensor3/PowerSensor3/host/src)
   set(POWERSENSOR3_ROOT_INC_DIR
-      ${CMAKE_SOURCE_DIR}/arduino/PowerSensor3/host/include)
+      ${CMAKE_SOURCE_DIR}/powersensor3/PowerSensor3/host/include)
   set(POWERSENSOR3_HEADER ${POWERSENSOR3_ROOT_INC_DIR}/PowerSensor.hpp)
   set(POWERSENSOR3_SOURCE ${POWERSENSOR3_ROOT_SRC_DIR}/PowerSensor.cc
                           ${POWERSENSOR3_ROOT_SRC_DIR}/sensors.cc)
-  set(HAVE_ARDUINO TRUE)
+  set(HAVE_POWERSENSOR3 TRUE)
 endif()
 
 # Find dependencies for Likwid
@@ -111,12 +114,10 @@ add_library(pmt SHARED $<TARGET_OBJECTS:pmt-common>)
 # AMDGPU
 add_subdirectory(amdgpu)
 
-# Arduino
-if(${BUILD_ARDUINO_PMT})
-  add_subdirectory(arduino)
+# PowerSensor
+if(${BUILD_POWERSENSOR2_PMT})
+  add_subdirectory(powersensor2)
 endif()
-
-# PowerSensor3
 if(${BUILD_POWERSENSOR3_PMT})
   add_subdirectory(powersensor3)
 endif()
