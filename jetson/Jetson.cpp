@@ -43,8 +43,10 @@ Jetson_::JetsonState::operator State() {
   state.joulesAtRead = consumedEnergyTotal * 1e-3;
 
   state.misc.reserve(measurements.size());
-  for (auto &measurement : measurements) {
-    state.misc.push_back(measurement.second);
+  for (const std::pair<std::string, int> &measurement : measurements) {
+    const std::string name = measurement.first;
+    const double watts = double(measurement.second) / 1000;
+    state.misc.push_back({name, watts});
   }
 
   return state;

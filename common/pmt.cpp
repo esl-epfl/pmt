@@ -1,5 +1,6 @@
 #include <cassert>
 #include <iostream>
+#include <iomanip>
 
 #include "pmt.h"
 namespace pmt {
@@ -68,13 +69,14 @@ void PMT::dump(const State &startState, const State &firstState,
                const State &secondState) {
   if (dumpFile != nullptr) {
     std::unique_lock<std::mutex> lock(dumpFileMutex);
-    *dumpFile << "S " << seconds(startState, secondState) << " "
-              << watts(firstState, secondState);
-    for (int i = 0; i < secondState.misc.size(); i++) {
-      if (i > 0) {
-        *dumpFile << " ";
+    *dumpFile << "S " << seconds(startState, secondState) << " " << std::fixed
+              << std::setprecision(3) << watts(firstState, secondState);
+    for (const std::pair<std::string, double> &m : secondState.misc) {
+      if (m.first.empty()) {
+        *dumpFile << " " << m.second;
+      } else {
+        *dumpFile << " " << m.first << ":" << m.second;
       }
-      *dumpFile << secondState.misc[i];
     }
     *dumpFile << std::endl;
   }
