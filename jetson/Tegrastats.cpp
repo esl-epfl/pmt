@@ -145,10 +145,7 @@ void signal_callback_handler(int num) {
 
 Tegrastats::Tegrastats() {
   logfile = detail::find_logfile();
-  if (detail::file_exists(logfile)) {
-    throw std::runtime_error("tegrastats is running, but log file " + logfile +
-                             " could not be read.");
-  } else {
+  if (!detail::file_exists(logfile)) {
     detail::stop_tegrastats(logfile);
     logfile = detail::start_tegrastats(interval);
     started_tegrastats = true;

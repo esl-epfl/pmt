@@ -18,7 +18,7 @@ class State {
  public:
   double timeAtRead;
   double joulesAtRead;
-  std::vector<double> misc;
+  std::vector<std::pair<std::string, double>> misc;
 };
 
 class PMT {
