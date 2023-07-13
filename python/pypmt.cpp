@@ -1,6 +1,5 @@
 #include <pybind11/pybind11.h>
 
-#include <../amdgpu/AMDGPU.h>
 #include <../common/pmt.h>
 
 #ifdef BUILD_POWERSENSOR2
@@ -52,12 +51,6 @@ PYBIND11_MODULE(pypmt, m) {
   m.def("watts", &watts, "Get average power consumption");
 
   py::class_<pmt::State>(m, "State");
-
-  py::class_<pmt::amdgpu::AMDGPU>(m, "AMDGPU")
-      .def("create", &pmt::amdgpu::AMDGPU::create)
-      .def("read", &pmt::amdgpu::AMDGPU::read)
-      .def("startDumpThread", &pmt::amdgpu::AMDGPU::startDumpThread)
-      .def("stopDumpThread", &pmt::amdgpu::AMDGPU::stopDumpThread);
 
 #ifdef BUILD_POWERSENSOR2
   py::class_<pmt::powersensor2::PowerSensor2>(m, "PowerSensor2")

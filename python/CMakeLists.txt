@@ -8,7 +8,6 @@ target_link_libraries(
           pybind11::lto
           pybind11::windows_extras
           $<TARGET_OBJECTS:pmt-common>
-          pmt-amdgpu
           pmt-dummy
           pmt-jetson
           pmt-rapl

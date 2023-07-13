@@ -1,7 +1,6 @@
 #include "pmt-config.h"
 
 #include "pmt/pmt.h"
-#include "pmt/AMDGPU.h"
 #if defined(HAVE_POWERSENSOR2)
 #include "pmt/PowerSensor2.h"
 #endif
