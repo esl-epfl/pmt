@@ -24,7 +24,7 @@ class Jetson_ : public Jetson {
     unsigned int consumedEnergyTotal = 0;
   };
 
-  virtual State measure();
+  State read() override { return read_jetson(); }
 
   virtual const char *getDumpFileName() { return "/tmp/pmt_jetson.out"; }
 
@@ -103,7 +103,17 @@ Jetson_::JetsonState Jetson_::read_jetson() {
   return state;
 }
 
-State Jetson_::measure() { return read_jetson(); }
+std::vector<std::pair<std::string, double>> Jetson::misc(
+    const State &firstState, const State &secondState) {
+  const size_t n = secondState.misc.size();
+  std::vector<std::pair<std::string, double>> result(n);
+  for (size_t i = 0; i < n; i++) {
+    const std::string &name = secondState.misc[i].first;
+    const double watts = secondState.misc[i].second;
+    result[i] = {name, watts};
+  }
+  return result;
+}
 
 }  // end namespace jetson
 }  // end namespace pmt

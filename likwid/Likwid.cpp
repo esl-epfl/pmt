@@ -25,7 +25,7 @@ class Likwid_ : public Likwid {
   ~Likwid_();
 
  private:
-  virtual State measure() override;
+  virtual State read() override;
 
   virtual const char *getDumpFileName() override {
     return "/tmp/pmt_likwid.out";
@@ -133,7 +133,7 @@ Likwid_::~Likwid_() {
 #endif
 }  // end destructor
 
-State Likwid_::measure() {
+State Likwid_::read() {
 #if defined(HAVE_LIKWID)
   for (int groupId = 0; groupId < nr_groups; groupId++) {
     // Read performance counters

@@ -23,7 +23,7 @@ class PowerSensor2Impl : public PowerSensor2 {
       : powersensor_(std::make_unique<PowerSensor>(device)),
         firstState_(powersensor_->read()) {}
 
-  State measure() {
+  State read() override {
     PowerSensorState psState = powersensor_->read();
     State state;
     state.timeAtRead = ::Seconds(firstState_, psState);
