@@ -25,7 +25,7 @@ class PMT {
  public:
   virtual ~PMT();
 
-  virtual State read();
+  virtual State read() = 0;
 
   static double seconds(const State &firstState, const State &secondState);
 
@@ -33,20 +33,20 @@ class PMT {
 
   static double watts(const State &firstState, const State &secondState);
 
+  virtual std::vector<std::pair<std::string, double>> misc(
+      const State &firstState, const State &secondState);
+
   void startDumpThread(const char *dumpFileName = nullptr);
   void stopDumpThread();
 
   void mark(const State &startState, const State &currentState,
             const char *name = 0, unsigned tag = 0) const;
 
- protected:
-  virtual State measure() = 0;
-
   virtual int getMeasurementInterval() = 0;  // in milliseconds
+  virtual float getDumpInterval();           // in seconds
 
+ protected:
   virtual const char *getDumpFileName() = 0;
-
-  virtual float getDumpInterval();  // in seconds
 
   void dump(const State &startState, const State &firstState,
             const State &secondState);

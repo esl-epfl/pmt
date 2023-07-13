@@ -19,6 +19,12 @@ double PMT::watts(const State &firstState, const State &secondState) {
   return joules(firstState, secondState) / seconds(firstState, secondState);
 }
 
+std::vector<std::pair<std::string, double>> PMT::misc(
+    const State &firstState, const State &secondState) {
+  std::vector<std::pair<std::string, double>> result;
+  return result;
+}
+
 float PMT::getDumpInterval() {
   const char *dumpIntervalStr = std::getenv(kDumpIntervalVariable.c_str());
   return dumpIntervalStr ? std::stoi(dumpIntervalStr)
@@ -49,11 +55,11 @@ void PMT::startDumpThread(const char *dumpFileName) {
           std::chrono::milliseconds(measurementInterval));
       currentState = read();
       const float elapsedTime = seconds(dumpState, currentState);
-      if (stop || (elapsedTime > dumpInterval)) {
+      if (elapsedTime > dumpInterval) {
         dump(startState, dumpState, currentState);
         dumpState = currentState;
+        previousState = currentState;
       }
-      previousState = currentState;
     }
   });
 }
@@ -71,7 +77,8 @@ void PMT::dump(const State &startState, const State &firstState,
     std::unique_lock<std::mutex> lock(dumpFileMutex);
     *dumpFile << "S " << seconds(startState, secondState) << " " << std::fixed
               << std::setprecision(3) << watts(firstState, secondState);
-    for (const std::pair<std::string, double> &m : secondState.misc) {
+    for (const std::pair<std::string, double> &m :
+         misc(firstState, secondState)) {
       if (m.first.empty()) {
         *dumpFile << " " << m.second;
       } else {
@@ -98,7 +105,5 @@ double PMT::get_wtime() {
              .count() /
          1.0e6;
 }
-
-State PMT::read() { return stop ? previousState : measure(); }
 
 }  // end namespace pmt

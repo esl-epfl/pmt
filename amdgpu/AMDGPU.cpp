@@ -24,7 +24,7 @@ class AMDGPU_ : public AMDGPU {
     double consumedEnergyDevice = 0;
   };
 
-  virtual State measure();
+  State read() override { return read_amdgpu(); }
 
   virtual const char *getDumpFileName() { return "/tmp/pmt_amdgpu.out"; }
 
@@ -109,8 +109,6 @@ AMDGPU_::AMDGPUState AMDGPU_::read_amdgpu() {
   previousState = state;
   return state;
 }
-
-State AMDGPU_::measure() { return read_amdgpu(); }
 
 }  // end namespace amdgpu
 }  // end namespace pmt

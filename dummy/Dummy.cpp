@@ -4,7 +4,7 @@ namespace pmt {
 
 class Dummy_ : public Dummy {
  private:
-  virtual State measure();
+  virtual State read() override;
 
   virtual const char *getDumpFileName() { return nullptr; }
 
@@ -13,7 +13,7 @@ class Dummy_ : public Dummy {
 
 std::unique_ptr<Dummy> Dummy::create() { return std::make_unique<Dummy_>(); }
 
-State Dummy_::measure() {
+State Dummy_::read() {
   State state;
   state.timeAtRead = PMT::get_wtime();
   state.joulesAtRead = 0;

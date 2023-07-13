@@ -1,6 +1,6 @@
 project(rapl)
 
-add_library(pmt-rapl OBJECT Rapl.cpp rapl-read.cpp)
+add_library(pmt-rapl OBJECT Rapl.cpp RaplImpl.cpp)
 
 target_link_libraries(pmt-rapl Threads::Threads)
 

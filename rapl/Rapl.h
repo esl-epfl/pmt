@@ -1,15 +1,14 @@
-#ifndef RAPL_PMT_H
-#define RAPL_PMT_H
+#ifndef PMT_RAPL_H_
+#define PMT_RAPL_H_
 
 #include "pmt.h"
 
-namespace pmt {
-namespace rapl {
+namespace pmt::rapl {
 class Rapl : public PMT {
 public:
   static std::unique_ptr<Rapl> create();
+  std::vector<std::pair<std::string, double>> misc(const State &firstState, const State &secondState) override;
 };
-} // end namespace rapl
-} // end namespace pmt
+} // end namespace pmt::rapl
 
-#endif
+#endif // PMT_RAPL_H_

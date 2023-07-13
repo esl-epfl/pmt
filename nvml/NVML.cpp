@@ -42,7 +42,7 @@ class NVML_ : public NVML {
     unsigned int consumedEnergyDevice = 0;
   };
 
-  virtual State measure();
+  State read() override { return read_nvml(); }
 
   virtual const char *getDumpFileName() { return "/tmp/pmt_nvml.out"; }
 
@@ -109,8 +109,5 @@ NVML_::NVMLState NVML_::read_nvml() {
 
   return state;
 }
-
-State NVML_::measure() { return read_nvml(); }
-
 }  // end namespace nvml
 }  // end namespace pmt

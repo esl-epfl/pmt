@@ -29,7 +29,7 @@ class Xilinx_ : public Xilinx {
     double consumedEnergyDevice = 0;
   };
 
-  virtual State measure();
+  State read() override { return read_xilinx(); }
 
   virtual const char *getDumpFileName() { return "/tmp/pmt_xilinx.out"; }
 
@@ -97,8 +97,6 @@ Xilinx_::XilinxState Xilinx_::read_xilinx() {
   previousState = state;
   return state;
 }
-
-State Xilinx_::measure() { return read_xilinx(); }
 
 }  // end namespace xilinx
 }  // end namespace pmt

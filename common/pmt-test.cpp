@@ -13,7 +13,8 @@ void run(pmt::PMT &sensor, int argc, char *argv[]) {
     auto first = sensor.read();
     while (true) {
       auto start = sensor.read();
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      std::this_thread::sleep_for(
+          std::chrono::milliseconds(sensor.getMeasurementInterval()));
       auto end = sensor.read();
       std::cout << pmt::PMT::seconds(start, end) << " s, ";
       std::cout << pmt::PMT::joules(start, end) << " J, ";
