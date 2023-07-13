@@ -269,31 +269,34 @@ std::vector<RaplMeasurement> RaplImpl::GetMeasurements() {
 }  // end Rapl::measure
 
 void RaplImpl::SetMeasurementInterval() {
-  // In case no counters are available, return an arbitrary large value
+  const int measurement_interval_min = 10;    // ms
+  const int measurement_interval_max = 1000;  // ms
+
   if (file_names_.size() == 0) {
-    measurement_interval_ = 1000;  // ms
+    measurement_interval_ = measurement_interval_max;
     return;
   }
 
   const std::string filename = file_names_[0];
-  int measurement_interval = 10;  // ms
+  int measurement_interval = measurement_interval_min;
 
-  for (; measurement_interval < 1000; measurement_interval *= 1.1) {
+  for (; measurement_interval < measurement_interval_max;
+       measurement_interval += measurement_interval_min) {
     size_t value1 = 0;
     size_t value2 = 0;
     ReadFile(filename, value1);
     ReadFile(filename, value2);
     if (value1 != value2) {
+      break;
     }
   };
 
-  const int multiple = 100;
-  measurement_interval /= 2;
+  const int multiple = 10;
   measurement_interval_ =
       ((measurement_interval + multiple) / multiple) * multiple;
 
 #if defined(DEBUG)
-  std::cout << "RaplMeasurement interval: " << measurement_interval_ << "ms \n";
+  std::cout << "Measurement interval: " << measurement_interval_ << "ms \n";
 #endif
 }
 }  // namespace pmt::rapl
