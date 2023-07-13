@@ -111,9 +111,6 @@ add_subdirectory(common)
 # PMT library
 add_library(pmt SHARED $<TARGET_OBJECTS:pmt-common>)
 
-# AMDGPU
-add_subdirectory(amdgpu)
-
 # PowerSensor
 if(${BUILD_POWERSENSOR2_PMT})
   add_subdirectory(powersensor2)

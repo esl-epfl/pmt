@@ -3,9 +3,7 @@ from pypmt import joules, seconds, watts
 
 
 def get_pmt(platform, device_id=0):
-    if platform == "amdgpu":
-        return pypmt.AMDGPU.create(device_id)
-    elif platform in ['powersensor2', 'powersensor3']:
+    if platform in ['powersensor2', 'powersensor3']:
         try:
             return pypmt.PowerSensor_.create(device_id, 2)
         except AttributeError:
