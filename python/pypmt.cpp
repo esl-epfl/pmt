@@ -11,7 +11,7 @@
 #endif
 
 #include <../dummy/Dummy.h>
-#include <../jetson/Jetson.h>
+#include <../tegra/Tegra.h>
 
 #ifdef BUILD_LIKWID
 #include <../likwid/Likwid.h>
@@ -74,11 +74,11 @@ PYBIND11_MODULE(pypmt, m) {
       .def("startDumpThread", &pmt::Dummy::startDumpThread)
       .def("stopDumpThread", &pmt::Dummy::stopDumpThread);
 
-  py::class_<pmt::jetson::Jetson>(m, "Jetson")
-      .def("create", &pmt::jetson::Jetson::create)
-      .def("read", &pmt::jetson::Jetson::read)
-      .def("startDumpThread", &pmt::jetson::Jetson::startDumpThread)
-      .def("stopDumpThread", &pmt::jetson::Jetson::stopDumpThread);
+  py::class_<pmt::tegra::Tegra>(m, "tegra")
+      .def("create", &pmt::tegra::Tegra::create)
+      .def("read", &pmt::tegra::Tegra::read)
+      .def("startDumpThread", &pmt::tegra::Tegra::startDumpThread)
+      .def("stopDumpThread", &pmt::tegra::Tegra::stopDumpThread);
 
 #ifdef BUILD_LIKWID
   py::class_<pmt::likwid::Likwid>(m, "Likwid")

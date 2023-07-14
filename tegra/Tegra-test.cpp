@@ -1,8 +1,8 @@
 #include "../common/pmt-test.h"
 
-#include "Jetson.h"
+#include "Tegra.h"
 
 int main(int argc, char** argv) {
-  auto sensor = pmt::jetson::Jetson::create();
+  auto sensor = pmt::tegra::Tegra::create();
   run(*sensor, argc, argv);
 }

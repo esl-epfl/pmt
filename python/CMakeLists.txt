@@ -9,7 +9,7 @@ target_link_libraries(
           pybind11::windows_extras
           $<TARGET_OBJECTS:pmt-common>
           pmt-dummy
-          pmt-jetson
+          pmt-tegra
           pmt-rapl
           pmt-xilinx)
 
