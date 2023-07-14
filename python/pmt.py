@@ -15,8 +15,8 @@ def get_pmt(platform, device_id=0):
             raise Exception("PowerSensor3 not installed")
     elif platform == "dummy":
         return pypmt.Dummy.create()
-    elif platform == "jetson":
-        return pypmt.Jetson.create()
+    elif platform == "tegra":
+        return pypmt.tegra.create()
     elif platform == "likwid":
         try:
             return pypmt.Likwid.create(device_id)

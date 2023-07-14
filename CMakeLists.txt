@@ -132,8 +132,8 @@ if(${CUDAToolkit_FOUND})
   add_subdirectory(nvml)
 endif()
 
-# Jetson
-add_subdirectory(jetson)
+# Tegra
+add_subdirectory(tegra)
 
 #Python Bindings
 if(${pybind11_FOUND})
