@@ -1,15 +1,13 @@
-#ifndef NVML_PMT_H_
-#define NVML_PMT_H_
+#ifndef PMT_NVML_H_
+#define PMT_NVML_H_
 
 #include "pmt.h"
 
-namespace pmt {
-namespace nvml {
+namespace pmt::nvml {
 class NVML : public PMT {
 public:
   static std::unique_ptr<NVML> create(int device_number = 0);
 };
-} // end namespace nvml
-} // end namespace pmt
+} // end namespace pmt::nvml
 
-#endif
+#endif // PMT_NVML_H_
