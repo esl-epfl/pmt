@@ -217,7 +217,7 @@ State RaplImpl::GetState() {
     const std::string name = measurements[i].name;
     const size_t joules_now = measurements[i].joules;
     const size_t joules_previous = previous_measurements_[i].joules;
-    const double duration = previous_timestamp_ - state.timestamp_;
+    const double duration = state.timestamp_ - previous_timestamp_;
     const size_t joules_diff = (joules_now - joules_previous) * 1e-6;
     const float watt = joules_diff / duration;
     state.name_[i + 1] = name;

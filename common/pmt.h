@@ -83,6 +83,8 @@ class PMT {
   void StartThread();
   void StopThread();
 
+  void DumpHeader(const State &state);
+
   std::unique_ptr<std::ofstream> dump_file_ = nullptr;
   mutable std::mutex dump_file_mutex_;
 };
