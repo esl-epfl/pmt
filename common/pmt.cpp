@@ -47,9 +47,6 @@ void PMT::StartThread() {
 
       const float duration = seconds(previous, state_latest_);
       if (dump_file_ && duration > dumpInterval) {
-        assert(state_latest_.nr_measurements_ > 0);
-        assert(start.nr_measurements_ > 0);
-        assert(previous.nr_measurements_ > 0);
         Dump(start, previous, state_latest_);
         previous = state_latest_;
       }
@@ -70,23 +67,29 @@ void PMT::StartDump(const char *filename) {
   }
   assert(filename);
   dump_file_ = std::make_unique<std::ofstream>(filename);
+  const State state = Read();
+  DumpHeader(state);
 }
 
 void PMT::StopDump() { dump_file_.reset(); }
 
+void PMT::DumpHeader(const State &state) {
+  if (dump_file_ != nullptr) {
+    std::unique_lock<std::mutex> lock(dump_file_mutex_);
+    *dump_file_ << "timestamp";
+    for (const std::string &name : state.name_) {
+      *dump_file_ << " " << name;
+    }
+    *dump_file_ << std::endl;
+  }
+}
+
 void PMT::Dump(const State &start, const State &first, const State &second) {
   if (dump_file_ != nullptr) {
     std::unique_lock<std::mutex> lock(dump_file_mutex_);
-    *dump_file_ << "S " << seconds(start, second) << " " << std::fixed
-                << std::setprecision(3) << watts(first, second);
-    for (size_t i = 0; i < second.nr_measurements_; i++) {
-      const std::string name = second.name_[i];
-      const float watt = second.watt_[i];
-      if (name.empty()) {
-        *dump_file_ << " " << watt;
-      } else {
-        *dump_file_ << " " << name << ":" << watt;
-      }
+    *dump_file_ << std::fixed << std::setprecision(3) << seconds(start, second);
+    for (float watt : second.watt_) {
+      *dump_file_ << " " << watt;
     }
     *dump_file_ << std::endl;
   }

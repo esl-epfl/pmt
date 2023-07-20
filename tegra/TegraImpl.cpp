@@ -210,7 +210,7 @@ TegraState::operator State() {
   state.timestamp_ = timestamp_;
   state.name_[0] = "total";
   state.joules_[0] = joules_ * 1e-3;
-  state.watt_[0] = watt_;
+  state.watt_[0] = watt_ * 1e-3;
 
   for (size_t i = 0; i < measurements.size(); i++) {
     const std::string name = measurements[i].first;
