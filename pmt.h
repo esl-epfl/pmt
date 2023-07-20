@@ -9,9 +9,6 @@
 #endif
 #include "pmt/Dummy.h"
 #include "pmt/Jetson.h"
-#if defined(HAVE_LIKWID)
-#include "pmt/Likwid.h"
-#endif
 #if defined(HAVE_NVML)
 #include "pmt/NVML.h"
 #endif

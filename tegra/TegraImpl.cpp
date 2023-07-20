@@ -176,7 +176,7 @@ TegraImpl::TegraImpl() {
   }
 
   previous_state_ = GetTegraState();
-  previous_state_.consumedEnergyTotal = 0;
+  previous_state_.joules_ = 0;
 }
 
 TegraImpl::~TegraImpl() {
@@ -206,15 +206,17 @@ const std::vector<std::string> sensors_TegraImplnano{"POM_5V_IN", "POM_5V_GPU",
                                                      "POM_5V_CPU"};
 
 TegraState::operator State() {
-  State state;
-  state.timeAtRead = timeAtRead;
-  state.joulesAtRead = consumedEnergyTotal * 1e-3;
+  State state(1 + measurements.size());
+  state.timestamp_ = timestamp_;
+  state.name_[0] = "total";
+  state.joules_[0] = joules_ * 1e-3;
+  state.watt_[0] = watt_;
 
-  state.misc.reserve(measurements.size());
-  for (const TegraMeasurement& measurement : measurements) {
-    const std::string name = measurement.first;
-    const double watts = double(measurement.second) / 1000;
-    state.misc.push_back({name, watts});
+  for (size_t i = 0; i < measurements.size(); i++) {
+    const std::string name = measurements[i].first;
+    const double watt = double(measurements[i].second) / 1000;
+    state.name_[i + 1] = name;
+    state.watt_[i + 1] = watt;
   }
 
   return state;
@@ -222,33 +224,30 @@ TegraState::operator State() {
 
 TegraState TegraImpl::GetTegraState() {
   TegraState state;
-  state.timeAtRead = get_wtime();
+  state.timestamp_ = GetTime();
   state.measurements = GetMeasurements();
 
   // Compute total power consumption as sum of individual measurements.
   // Which individual measurements to use differs per platform.
-  state.instantaneousPowerTotal = 0;
+  state.watt_ = 0;
   if (detail::CheckSensors(sensors_agx_xavier, state.measurements)) {
     // AGX Xavier: sum all sensors
     for (auto& measurement : state.measurements) {
-      state.instantaneousPowerTotal += measurement.second;
+      state.watt_ += measurement.second;
     }
   } else if (detail::CheckSensors(sensors_agx_orin, state.measurements)) {
     // AGX Orin: sum all sensors
     for (auto& measurement : state.measurements) {
-      state.instantaneousPowerTotal += measurement.second;
+      state.watt_ += measurement.second;
     }
   } else if (detail::CheckSensors(sensors_TegraImplnano, state.measurements)) {
     // Jetson Nano: POM_5V_IN only
-    state.instantaneousPowerTotal += state.measurements[0].second;
+    state.watt_ += state.measurements[0].second;
   }
 
-  state.consumedEnergyTotal = previous_state_.consumedEnergyTotal;
-  float averagePower = (state.instantaneousPowerTotal +
-                        previous_state_.instantaneousPowerTotal) /
-                       2;
-  float timeElapsed = (state.timeAtRead - previous_state_.timeAtRead);
-  state.consumedEnergyTotal += averagePower * timeElapsed;
+  const float watt = (state.watt_ + previous_state_.watt_) / 2;
+  const float duration = (state.timestamp_ - previous_state_.timestamp_);
+  state.joules_ = previous_state_.joules_ + (watt * duration);
 
   previous_state_ = state;
 

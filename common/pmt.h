@@ -4,7 +4,6 @@
 #include "pmt-config.h"
 
 #include <fstream>
-#include <memory>
 #include <mutex>
 #include <thread>
 #include <vector>
@@ -16,49 +15,76 @@ const std::string kDumpIntervalVariable = "PMT_DUMP_INTERVAL";
 
 class State {
  public:
-  double timeAtRead;
-  double joulesAtRead;
-  std::vector<std::pair<std::string, double>> misc;
+  State &operator=(const State &state) {
+    timestamp_ = state.timestamp_;
+    nr_measurements_ = state.nr_measurements_;
+    name_ = state.name_;
+    joules_ = state.joules_;
+    watt_ = state.watt_;
+    return *this;
+  }
+
+  State(int nr_measurements = 1) : nr_measurements_(nr_measurements) {
+    name_.resize(nr_measurements);
+    joules_.resize(nr_measurements);
+    watt_.resize(nr_measurements);
+  }
+
+  double timestamp_;
+  int nr_measurements_;
+  std::vector<std::string> name_;
+  std::vector<float> joules_;
+  std::vector<float> watt_;
 };
 
 class PMT {
  public:
-  virtual ~PMT();
+  ~PMT();
 
-  virtual State read() = 0;
+  static double seconds(const State &first, const State &second);
 
-  static double seconds(const State &firstState, const State &secondState);
+  static double joules(const State &first, const State &second);
 
-  static double joules(const State &firstState, const State &secondState);
+  static double watts(const State &first, const State &second);
 
-  static double watts(const State &firstState, const State &secondState);
+  void StartDump(const char *filename = nullptr);
+  void StopDump();
 
-  virtual std::vector<std::pair<std::string, double>> misc(
-      const State &firstState, const State &secondState);
+  void Mark(const State &start, const State &current, const char *name = 0,
+            unsigned tag = 0) const;
 
-  void startDumpThread(const char *dumpFileName = nullptr);
-  void stopDumpThread();
+  virtual int GetMeasurementInterval() = 0;  // in milliseconds
+  virtual float GetDumpInterval();           // in seconds
 
-  void mark(const State &startState, const State &currentState,
-            const char *name = 0, unsigned tag = 0) const;
-
-  virtual int getMeasurementInterval() = 0;  // in milliseconds
-  virtual float getDumpInterval();           // in seconds
+  State Read();
 
  protected:
-  virtual const char *getDumpFileName() = 0;
+  virtual State GetState() { return state_previous_; };
 
-  void dump(const State &startState, const State &firstState,
-            const State &secondState);
+  virtual const char *GetDumpFilename() = 0;
 
-  static double get_wtime();
+  void Dump(const State &start, const State &first, const State &second);
+
+  static double GetTime();
 
  private:
-  std::thread dumpThread;
-  std::unique_ptr<std::ofstream> dumpFile = nullptr;
-  mutable std::mutex dumpFileMutex;
-  volatile bool stop = false;
-  State previousState;
+  // The last state returned by Read()
+  State state_previous_;
+
+  // The last state set by the thread
+  State state_latest_;
+
+  // This thread continuously call GetState to update state_latest_. It is
+  // started automatically upon the first Read() call.
+  std::thread thread_;
+  volatile bool thread_started_ = false;
+  volatile bool thread_stop_ = false;
+
+  void StartThread();
+  void StopThread();
+
+  std::unique_ptr<std::ofstream> dump_file_ = nullptr;
+  mutable std::mutex dump_file_mutex_;
 };
 }  // end namespace pmt
 

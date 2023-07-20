@@ -3,7 +3,6 @@
 
 #cmakedefine HAVE_POWERSENSOR2
 #cmakedefine HAVE_POWERSENSOR3
-#cmakedefine HAVE_LIKWID
 #cmakedefine HAVE_NVML
 #cmakedefine HAVE_ROCM-smi
 

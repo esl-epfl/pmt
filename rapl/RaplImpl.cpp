@@ -39,28 +39,10 @@ void RemoveDuplicates(std::vector<T>& v) {
 
 namespace pmt::rapl {
 
-RaplState::operator pmt::State() {
-  State state;
-  state.timeAtRead = timeAtRead;
-  state.joulesAtRead = consumedEnergyTotal;
-  state.misc.reserve(measurements.size());
-  for (size_t i = 0; i < measurements.size(); i++) {
-    const rapl::RaplMeasurement& m = measurements[i];
-    const std::string name = m.name;
-    const double value = measurements[i].value;
-    state.misc.push_back({name, value});
-  }
-  return state;
-}
-
 RaplImpl::RaplImpl() {
   Init();
-  StartThread();
-}
-
-RaplImpl::~RaplImpl() {
-  stopDumpThread();
-  StopThread();
+  previous_timestamp_ = GetTime();
+  previous_measurements_ = GetMeasurements();
 }
 
 std::vector<int> RaplImpl::DetectPackages() {
@@ -178,58 +160,13 @@ void RaplImpl::Init() {
   const size_t n = uj_max_.size();
   uj_first_.resize(n);
   uj_previous_.resize(n);
-  uj_total_.resize(n);
+  uj_offset_.resize(n);
   std::vector<RaplMeasurement> measurements = GetMeasurements();
   for (size_t i = 0; i < n; i++) {
-    uj_first_[i] = measurements[i].value;
+    uj_first_[i] = measurements[i].joules;
     uj_previous_[i] = uj_first_[i];
-    uj_total_[i] = 0;
+    uj_offset_[i] = 0;
   }
-
-  SetMeasurementInterval();
-}
-
-void RaplImpl::StartThread() {
-  thread_ = std::thread([&] {
-    while (!stop_) {
-      GetMeasurements();
-      for (size_t i = 0; i < kKeepAliveInterval && !stop_; i++) {
-        std::this_thread::sleep_for(
-            std::chrono::milliseconds(getMeasurementInterval()));
-      }
-    }
-  });
-}
-
-void RaplImpl::StopThread() {
-  stop_ = true;
-  if (thread_.joinable()) {
-    thread_.join();
-  }
-}
-
-RaplState RaplImpl::GetRaplState() {
-  RaplState state;
-  state.timeAtRead = get_wtime();
-  state.measurements = GetMeasurements();
-
-  for (rapl::RaplMeasurement& m : state.measurements) {
-    m.value *= 1e-6;  // convert uj to j
-  }
-
-  const size_t n_measurements = state.measurements.size();
-
-  // Fill the current state
-  state.consumedEnergyTotal = 0;
-  for (size_t i = 0; i < state.measurements.size(); i++) {
-    const std::string name = state.measurements[i].name;
-    const size_t joulesAtRead = state.measurements[i].value;
-    if (name.find("package") != std::string::npos) {
-      state.consumedEnergyTotal += joulesAtRead;
-    }
-  }
-
-  return state;
 }
 
 std::vector<RaplMeasurement> RaplImpl::GetMeasurements() {
@@ -257,46 +194,46 @@ std::vector<RaplMeasurement> RaplImpl::GetMeasurements() {
   }
 
   for (size_t i = 0; i < measurements.size(); i++) {
-    const size_t uj_now = measurements[i].value;
+    const size_t uj_now = measurements[i].joules;
     if (uj_now < uj_previous_[i]) {
-      uj_total_[i] += uj_max_[i];
+      uj_offset_[i] += uj_max_[i];
     }
     uj_previous_[i] = uj_now;
-    measurements[i].value = uj_total_[i] + uj_now - uj_first_[i];
+    measurements[i].joules = uj_offset_[i] + uj_now - uj_first_[i];
   }
 
   return measurements;
-}  // end Rapl::measure
+}  // end Rapl::GetMeasurement
 
-void RaplImpl::SetMeasurementInterval() {
-  const int measurement_interval_min = 10;    // ms
-  const int measurement_interval_max = 1000;  // ms
+State RaplImpl::GetState() {
+  std::vector<RaplMeasurement> measurements = GetMeasurements();
+  State state(1 + measurements.size());
+  state.timestamp_ = GetTime();
+  state.name_[0] = "total";
+  state.joules_[0] = 0;
+  state.watt_[0] = 0;
 
-  if (file_names_.size() == 0) {
-    measurement_interval_ = measurement_interval_max;
-    return;
+  for (size_t i = 0; i < measurements.size(); i++) {
+    const std::string name = measurements[i].name;
+    const size_t joules_now = measurements[i].joules;
+    const size_t joules_previous = previous_measurements_[i].joules;
+    const double duration = previous_timestamp_ - state.timestamp_;
+    const size_t joules_diff = (joules_now - joules_previous) * 1e-6;
+    const float watt = joules_diff / duration;
+    state.name_[i + 1] = name;
+    state.joules_[i + 1] = joules_now * 1e-6;
+    state.watt_[i + 1] = watt;
+
+    if (name.find("package") != std::string::npos) {
+      state.joules_[0] += joules_now * 1e-6;
+      state.watt_[0] += watt;
+    }
   }
 
-  const std::string filename = file_names_[0];
-  int measurement_interval = measurement_interval_min;
+  previous_timestamp_ = state.timestamp_;
+  previous_measurements_ = measurements;
 
-  for (; measurement_interval < measurement_interval_max;
-       measurement_interval += measurement_interval_min) {
-    size_t value1 = 0;
-    size_t value2 = 0;
-    ReadFile(filename, value1);
-    ReadFile(filename, value2);
-    if (value1 != value2) {
-      break;
-    }
-  };
-
-  const int multiple = 10;
-  measurement_interval_ =
-      ((measurement_interval + multiple) / multiple) * multiple;
-
-#if defined(DEBUG)
-  std::cout << "Measurement interval: " << measurement_interval_ << "ms \n";
-#endif
+  return state;
 }
+
 }  // namespace pmt::rapl

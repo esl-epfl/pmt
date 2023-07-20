@@ -6,8 +6,7 @@
 namespace pmt::rapl {
 class Rapl : public PMT {
 public:
-  static std::unique_ptr<Rapl> create();
-  std::vector<std::pair<std::string, double>> misc(const State &firstState, const State &secondState) override;
+  static std::unique_ptr<Rapl> Create();
 };
 } // end namespace pmt::rapl
 

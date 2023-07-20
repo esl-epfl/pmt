@@ -27,7 +27,6 @@ include_directories(${CMAKE_SOURCE_DIR}/common)
 # Options to disable implementations
 # that require external dependencies
 option(BUILD_POWERSENSOR2_PMT "" OFF)
-option(BUILD_LIKWID_PMT "" OFF)
 option(BUILD_NVML_PMT "" OFF)
 option(BUILD_POWERSENSOR3_PMT "" OFF)
 option(BUILD_PYTHON_PMT "" OFF)
@@ -52,16 +51,6 @@ if(${BUILD_POWERSENSOR3_PMT})
   set(HAVE_POWERSENSOR3 TRUE)
 endif()
 
-# Find dependencies for Likwid
-if(${BUILD_LIKWID_PMT})
-  find_package(Likwid QUIET)
-  if(${LIKWID_FOUND})
-    set(HAVE_LIKWID TRUE)
-  else()
-    message("Likwid was not found, Likwid will not be built.")
-  endif()
-endif()
-
 # Find dependencies for NVML
 if(${BUILD_NVML_PMT})
   find_package(CUDAToolkit QUIET)
@@ -78,14 +67,10 @@ if(${BUILD_PYTHON_PMT})
   find_package(pybind11 CONFIG REQUIRED)
 endif()
 
-# Find dependencies for ROCMpmt
+# Find dependencies for ROCM
 if(${BUILD_ROCM_PMT})
-  find_package(ROCM-SMI)
-  if(${ROCM-SMI_FOUND})
-    set(HAVE_ROCMSMI TRUE)
-  else()
-    message("ROCM-SMI was not found, ROCMpmt will not be built.")
-  endif()
+  find_package(ROCM-SMI REQUIRED)
+  message(${ROCM-SMI_INCLUDE_DIR})
 endif()
 
 # Config file
@@ -121,11 +106,6 @@ endif()
 
 # Dummy
 add_subdirectory(dummy)
-
-# Likwid
-if(${LIKWID_FOUND})
-  add_subdirectory(likwid)
-endif()
 
 # NVML
 if(${CUDAToolkit_FOUND})
