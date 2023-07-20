@@ -29,7 +29,7 @@ Include the header file into your program, e.g.:
 Depending on which PMT implementations you have selected during the build, you can now initialize
 any PMT instance:
 ```
-std::unique ptr<pmt::PMT> sensor(pmt::nvml::NVML::create());
+std::unique ptr<pmt::PMT> sensor(pmt::nvml::NVML::Create());
 ```
 Next, you can start measuring power using the common api as specified in `pmt.h`:
 ```

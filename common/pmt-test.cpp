@@ -1,4 +1,5 @@
 #include <chrono>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <thread>
@@ -6,16 +7,17 @@
 #include "pmt-test.h"
 
 void run(pmt::PMT &sensor, int argc, char *argv[]) {
-  const char *dumpFileName = std::getenv(pmt::kDumpFilenameVariable.c_str());
-  sensor.startDumpThread(dumpFileName);
+  const char *filename = std::getenv(pmt::kDumpFilenameVariable.c_str());
+  sensor.StartDump(filename);
 
   if (argc == 1) {
-    auto first = sensor.read();
+    auto first = sensor.Read();
     while (true) {
-      auto start = sensor.read();
+      auto start = sensor.Read();
       std::this_thread::sleep_for(
-          std::chrono::milliseconds(sensor.getMeasurementInterval()));
-      auto end = sensor.read();
+          std::chrono::milliseconds(sensor.GetMeasurementInterval()));
+      auto end = sensor.Read();
+      std::cout << std::fixed << std::setprecision(3);
       std::cout << pmt::PMT::seconds(start, end) << " s, ";
       std::cout << pmt::PMT::joules(start, end) << " J, ";
       std::cout << pmt::PMT::watts(start, end) << " W, ";
@@ -32,11 +34,11 @@ void run(pmt::PMT &sensor, int argc, char *argv[]) {
       }
       command << argv[i];
     }
-    auto start = sensor.read();
+    auto start = sensor.Read();
     if (system(command.str().c_str()) != 0) {
       perror(command.str().c_str());
     }
-    auto end = sensor.read();
+    auto end = sensor.Read();
     std::cout << "Runtime: " << pmt::PMT::seconds(start, end) << " s"
               << std::endl;
     std::cout << "Joules: " << pmt::PMT::joules(start, end) << " J"

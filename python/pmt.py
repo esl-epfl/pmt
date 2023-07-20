@@ -17,11 +17,6 @@ def get_pmt(platform, device_id=0):
         return pypmt.Dummy.create()
     elif platform == "tegra":
         return pypmt.tegra.create()
-    elif platform == "likwid":
-        try:
-            return pypmt.Likwid.create(device_id)
-        except AttributeError:
-            raise Exception("Likwid not installed")
     elif platform == "nvml":
         try:
             return pypmt.NVML.create(device_id)

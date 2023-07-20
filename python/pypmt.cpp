@@ -13,10 +13,6 @@
 #include <../dummy/Dummy.h>
 #include <../tegra/Tegra.h>
 
-#ifdef BUILD_LIKWID
-#include <../likwid/Likwid.h>
-#endif
-
 #ifdef BUILD_NVML
 #include <../nvml/NVML.h>
 #endif
@@ -32,15 +28,15 @@
 namespace py = pybind11;
 
 double seconds(pmt::State start, pmt::State end) {
-  return end.timeAtRead - start.timeAtRead;
+  return pmt::PMT::seconds(start, end);
 }
 
 double joules(pmt::State start, pmt::State end) {
-  return end.joulesAtRead - start.joulesAtRead;
+  return pmt::PMT::joules(start, end);
 }
 
 double watts(pmt::State start, pmt::State end) {
-  return joules(start, end) / seconds(start, end);
+  return pmt::PMT::watts(start, end);
 }
 
 PYBIND11_MODULE(pypmt, m) {
@@ -54,65 +50,57 @@ PYBIND11_MODULE(pypmt, m) {
 
 #ifdef BUILD_POWERSENSOR2
   py::class_<pmt::powersensor2::PowerSensor2>(m, "PowerSensor2")
-      .def("create", &pmt::powersensor2::PowerSensor2::create)
-      .def("read", &pmt::powersensor2::PowerSensor2::read)
-      .def("startDumpThread", &pmt::powersensor2::PowerSensor2::startDumpThread)
-      .def("stopDumpThread", &pmt::powersensor2::PowerSensor2::stopDumpThread);
+      .def("create", &pmt::powersensor2::PowerSensor2::Create)
+      .def("read", &pmt::powersensor2::PowerSensor2::Read)
+      .def("startDump", &pmt::powersensor2::PowerSensor2::StartDump)
+      .def("stopDump", &pmt::powersensor2::PowerSensor2::StopDump);
 #endif
 
 #ifdef BUILD_POWERSENSOR3
   py::class_<pmt::powersensor3::PowerSensor3>(m, "PowerSensor3")
-      .def("create", &pmt::powersensor3::PowerSensor3::create)
-      .def("read", &pmt::powersensor3::PowerSensor3::read)
-      .def("startDumpThread", &pmt::powersensor3::PowerSensor3::startDumpThread)
-      .def("stopDumpThread", &pmt::powersensor3::PowerSensor3::stopDumpThread);
+      .def("create", &pmt::powersensor3::PowerSensor3::Create)
+      .def("read", &pmt::powersensor3::PowerSensor3::Read)
+      .def("startDump", &pmt::powersensor3::PowerSensor3::StartDump)
+      .def("stopDump", &pmt::powersensor3::PowerSensor3::StopDump);
 #endif
 
   py::class_<pmt::Dummy>(m, "Dummy")
-      .def("create", &pmt::Dummy::create)
-      .def("read", &pmt::Dummy::read)
-      .def("startDumpThread", &pmt::Dummy::startDumpThread)
-      .def("stopDumpThread", &pmt::Dummy::stopDumpThread);
+      .def("create", &pmt::Dummy::Create)
+      .def("read", &pmt::Dummy::Read)
+      .def("startDump", &pmt::Dummy::StartDump)
+      .def("stopDump", &pmt::Dummy::StopDump);
 
   py::class_<pmt::tegra::Tegra>(m, "tegra")
-      .def("create", &pmt::tegra::Tegra::create)
-      .def("read", &pmt::tegra::Tegra::read)
-      .def("startDumpThread", &pmt::tegra::Tegra::startDumpThread)
-      .def("stopDumpThread", &pmt::tegra::Tegra::stopDumpThread);
-
-#ifdef BUILD_LIKWID
-  py::class_<pmt::likwid::Likwid>(m, "Likwid")
-      .def("create", &pmt::likwid::Likwid::create)
-      .def("read", &pmt::likwid::Likwid::read)
-      .def("startDumpThread", &pmt::likwid::Likwid::startDumpThread)
-      .def("stopDumpThread", &pmt::likwid::Likwid::stopDumpThread);
-#endif
+      .def("create", &pmt::tegra::Tegra::Create)
+      .def("read", &pmt::tegra::Tegra::Read)
+      .def("startDump", &pmt::tegra::Tegra::StartDump)
+      .def("stopDump", &pmt::tegra::Tegra::StopDump);
 
 #ifdef BUILD_NVML
   py::class_<pmt::nvml::NVML>(m, "NVML")
-      .def("create", &pmt::nvml::NVML::create)
-      .def("read", &pmt::nvml::NVML::read)
-      .def("startDumpThread", &pmt::nvml::NVML::startDumpThread)
-      .def("stopDumpThread", &pmt::nvml::NVML::stopDumpThread);
+      .def("create", &pmt::nvml::NVML::Create)
+      .def("read", &pmt::nvml::NVML::Read)
+      .def("startDump", &pmt::nvml::NVML::StartDump)
+      .def("StopDump", &pmt::nvml::NVML::StopDump);
 #endif
 
   py::class_<pmt::rapl::Rapl>(m, "Rapl")
-      .def("create", &pmt::rapl::Rapl::create)
-      .def("read", &pmt::rapl::Rapl::read)
-      .def("startDumpThread", &pmt::rapl::Rapl::startDumpThread)
-      .def("stopDumpThread", &pmt::rapl::Rapl::stopDumpThread);
+      .def("create", &pmt::rapl::Rapl::Create)
+      .def("read", &pmt::rapl::Rapl::Read)
+      .def("startDump", &pmt::rapl::Rapl::StartDump)
+      .def("stopDump", &pmt::rapl::Rapl::StopDump);
 
 #ifdef BUILD_ROCM
   py::class_<pmt::rocm::ROCM>(m, "ROCM")
-      .def("create", &pmt::rocm::ROCM::create)
-      .def("read", &pmt::rocm::ROCM::read)
-      .def("startDumpThread", &pmt::rocm::ROCM::startDumpThread)
-      .def("stopDumpThread", &pmt::rocm::ROCM::stopDumpThread);
+      .def("create", &pmt::rocm::ROCM::Create)
+      .def("read", &pmt::rocm::ROCM::Read)
+      .def("startDump", &pmt::rocm::ROCM::StartDump)
+      .def("stopDump", &pmt::rocm::ROCM::StopDump);
 #endif
 
   py::class_<pmt::xilinx::Xilinx>(m, "Xilinx")
-      .def("create", &pmt::xilinx::Xilinx::create)
-      .def("read", &pmt::xilinx::Xilinx::read)
-      .def("startDumpThread", &pmt::xilinx::Xilinx::startDumpThread)
-      .def("stopDumpThread", &pmt::xilinx::Xilinx::stopDumpThread);
+      .def("create", &pmt::xilinx::Xilinx::Create)
+      .def("read", &pmt::xilinx::Xilinx::Read)
+      .def("startDump", &pmt::xilinx::Xilinx::StartDump)
+      .def("stopDump", &pmt::xilinx::Xilinx::StopDump);
 }

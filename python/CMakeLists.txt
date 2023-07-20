@@ -23,11 +23,6 @@ if(${BUILD_POWERSENSOR3_PMT})
   target_link_libraries(pypmt PRIVATE pmt-powersensor3)
 endif()
 
-if(${LIKWID_FOUND})
-  add_definitions(-DBUILD_LIKWID)
-  target_link_libraries(pypmt PRIVATE pmt-likwid)
-endif()
-
 if(${BUILD_NVML_PMT})
   find_package(CUDAToolkit QUIET)
   if(${CUDAToolkit_FOUND})

@@ -2,21 +2,23 @@
 
 namespace pmt {
 
-class Dummy_ : public Dummy {
+class DummyImpl : public Dummy {
  private:
-  virtual State read() override;
+  virtual State GetState() override;
 
-  virtual const char *getDumpFileName() { return nullptr; }
+  virtual const char *GetDumpFilename() { return nullptr; }
 
-  virtual int getMeasurementInterval() { return 0; }
+  virtual int GetMeasurementInterval() { return 0; }
 };
 
-std::unique_ptr<Dummy> Dummy::create() { return std::make_unique<Dummy_>(); }
+std::unique_ptr<Dummy> Dummy::Create() { return std::make_unique<DummyImpl>(); }
 
-State Dummy_::read() {
+State DummyImpl::GetState() {
   State state;
-  state.timeAtRead = PMT::get_wtime();
-  state.joulesAtRead = 0;
+  state.timestamp_ = PMT::GetTime();
+  state.name_[0] = "none";
+  state.joules_[0] = 0;
+  state.watt_[0] = 0;
   return state;
 }
 

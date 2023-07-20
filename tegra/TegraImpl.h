@@ -10,10 +10,10 @@ using TegraMeasurement = std::pair<std::string, int>;
 class TegraState {
  public:
   operator State();
-  double timeAtRead;
+  double timestamp_;
   std::vector<std::pair<std::string, int>> measurements;
-  unsigned int instantaneousPowerTotal = 0;
-  unsigned int consumedEnergyTotal = 0;
+  unsigned int watt_ = 0;
+  unsigned int joules_ = 0;
 };
 
 class TegraImpl : public Tegra {
@@ -21,10 +21,10 @@ class TegraImpl : public Tegra {
   TegraImpl();
   ~TegraImpl();
 
-   State read() override { return GetTegraState(); }
+   State GetState() override { return GetTegraState(); }
 
-  virtual const char *getDumpFileName() { return "/tmp/pmt_tegra.out"; }
-  virtual int getMeasurementInterval() { return measurement_interval_; }
+  virtual const char *GetDumpFilename() { return "/tmp/pmt_tegra.out"; }
+  virtual int GetMeasurementInterval() { return measurement_interval_; }
 
 private:
   TegraState GetTegraState();

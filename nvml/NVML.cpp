@@ -1,10 +1,6 @@
 #include "NVML.h"
 
-#include <iostream>
 #include <sstream>
-#include <stdexcept>
-
-#include <unistd.h>
 
 #if defined(HAVE_NVML)
 #include "nvml.h"
@@ -26,13 +22,12 @@ inline void __checkNVMLCall(nvmlReturn_t result, const char *const func,
 #endif
 
 namespace pmt::nvml {
-
 class NVMLState {
  public:
   operator State();
-  double timeAtRead;
-  unsigned int instantaneousPower = 0;
-  unsigned int consumedEnergyDevice = 0;
+  double timestamp_;
+  unsigned int watt_ = 0;
+  unsigned int joules_ = 0;
 };
 
 class NVMLImpl : public NVML {
@@ -41,72 +36,72 @@ class NVMLImpl : public NVML {
   ~NVMLImpl();
 
  private:
-  State read() override { return GetNVMLState(); }
+  State GetState() override { return GetNVMLState(); }
 
-  virtual const char *getDumpFileName() { return "/tmp/pmt_nvml.out"; }
+  virtual const char *GetDumpFilename() { return "/tmp/pmt_nvml.out"; }
 
-  virtual int getMeasurementInterval() {
+  virtual int GetMeasurementInterval() {
     return 10;  // milliseconds
   }
 
-  NVMLState previousState;
+  NVMLState state_previous_;
   NVMLState GetNVMLState();
 
 #if defined(HAVE_NVML)
-  nvmlDevice_t device;
+  nvmlDevice_t device_;
 #endif
 };
 
 NVMLState::operator State() {
   State state;
-  state.timeAtRead = timeAtRead;
-  state.joulesAtRead = consumedEnergyDevice * 1e-3;
+  state.timestamp_ = timestamp_;
+  state.name_[0] = "device";
+  state.joules_[0] = joules_ * 1e-3;
+  state.watt_[0] = watt_ * 1e-3;
   return state;
 }
 
-std::unique_ptr<NVML> NVML::create(int device_number) {
+std::unique_ptr<NVML> NVML::Create(int device_number) {
   return std::unique_ptr<NVML>(new NVMLImpl(device_number));
 }
 
 NVMLImpl::NVMLImpl(int device_number) {
-  const char *cstr_pmt_device = getenv("PMT_DEVICE");
-  const unsigned device_number_ =
-      cstr_pmt_device ? atoi(cstr_pmt_device) : device_number;
+  const char *pmt_device = getenv("PMT_DEVICE");
+  device_number = pmt_device ? atoi(pmt_device) : device_number;
 
 #if defined(HAVE_NVML)
   checkNVMLCall(nvmlInit());
-  checkNVMLCall(nvmlDeviceGetHandleByIndex(device_number_, &device));
+  checkNVMLCall(nvmlDeviceGetHandleByIndex(device_number, &device_));
 #endif
 
-  previousState = GetNVMLState();
-  previousState.consumedEnergyDevice = 0;
+  state_previous_ = GetNVMLState();
+  state_previous_.joules_ = 0;
 }
 
 NVMLImpl::~NVMLImpl() {
 #if defined(HAVE_NVML)
-  stopDumpThread();
   checkNVMLCall(nvmlShutdown());
 #endif
 }
 
 NVMLState NVMLImpl::GetNVMLState() {
   NVMLState state;
-  state.timeAtRead = get_wtime();
+  state.timestamp_ = GetTime();
 
 #if defined(HAVE_NVML)
-  checkNVMLCall(nvmlDeviceGetPowerUsage(device, &state.instantaneousPower));
-  state.consumedEnergyDevice = previousState.consumedEnergyDevice;
-  const float averagePower =
-      (state.instantaneousPower + previousState.instantaneousPower) / 2;
-  const float timeElapsed = (state.timeAtRead - previousState.timeAtRead);
-  state.consumedEnergyDevice += averagePower * timeElapsed;
+  checkNVMLCall(nvmlDeviceGetPowerUsage(device_, &state.watt_));
+  state.joules_ = state_previous_.joules_;
+  const float watt = (state.watt_ + state_previous_.watt_) / 2;
+  const float duration = (state.timestamp_ - state_previous_.timestamp_);
+  state.joules_ += watt * duration;
+  state.watt_ = watt;
 #else
-  state.consumedEnergyDevice = 0;
+  state.joules_ = 0;
+  state.watt_ = 0;
 #endif
 
-  previousState = state;
+  state_previous_ = state;
 
   return state;
 }
-
 }  // end namespace pmt::nvml
