@@ -27,24 +27,13 @@
 
 namespace py = pybind11;
 
-double seconds(pmt::State start, pmt::State end) {
-  return pmt::PMT::seconds(start, end);
-}
-
-double joules(pmt::State start, pmt::State end) {
-  return pmt::PMT::joules(start, end);
-}
-
-double watts(pmt::State start, pmt::State end) {
-  return pmt::PMT::watts(start, end);
-}
-
 PYBIND11_MODULE(pypmt, m) {
   m.doc() = "libpmt python bindings";
 
-  m.def("seconds", &seconds, "Get elapsed time");
-  m.def("joules", &joules, "Get energy consumption");
-  m.def("watts", &watts, "Get average power consumption");
+  py::class_<pmt::PMT>(m, "PMT")
+      .def("seconds", &pmt::PMT::seconds, "Get elapsed time")
+      .def("joules", &pmt::PMT::joules, "Get energy consumption")
+      .def("watts", &pmt::PMT::watts, "Get average power consumption");
 
   py::class_<pmt::State>(m, "State");
 

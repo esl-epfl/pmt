@@ -8,7 +8,6 @@
 #include "pmt/PowerSensor3.h"
 #endif
 #include "pmt/Dummy.h"
-#include "pmt/Jetson.h"
 #if defined(HAVE_NVML)
 #include "pmt/NVML.h"
 #endif
@@ -16,4 +15,5 @@
 #include "pmt/ROCM.h"
 #endif
 #include "pmt/Rapl.h"
+#include "pmt/Tegra.h"
 #include "pmt/Xilinx.h"

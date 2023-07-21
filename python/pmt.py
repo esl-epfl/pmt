@@ -1,5 +1,4 @@
 import pypmt
-from pypmt import joules, seconds, watts
 
 
 def get_pmt(platform, device_id=0):
@@ -49,9 +48,9 @@ def measure(platform, device_id=0):
                 results.append(func_results)
             pmt_results = {
                 "platform": platform,
-                "joules": format(pypmt.joules(start, end), ".3f"),
-                "seconds": format(pypmt.seconds(start, end), ".3f"),
-                "watt": format(pypmt.watts(start, end), ".3f"),
+                "joules": format(pypmt.PMT.joules(start, end), ".3f"),
+                "seconds": format(pypmt.PMT.seconds(start, end), ".3f"),
+                "watt": format(pypmt.PMT.watts(start, end), ".3f"),
             }
             results.append(pmt_results)
 
@@ -62,19 +61,27 @@ def measure(platform, device_id=0):
     return decorator
 
 
-def dump(platform, filename, device_id=0):
+def dump(platform, **kwargs):
+
+    filename = None
+    filename_arg = 'filename'
+    if filename_arg in kwargs:
+        filename = kwargs[filename_arg]
+
+    device_id = 0
+    device_id_arg = 'device_id'
+    if device_id_arg in kwargs:
+        device_id = kwargs[device_id_arg]
+
     def decorator(func):
-        def wrapper(*args, **kwargs):
-            pmt = get_pmt(platform, device_id)
+       def wrapper(*args, **kwargs):
+           pmt = get_pmt(platform, device_id)
+           pmt.startDump(filename)
+           result = func(*args, **kwargs)
+           pmt.stopDump()
+           return result
 
-            if not filename:
-                raise Exception("Please provide a filename to dump the results")
-            pmt.startDumpThread(filename)
-            result = func(*args, **kwargs)
-            pmt.stopDumpThread()
-
-            return result
-
-        return wrapper
+       return wrapper
 
     return decorator
+
