@@ -34,6 +34,10 @@ void PMT::StartThread() {
     State previous = start;
     state_latest_ = start;
 
+    if (dump_file_) {
+      DumpHeader(start);
+    }
+
     const int measurement_interval =
         GetMeasurementInterval();  // in milliseconds
     assert(measurement_interval > 0);
@@ -62,13 +66,17 @@ void PMT::StopThread() {
 }
 
 void PMT::StartDump(const char *filename) {
+  const char *filename_ = std::getenv(kDumpFilenameVariable.c_str());
+  if (filename_) {
+    filename = filename_;
+  }
   if (!filename) {
     filename = GetDumpFilename();
   }
   assert(filename);
+
   dump_file_ = std::make_unique<std::ofstream>(filename);
-  const State state = Read();
-  DumpHeader(state);
+  Read();
 }
 
 void PMT::StopDump() { dump_file_.reset(); }

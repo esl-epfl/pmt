@@ -1,6 +1,7 @@
 import time
 
 import pmt
+import pypmt
 
 
 @pmt.measure("nvml")
@@ -16,9 +17,9 @@ def my_kernel2():
     end = pm.read()
     return {
         "platform": platform,
-        "joules": format(pmt.joules(start, end), ".3f"),
-        "seconds": format(pmt.seconds(start, end), ".3f"),
-        "watt": format(pmt.watts(start, end), ".3f"),
+        "joules": format(pypmt.PMT.joules(start, end), ".3f"),
+        "seconds": format(pypmt.PMT.seconds(start, end), ".3f"),
+        "watt": format(pypmt.PMT.watts(start, end), ".3f"),
     }
 
 
