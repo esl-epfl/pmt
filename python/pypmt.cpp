@@ -2,6 +2,8 @@
 
 #include <../common/pmt.h>
 
+#include <../cray/Cray.h>
+
 #ifdef BUILD_POWERSENSOR2
 #include <../powersensor2/PowerSensor2.h>
 #endif
@@ -36,6 +38,12 @@ PYBIND11_MODULE(pypmt, m) {
       .def("watts", &pmt::PMT::watts, "Get average power consumption");
 
   py::class_<pmt::State>(m, "State");
+
+  py::class_<pmt::cray::Cray>(m, "Cray")
+      .def("create", &pmt::cray::Cray::Create)
+      .def("read", &pmt::cray::Cray::Read)
+      .def("startDump", &pmt::cray::Cray::StartDump)
+      .def("stopDump", &pmt::cray::Cray::StopDump);
 
 #ifdef BUILD_POWERSENSOR2
   py::class_<pmt::powersensor2::PowerSensor2>(m, "PowerSensor2")

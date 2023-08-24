@@ -12,6 +12,11 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
       CACHE STRING "Default build type." FORCE)
 endif()
 
+#Set CXX Standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 # Set debug print info
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
@@ -95,6 +100,9 @@ add_subdirectory(common)
 
 # PMT library
 add_library(pmt SHARED $<TARGET_OBJECTS:pmt-common>)
+
+#Cray
+add_subdirectory(cray)
 
 # PowerSensor
 if(${BUILD_POWERSENSOR2_PMT})

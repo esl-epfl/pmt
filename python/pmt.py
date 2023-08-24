@@ -2,7 +2,9 @@ import pypmt
 
 
 def get_pmt(platform, device_id=0):
-    if platform in ['powersensor2', 'powersensor3']:
+    if platform == "cray":
+        return pypmt.Cray.create()
+    elif platform in ['powersensor2', 'powersensor3']:
         try:
             return pypmt.PowerSensor_.create(device_id, 2)
         except AttributeError:
