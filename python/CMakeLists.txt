@@ -8,6 +8,7 @@ target_link_libraries(
           pybind11::lto
           pybind11::windows_extras
           $<TARGET_OBJECTS:pmt-common>
+          pmt-cray
           pmt-dummy
           pmt-tegra
           pmt-rapl
