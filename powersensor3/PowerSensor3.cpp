@@ -1,6 +1,12 @@
 #include "PowerSensor3.h"
 
+#include <cassert>
+#include <iostream>
+#include <map>
+
 #include POWERSENSOR3_HEADER
+
+const unsigned MAX_PAIRS = PowerSensor3::MAX_PAIRS;
 
 namespace {
 double Seconds(const PowerSensor3::State &first,
@@ -9,13 +15,13 @@ double Seconds(const PowerSensor3::State &first,
 }
 
 double Joules(const PowerSensor3::State &first,
-              const PowerSensor3::State &second, int sensor_id) {
-  return PowerSensor3::Joules(first, second, sensor_id);
+              const PowerSensor3::State &second, int pair_id) {
+  return PowerSensor3::Joules(first, second, pair_id);
 }
 
 double Watt(const PowerSensor3::State &first, const PowerSensor3::State &second,
-            int sensor_id) {
-  return PowerSensor3::Watt(first, second, sensor_id);
+            int pair_id) {
+  return PowerSensor3::Watt(first, second, pair_id);
 }
 }  // namespace
 
@@ -26,25 +32,57 @@ class PowerSensor3Impl : public PowerSensor3 {
  public:
   PowerSensor3Impl(const char *device)
       : powersensor_(std::make_unique<PowerSensor>(device)),
-        first_state_(powersensor_->read()) {}
+        first_state_(powersensor_->read()) {
+    for (unsigned pair_id; pair_id < MAX_PAIRS; pair_id++) {
+      pairNames[pair_id] = GetPairName(pair_id);
+    }
+  }
 
   State GetState() override {
+    State state(MAX_PAIRS + 1);
     const PowerSensorState powersensor_state = powersensor_->read();
-    State state;
+
+    state.name_[0] = "total";
     state.timestamp_ = ::Seconds(first_state_, powersensor_state);
-    state.name_[0] = "device";
     state.joules_[0] = ::Joules(first_state_, powersensor_state, -1);
     state.watt_[0] = ::Watt(first_state_, powersensor_state, -1);
+
+    for (unsigned pair_id; pair_id < MAX_PAIRS; pair_id++) {
+      state.name_[pair_id + 1] = pairNames[pair_id];
+      state.joules_[pair_id + 1] =
+          ::Joules(first_state_, powersensor_state, pair_id);
+      state.watt_[pair_id + 1] =
+          ::Watt(first_state_, powersensor_state, pair_id);
+    }
     return state;
+  }
+
+  State Read(int pair_id) override {
+    State state{1};
+    State current_state{MAX_PAIRS + 1};
+    current_state = PMT::Read();
+
+    state.timestamp_ = current_state.timestamp_;
+    state.name_[0] = current_state.name_[pair_id + 1];
+    state.joules_[0] = current_state.joules_[pair_id + 1];
+    state.watt_[0] = current_state.watt_[pair_id + 1];
+    return state;
+  }
+
+  bool IsInUse(int pair_id) override { return powersensor_->getInUse(pair_id); }
+
+  std::string GetPairName(int pair_id) override {
+    return powersensor_->getPairName(pair_id);
   }
 
  private:
   virtual const char *GetDumpFilename() { return "/tmp/pmt_powersensor3.out"; }
 
-  virtual int GetMeasurementInterval() {
+  virtual int GetMeasurementInterval() override {
     return 1;  // milliseconds
   }
 
+  std::string pairNames[MAX_PAIRS];
   std::unique_ptr<PowerSensor> powersensor_{};
   PowerSensorState first_state_{};
 };

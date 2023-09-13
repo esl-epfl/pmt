@@ -58,7 +58,9 @@ PYBIND11_MODULE(pypmt, m) {
       .def("create", &pmt::powersensor3::PowerSensor3::Create)
       .def("read", &pmt::powersensor3::PowerSensor3::Read)
       .def("startDump", &pmt::powersensor3::PowerSensor3::StartDump)
-      .def("stopDump", &pmt::powersensor3::PowerSensor3::StopDump);
+      .def("stopDump", &pmt::powersensor3::PowerSensor3::StopDump)
+      .def("getPairName", &pmt::powersensor3::PowerSensor3::GetPairName)
+      .def("isInUse", &pmt::powersensor3::PowerSensor3::IsInUse);
 #endif
 
   py::class_<pmt::Dummy>(m, "Dummy")

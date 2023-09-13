@@ -1,17 +1,29 @@
 import pypmt
+import os
+import re
+
+
+def is_tty_device(device_id):
+    return isinstance(device_id, str) and bool(re.search(r"^/dev/tty.*", device_id))
 
 
 def get_pmt(platform, device_id=0):
     if platform == "cray":
         return pypmt.Cray.create()
-    elif platform in ['powersensor2', 'powersensor3']:
+    elif platform == 'powersensor2':
         try:
-            return pypmt.PowerSensor_.create(device_id, 2)
+            if is_tty_device(device_id):
+                return pypmt.PowerSensor2.create(str(device_id))
+            else:
+                return pypmt.PowerSensor2.create()
         except AttributeError:
             raise Exception("PowerSensor2 not installed")
     elif platform == 'powersensor3':
         try:
-            return pypmt.PowerSensor_.create(device_id, 3)
+            if is_tty_device(device_id):
+                return pypmt.PowerSensor3.create(str(device_id))
+            else:
+                return pypmt.PowerSensor3.create()
         except AttributeError:
             raise Exception("PowerSensor3 not installed")
     elif platform == "dummy":
@@ -76,14 +88,13 @@ def dump(platform, **kwargs):
         device_id = kwargs[device_id_arg]
 
     def decorator(func):
-       def wrapper(*args, **kwargs):
-           pmt = get_pmt(platform, device_id)
-           pmt.startDump(filename)
-           result = func(*args, **kwargs)
-           pmt.stopDump()
-           return result
+        def wrapper(*args, **kwargs):
+            pmt = get_pmt(platform, device_id)
+            pmt.startDump(filename)
+            result = func(*args, **kwargs)
+            pmt.stopDump()
+            return result
 
-       return wrapper
+        return wrapper
 
     return decorator
-
