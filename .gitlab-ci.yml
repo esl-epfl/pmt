@@ -47,7 +47,7 @@ test-das6:
     - mkdir build
     - cd build
     - cmake .. -DBUILD_POWERSENSOR2_PMT=ON -DBUILD_POWERSENSOR3_PMT=ON -DBUILD_NVML_PMT=ON -DBUILD_PYTHON_PMT=ON
-    - make install
+    - make
     - $(pwd)/rapl/Rapl-test sleep 3
     - $(pwd)/nvml/NVML-test sleep 3
     - PYTHONPATH=$PYTHONPATH:$(pwd)/python python3 ${CI_PROJECT_DIR}/python/PythonNVMLDemo.py

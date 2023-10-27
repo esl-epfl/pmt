@@ -83,7 +83,8 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/config/pmt-config.h.in
                ${PROJECT_BINARY_DIR}/pmt-config.h)
 
 include_directories(${PROJECT_BINARY_DIR})
-install(FILES ${PROJECT_BINARY_DIR}/pmt-config.h DESTINATION include)
+install(FILES ${PROJECT_BINARY_DIR}/pmt-config.h
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
 
 # Installation
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -95,13 +96,15 @@ endif()
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH True)
 
+include(GNUInstallDirs)
+
 # PMT interface and common functionality
 add_subdirectory(common)
 
 # PMT library
 add_library(pmt SHARED $<TARGET_OBJECTS:pmt-common>)
 
-#Cray
+# Cray
 add_subdirectory(cray)
 
 # PowerSensor
@@ -123,27 +126,35 @@ endif()
 # Tegra
 add_subdirectory(tegra)
 
-#Python Bindings
+# Python bindings
 if(${pybind11_FOUND})
   add_subdirectory(python)
 endif()
 
-# Raplpmt
+# Rapl
 add_subdirectory(rapl)
 
-# ROCMpmt
+# ROCM
 if(${ROCM-SMI_FOUND})
   add_subdirectory(rocm)
 endif()
 
-# Xilinxpmt
+# Xilinx
 add_subdirectory(xilinx)
 
 # Public header file
 set_target_properties(pmt PROPERTIES PUBLIC_HEADER pmt.h)
 
 # Install library
+target_include_directories(
+  pmt PUBLIC $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+
 install(
-  TARGETS pmt
-  LIBRARY DESTINATION lib
-  PUBLIC_HEADER DESTINATION include)
+  TARGETS ${PROJECT_NAME}
+  EXPORT ${PROJECT_NAME}-config
+  COMPONENT ${PROJECT_NAME}
+  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/)
+
+# Install cmake targets
+install(EXPORT ${PROJECT_NAME}-config
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})

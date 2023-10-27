@@ -1,5 +1,5 @@
-#ifndef PMT_H_
-#define PMT_H_
+#ifndef PMT_COMMON_H_
+#define PMT_COMMON_H_
 
 #include "pmt-config.h"
 

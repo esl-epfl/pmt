@@ -46,14 +46,14 @@ endif()
 set_target_properties(pypmt PROPERTIES CXX_VISIBILITY_PRESET "hidden"
                                        CUDA_VISIBILITY_PRESET "hidden")
 
-install(TARGETS pypmt DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python")
+install(TARGETS pypmt DESTINATION "${CMAKE_INSTALL_LIBDIR}/python")
 
 install(
   FILES PythonNVMLDemo.py
   COMPONENT python
-  DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
+  DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 install(
   FILES pmt.py
   COMPONENT python
-  DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python")
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/python")

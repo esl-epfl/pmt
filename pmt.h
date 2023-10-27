@@ -1,4 +1,7 @@
-#include "pmt-config.h"
+#ifndef PMT_H_
+#define PMT_H_
+
+#include "pmt/pmt-config.h"
 
 #include "pmt/pmt.h"
 #if defined(HAVE_POWERSENSOR2)
@@ -17,3 +20,5 @@
 #include "pmt/Rapl.h"
 #include "pmt/Tegra.h"
 #include "pmt/Xilinx.h"
+
+#endif

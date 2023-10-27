@@ -42,6 +42,14 @@ std::cout<<sensor−>watts(start, end) <<” [W]“<<std::endl;
 std::cout<<sensor−>seconds(start, end)<<” [S]“<<std::endl;
 ```
 
+## CMake
+Integrating PMT into your CMake project is easy, as `.cmake` config files will
+be automatically generated and put into your install directory during installation.
+All you need to do is  add `find_package(pmt)` to your `CMakeLists.txt`
+and use `target_link_libraries(<target> pmt)` to setup the include directories
+and link libraries. Add `-Dpmt_ROOT=<pmt-installation-prefix>` to your CMake
+commandline to let CMake find the PMT config files.
+
 # pmt-test
 PMT-test executables might be used directly to read the values of a PowerSensor at a regular interval. The PMT-test executables are available in the install directory `/bin`.
 
