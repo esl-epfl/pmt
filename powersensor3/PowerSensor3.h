@@ -1,6 +1,9 @@
 #ifndef PMT_POWERSENSOR3_H_
 #define PMT_POWERSENSOR3_H_
 
+#include <memory>
+#include <string>
+
 #include "pmt.h"
 
 namespace pmt::powersensor3 {

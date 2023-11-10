@@ -1,6 +1,9 @@
 #ifndef PMT_POWERSENSOR2_H_
 #define PMT_POWERSENSOR2_H_
 
+#include <memory>
+#include <string>
+
 #include "pmt.h"
 
 namespace pmt::powersensor2 {
@@ -14,4 +17,4 @@ class PowerSensor2 : public PMT {
 
 }  // end namespace pmt::powersensor2
 
-#endif // PMT_POWERSENSOR2_H_
+#endif  // PMT_POWERSENSOR2_H_

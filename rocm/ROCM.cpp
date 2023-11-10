@@ -36,9 +36,9 @@ class ROCMImpl : public ROCM {
  private:
   virtual State GetState();
 
-  virtual const char *GetDumpFilename() { return "/tmp/pmt_rocm.out"; }
+  virtual const char *GetDumpFilename() override { return "/tmp/pmt_rocm.out"; }
 
-  virtual int GetMeasurementInterval() {
+  virtual int GetMeasurementInterval() override {
     return 100;  // milliseconds
   }
 

@@ -1,9 +1,11 @@
-#ifndef PMT_H_
-#define PMT_H_
+#ifndef PMT_CONFIG_H_
+#define PMT_CONFIG_H_
 
-#include "pmt/pmt-config.h"
+#cmakedefine HAVE_POWERSENSOR2
+#cmakedefine HAVE_POWERSENSOR3
+#cmakedefine HAVE_NVML
+#cmakedefine HAVE_ROCM-smi
 
-#include "pmt/pmt.h"
 #if defined(HAVE_POWERSENSOR2)
 #include "pmt/PowerSensor2.h"
 #endif

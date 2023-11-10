@@ -1,12 +1,10 @@
 #ifndef CRAY_PMT_H
 #define CRAY_PMT_H
 
-#include <iostream>
+#include <cstddef>
+#include <memory>
 #include <string>
-#include <sstream>
-#include <stdexcept>
 
-#include "FilenamesHelper.h"
 #include "pmt.h"
 
 namespace pmt {

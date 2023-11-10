@@ -1,9 +1,3 @@
-#include <fstream>
-#include <iostream>
-
-#include <omp.h>
-#include <unistd.h>
-
 #include "Tegra.h"
 #include "TegraImpl.h"
 

@@ -1,18 +1,18 @@
 #ifndef PMT_RAPLIMPL_H_
 #define PMT_RAPLIMPL_H_
 
-#include <cassert>
+#include <cstddef>
 #include <mutex>
 #include <string>
-#include <thread>
 #include <vector>
 
 #include "Rapl.h"
+#include "pmt.h"
 
 namespace pmt::rapl {
 
 const int kNumRaplDomains = 4;
-const int kKeepAliveInterval = 10; // call Measure() roughly every nth update
+const int kKeepAliveInterval = 10;  // call Measure() roughly every nth update
 
 struct RaplMeasurement {
   std::string name;
@@ -20,15 +20,15 @@ struct RaplMeasurement {
 };
 
 class RaplImpl : public Rapl {
-public:
+ public:
   RaplImpl();
 
   State GetState() override;
 
-  virtual const char *GetDumpFilename() { return "/tmp/pmt_rapl.out"; }
-  virtual int GetMeasurementInterval() { return 100; }
+  virtual const char *GetDumpFilename() override { return "/tmp/pmt_rapl.out"; }
+  virtual int GetMeasurementInterval() override { return 100; }
 
-private:
+ private:
   std::vector<int> DetectPackages();
   void Init();
   std::vector<RaplMeasurement> GetMeasurements();
@@ -55,6 +55,6 @@ private:
   std::mutex mutex_;
 };
 
-} // end namespace pmt::rapl
+}  // end namespace pmt::rapl
 
-#endif // PMT_RAPLIMPL_H_
+#endif  // PMT_RAPLIMPL_H_

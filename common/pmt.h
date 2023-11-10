@@ -1,10 +1,10 @@
 #ifndef PMT_COMMON_H_
 #define PMT_COMMON_H_
 
-#include "pmt-config.h"
-
 #include <fstream>
+#include <memory>
 #include <mutex>
+#include <string>
 #include <thread>
 #include <vector>
 
@@ -39,7 +39,7 @@ class State {
 
 class PMT {
  public:
-  ~PMT();
+  virtual ~PMT();
 
   static double seconds(const State &first, const State &second);
 

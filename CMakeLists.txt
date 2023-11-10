@@ -26,6 +26,9 @@ find_package(OpenMP REQUIRED)
 # Enable PThreads
 find_package(Threads REQUIRED)
 
+# Enable compile commands (needed for iwyu)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Add PMT common directory as include directory
 include_directories(${CMAKE_SOURCE_DIR}/common)
 
@@ -40,7 +43,6 @@ option(BUILD_ROCM_PMT "" OFF)
 # Find dependencies for PowerSensor
 if(${BUILD_POWERSENSOR2_PMT})
   set(POWERSENSOR2_ROOT_DIR ${CMAKE_SOURCE_DIR}/powersensor2/PowerSensor2)
-  set(POWERSENSOR2_HEADER ${POWERSENSOR2_ROOT_DIR}/PowerSensor.h)
   set(POWERSENSOR2_SOURCE ${POWERSENSOR2_ROOT_DIR}/PowerSensor.cc)
   set(HAVE_POWERSENSOR2 TRUE)
 endif()
@@ -50,7 +52,6 @@ if(${BUILD_POWERSENSOR3_PMT})
       ${CMAKE_SOURCE_DIR}/powersensor3/PowerSensor3/host/src)
   set(POWERSENSOR3_ROOT_INC_DIR
       ${CMAKE_SOURCE_DIR}/powersensor3/PowerSensor3/host/include)
-  set(POWERSENSOR3_HEADER ${POWERSENSOR3_ROOT_INC_DIR}/PowerSensor.hpp)
   set(POWERSENSOR3_SOURCE ${POWERSENSOR3_ROOT_SRC_DIR}/PowerSensor.cc
                           ${POWERSENSOR3_ROOT_SRC_DIR}/sensors.cc)
   set(HAVE_POWERSENSOR3 TRUE)
@@ -79,12 +80,10 @@ if(${BUILD_ROCM_PMT})
 endif()
 
 # Config file
-configure_file(${PROJECT_SOURCE_DIR}/cmake/config/pmt-config.h.in
-               ${PROJECT_BINARY_DIR}/pmt-config.h)
+configure_file(${PROJECT_SOURCE_DIR}/cmake/config/pmt.h.in
+               ${PROJECT_BINARY_DIR}/pmt.h)
 
 include_directories(${PROJECT_BINARY_DIR})
-install(FILES ${PROJECT_BINARY_DIR}/pmt-config.h
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
 
 # Installation
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -143,7 +142,7 @@ endif()
 add_subdirectory(xilinx)
 
 # Public header file
-set_target_properties(pmt PROPERTIES PUBLIC_HEADER pmt.h)
+set_target_properties(pmt PROPERTIES PUBLIC_HEADER ${CMAKE_BINARY_DIR}/pmt.h)
 
 # Install library
 target_include_directories(

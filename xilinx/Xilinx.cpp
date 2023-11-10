@@ -1,5 +1,13 @@
 #include "Xilinx.h"
 
+#include <istream>
+#include <stdexcept>
+#include <vector>
+
+#include <errno.h>
+#include <ext/alloc_traits.h>
+#include <stdlib.h>
+
 namespace anonymous {
 float GetPower(std::string &filename) {
   // Open power file, e.g.
@@ -33,9 +41,11 @@ class XilinxImpl : public Xilinx {
  private:
   State GetState() override { return GetXilinxState(); }
 
-  virtual const char *GetDumpFilename() { return "/tmp/pmt_xilinx.out"; }
+  virtual const char *GetDumpFilename() override {
+    return "/tmp/pmt_xilinx.out";
+  }
 
-  virtual int GetMeasurementInterval() {
+  virtual int GetMeasurementInterval() override {
     return 100;  // milliseconds
   }
 

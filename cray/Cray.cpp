@@ -1,4 +1,14 @@
+#include <algorithm>
+#include <exception>
+#include <iostream>
+#include <mutex>
+#include <stdexcept>
+#include <vector>
+
+#include <ext/alloc_traits.h>
+
 #include "Cray.h"
+#include "FilenamesHelper.h"
 
 namespace {
 double GetPower(const std::string& filePath) {
@@ -29,7 +39,6 @@ namespace pmt::cray {
 class CrayImpl : public Cray {
  public:
   CrayImpl();
-  ~CrayImpl();
 
   State GetState() override;
 
@@ -43,9 +52,9 @@ class CrayImpl : public Cray {
   // Mutex used to guard GetMeasurements()
   std::mutex mutex_;
 
-  virtual const char* GetDumpFilename() { return "/tmp/pmt_cray.out"; }
+  virtual const char* GetDumpFilename() override { return "/tmp/pmt_cray.out"; }
 
-  virtual int GetMeasurementInterval() {
+  virtual int GetMeasurementInterval() override {
     return 100;  // milliseconds
   }
 

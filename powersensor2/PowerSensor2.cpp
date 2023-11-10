@@ -1,6 +1,10 @@
+#include <vector>
+
+#include <ext/alloc_traits.h>
+
 #include "PowerSensor2.h"
 
-#include POWERSENSOR2_HEADER
+#include <PowerSensor.h>
 
 namespace {
 double Seconds(const PowerSensor::State &first,
@@ -39,9 +43,11 @@ class PowerSensor2Impl : public PowerSensor2 {
   }
 
  private:
-  virtual const char *GetDumpFilename() { return "/tmp/pmt_powersensor2.out"; }
+  virtual const char *GetDumpFilename() override {
+    return "/tmp/pmt_powersensor2.out";
+  }
 
-  virtual int GetMeasurementInterval() {
+  virtual int GetMeasurementInterval() override {
     return 1;  // milliseconds
   }
 

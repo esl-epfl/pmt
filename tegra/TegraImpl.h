@@ -1,7 +1,10 @@
+#include <algorithm>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "Tegra.h"
+#include "pmt.h"
 
 namespace pmt::tegra {
 
@@ -19,14 +22,18 @@ class TegraState {
 class TegraImpl : public Tegra {
  public:
   TegraImpl();
-  ~TegraImpl();
+  virtual ~TegraImpl();
 
-   State GetState() override { return GetTegraState(); }
+  State GetState() override { return GetTegraState(); }
 
-  virtual const char *GetDumpFilename() { return "/tmp/pmt_tegra.out"; }
-  virtual int GetMeasurementInterval() { return measurement_interval_; }
+  virtual const char *GetDumpFilename() override {
+    return "/tmp/pmt_tegra.out";
+  }
+  virtual int GetMeasurementInterval() override {
+    return measurement_interval_;
+  }
 
-private:
+ private:
   TegraState GetTegraState();
   std::vector<TegraMeasurement> GetMeasurements();
 

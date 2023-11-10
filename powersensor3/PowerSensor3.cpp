@@ -1,10 +1,10 @@
+#include <vector>
+
+#include <ext/alloc_traits.h>
+
 #include "PowerSensor3.h"
 
-#include <cassert>
-#include <iostream>
-#include <map>
-
-#include POWERSENSOR3_HEADER
+#include <PowerSensor.hpp>
 
 const unsigned MAX_PAIRS = PowerSensor3::MAX_PAIRS;
 
@@ -76,7 +76,9 @@ class PowerSensor3Impl : public PowerSensor3 {
   }
 
  private:
-  virtual const char *GetDumpFilename() { return "/tmp/pmt_powersensor3.out"; }
+  virtual const char *GetDumpFilename() override {
+    return "/tmp/pmt_powersensor3.out";
+  }
 
   virtual int GetMeasurementInterval() override {
     return 1;  // milliseconds

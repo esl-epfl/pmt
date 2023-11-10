@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "../common/pmt-test.h"
 
 #include "Xilinx.h"

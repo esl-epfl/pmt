@@ -1,3 +1,6 @@
+#include <ext/alloc_traits.h>
+#include <vector>
+
 #include "Dummy.h"
 
 namespace pmt {
@@ -6,9 +9,9 @@ class DummyImpl : public Dummy {
  private:
   virtual State GetState() override;
 
-  virtual const char *GetDumpFilename() { return nullptr; }
+  virtual const char *GetDumpFilename() override { return nullptr; }
 
-  virtual int GetMeasurementInterval() { return 0; }
+  virtual int GetMeasurementInterval() override { return 0; }
 };
 
 std::unique_ptr<Dummy> Dummy::Create() { return std::make_unique<DummyImpl>(); }

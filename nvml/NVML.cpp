@@ -1,8 +1,12 @@
+#include <cstdlib>
+#include <sstream>
+#include <stdexcept>
+#include <vector>
+
+#include <ext/alloc_traits.h>
+
 #include "NVML.h"
 
-#include <sstream>
-
-#if defined(HAVE_NVML)
 #include "nvml.h"
 
 #define checkNVMLCall(val) __checkNVMLCall((val), #val, __FILE__, __LINE__)
@@ -19,7 +23,6 @@ inline void __checkNVMLCall(nvmlReturn_t result, const char *const func,
     throw std::runtime_error(error.str());
   }
 }
-#endif
 
 namespace pmt::nvml {
 class NVMLState {
@@ -38,18 +41,16 @@ class NVMLImpl : public NVML {
  private:
   State GetState() override { return GetNVMLState(); }
 
-  virtual const char *GetDumpFilename() { return "/tmp/pmt_nvml.out"; }
+  virtual const char *GetDumpFilename() override { return "/tmp/pmt_nvml.out"; }
 
-  virtual int GetMeasurementInterval() {
+  virtual int GetMeasurementInterval() override {
     return 10;  // milliseconds
   }
 
   NVMLState state_previous_;
   NVMLState GetNVMLState();
 
-#if defined(HAVE_NVML)
   nvmlDevice_t device_;
-#endif
 };
 
 NVMLState::operator State() {
@@ -69,36 +70,25 @@ NVMLImpl::NVMLImpl(int device_number) {
   const char *pmt_device = getenv("PMT_DEVICE");
   device_number = pmt_device ? atoi(pmt_device) : device_number;
 
-#if defined(HAVE_NVML)
   checkNVMLCall(nvmlInit());
   checkNVMLCall(nvmlDeviceGetHandleByIndex(device_number, &device_));
-#endif
 
   state_previous_ = GetNVMLState();
   state_previous_.joules_ = 0;
 }
 
-NVMLImpl::~NVMLImpl() {
-#if defined(HAVE_NVML)
-  checkNVMLCall(nvmlShutdown());
-#endif
-}
+NVMLImpl::~NVMLImpl() { checkNVMLCall(nvmlShutdown()); }
 
 NVMLState NVMLImpl::GetNVMLState() {
   NVMLState state;
   state.timestamp_ = GetTime();
 
-#if defined(HAVE_NVML)
   checkNVMLCall(nvmlDeviceGetPowerUsage(device_, &state.watt_));
   state.joules_ = state_previous_.joules_;
   const float watt = (state.watt_ + state_previous_.watt_) / 2;
   const float duration = (state.timestamp_ - state_previous_.timestamp_);
   state.joules_ += watt * duration;
   state.watt_ = watt;
-#else
-  state.joules_ = 0;
-  state.watt_ = 0;
-#endif
 
   state_previous_ = state;
 

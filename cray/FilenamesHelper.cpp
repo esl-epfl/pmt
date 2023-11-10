@@ -1,3 +1,7 @@
+#include <algorithm>
+#include <iostream>
+#include <filesystem>
+
 #include "FilenamesHelper.h"
 
 namespace filenames_helper {

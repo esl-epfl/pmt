@@ -3,6 +3,9 @@
 
 #include "pmt.h"
 
+#include <memory>
+#include <string>
+
 namespace pmt::xilinx {
 class Xilinx : public PMT {
  public:
