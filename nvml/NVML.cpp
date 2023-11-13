@@ -81,16 +81,20 @@ NVMLImpl::~NVMLImpl() { checkNVMLCall(nvmlShutdown()); }
 
 NVMLState NVMLImpl::GetNVMLState() {
   NVMLState state;
-  state.timestamp_ = GetTime();
+  try {
+    state.timestamp_ = GetTime();
 
-  checkNVMLCall(nvmlDeviceGetPowerUsage(device_, &state.watt_));
-  state.joules_ = state_previous_.joules_;
-  const float watt = (state.watt_ + state_previous_.watt_) / 2;
-  const float duration = (state.timestamp_ - state_previous_.timestamp_);
-  state.joules_ += watt * duration;
-  state.watt_ = watt;
+    checkNVMLCall(nvmlDeviceGetPowerUsage(device_, &state.watt_));
+    state.joules_ = state_previous_.joules_;
+    const float watt = (state.watt_ + state_previous_.watt_) / 2;
+    const float duration = (state.timestamp_ - state_previous_.timestamp_);
+    state.joules_ += watt * duration;
+    state.watt_ = watt;
 
-  state_previous_ = state;
+    state_previous_ = state;
+  } catch (std::runtime_error &e) {
+    return state_previous_;
+  }
 
   return state;
 }

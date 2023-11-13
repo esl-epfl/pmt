@@ -122,13 +122,16 @@ double PMT::GetTime() {
 }
 
 State PMT::Read() {
+  const int measurement_interval = GetMeasurementInterval();
   if (!thread_started_) {
     StartThread();
     thread_started_ = true;
+    std::this_thread::sleep_for(
+        std::chrono::milliseconds(measurement_interval));
   }
   while (seconds(state_previous_, state_latest_) == 0) {
     std::this_thread::sleep_for(
-        std::chrono::milliseconds(GetMeasurementInterval()));
+        std::chrono::milliseconds(measurement_interval));
   }
   state_previous_ = state_latest_;
   return state_latest_;
