@@ -1,10 +1,12 @@
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
+  CMAKE_OPTIONS: "-DBUILD_POWERSENSOR2_PMT=ON -DBUILD_POWERSENSOR3_PMT=ON -DBUILD_NVML_PMT=ON -DBUILD_PYTHON_PMT=ON"
+  SKIP: "include-what-you-use"
 
 stages:
+  - linting
   - build
   - test
-  - linting
 
 format:
   stage: linting
@@ -12,10 +14,15 @@ format:
   before_script:
     - apt-get update -qq
     - apt-get install -y -qq
+       git
        python3-pip
-    - pip3 install clang-format==14.0.0 cmake-format
+       python3-pybind11
+    - pip3 install
+      clang-format==14.0.0
+      cmake-format
+      pre-commit
   script:
-    - ./scripts/run-format.sh
+    - pre-commit run -a
 
 build-docker:
   stage: build
@@ -25,14 +32,11 @@ build-docker:
     - apt-get install -y -qq
        cmake
        g++
-       likwid
        libpython3-dev
        python3-pybind11
   script:
-    - mkdir build
-    - cd build
-    - cmake .. -DBUILD_POWERSENSOR2_PMT=ON -DBUILD_POWERSENSOR3_PMT=ON -DBUILD_PYTHON_PMT=ON
-    - make install
+    - cmake -S . -B build ${CMAKE_OPTIONS}
+    - make -C build install
 
 test-das6:
   stage: test
@@ -44,10 +48,8 @@ test-das6:
     - module load py-pybind11/2.10.1
     - module load cuda/11.6.2
   script:
-    - mkdir build
-    - cd build
-    - cmake .. -DBUILD_POWERSENSOR2_PMT=ON -DBUILD_POWERSENSOR3_PMT=ON -DBUILD_NVML_PMT=ON -DBUILD_PYTHON_PMT=ON
-    - make
-    - $(pwd)/rapl/Rapl-test sleep 3
-    - $(pwd)/nvml/NVML-test sleep 3
-    - PYTHONPATH=$PYTHONPATH:$(pwd)/python python3 ${CI_PROJECT_DIR}/python/PythonNVMLDemo.py
+    - cmake -S . -B build ${CMAKE_OPTIONS}
+    - make -C build
+    - $(pwd)/build/rapl/Rapl-test sleep 3
+    - $(pwd)/build/nvml/NVML-test sleep 3
+    - PYTHONPATH=$PYTHONPATH:$(pwd)/build/python python3 ${CI_PROJECT_DIR}/python/PythonNVMLDemo.py
