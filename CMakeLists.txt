@@ -39,6 +39,7 @@ option(BUILD_NVML_PMT "" OFF)
 option(BUILD_POWERSENSOR3_PMT "" OFF)
 option(BUILD_PYTHON_PMT "" OFF)
 option(BUILD_ROCM_PMT "" OFF)
+option(BUILD_LIKWID_PMT "" OFF)
 
 # Find dependencies for PowerSensor
 if(${BUILD_POWERSENSOR2_PMT})
@@ -77,6 +78,16 @@ endif()
 if(${BUILD_ROCM_PMT})
   find_package(ROCM-SMI REQUIRED)
   message(${ROCM-SMI_INCLUDE_DIR})
+endif()
+
+# Find dependencies for Likwid
+if(${BUILD_LIKWID_PMT})
+  find_package(Likwid QUIET)
+  if(${LIKWID_FOUND})
+    set(HAVE_LIKWID TRUE)
+  else()
+    message("Likwid was not found, Likwid will not be built.")
+  endif()
 endif()
 
 # Config file
@@ -140,6 +151,11 @@ endif()
 
 # Xilinx
 add_subdirectory(xilinx)
+
+# Likwid
+if(${LIKWID_FOUND})
+  add_subdirectory(likwid)
+endif()
 
 # Public header file
 set_target_properties(pmt PROPERTIES PUBLIC_HEADER ${CMAKE_BINARY_DIR}/pmt.h)

@@ -5,6 +5,7 @@
 #cmakedefine HAVE_POWERSENSOR3
 #cmakedefine HAVE_NVML
 #cmakedefine HAVE_ROCM-smi
+#cmakedefine HAVE_LIKWID
 
 #if defined(HAVE_POWERSENSOR2)
 #include "pmt/PowerSensor2.h"
@@ -22,5 +23,8 @@
 #include "pmt/Rapl.h"
 #include "pmt/Tegra.h"
 #include "pmt/Xilinx.h"
+#if defined(HAVE_LIKWID)
+#include "pmt/Likwid.h"
+#endif
 
 #endif
