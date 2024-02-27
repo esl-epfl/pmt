@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "pmt.h"
+#include "common/pmt.h"
 
 namespace pmt::rapl {
 class Rapl : public PMT {

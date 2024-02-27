@@ -1,7 +1,7 @@
 #ifndef PMT_XILINX_H_
 #define PMT_XILINX_H_
 
-#include "pmt.h"
+#include "common/pmt.h"
 
 #include <memory>
 #include <string>

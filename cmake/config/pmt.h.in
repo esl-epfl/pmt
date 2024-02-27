@@ -8,23 +8,29 @@
 #cmakedefine HAVE_LIKWID
 
 #if defined(HAVE_POWERSENSOR2)
-#include "pmt/PowerSensor2.h"
+#include <pmt/PowerSensor2.h>
 #endif
 #if defined(HAVE_POWERSENSOR3)
-#include "pmt/PowerSensor3.h"
+#include <pmt/PowerSensor3.h>
 #endif
-#include "pmt/Dummy.h"
+#include <pmt/Dummy.h>
 #if defined(HAVE_NVML)
-#include "pmt/NVML.h"
+#include <pmt/NVML.h>
 #endif
 #if defined(HAVE_ROCMSMI)
-#include "pmt/ROCM.h"
+#include <pmt/ROCM.h>
 #endif
-#include "pmt/Rapl.h"
-#include "pmt/Tegra.h"
-#include "pmt/Xilinx.h"
+#if BUILD_RAPL_PMT
+#include <pmt/Rapl.h>
+#endif
+#if BUILD_TEGRA_PMT
+#include <pmt/Tegra.h>
+#endif
+#if BUILD_XILINX_PMT
+#include <pmt/Xilinx.h>
+#endif
 #if defined(HAVE_LIKWID)
-#include "pmt/Likwid.h"
+#include <pmt/Likwid.h>
 #endif
 
 #endif

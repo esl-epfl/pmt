@@ -2,17 +2,27 @@ project(python)
 
 add_library(pypmt MODULE pypmt.cpp)
 
+set(LINK_LIBRARIES pmt-dummy)
+if(BUILD_CRAY_PMT)
+  list(APPEND LINK_LIBRARIES pmt-cray)
+  add_definitions(-DBUILD_CRAY)
+endif()
+if(BUILD_RAPL_PMT)
+  list(APPEND LINK_LIBRARIES pmt-rapl)
+  add_definitions(-DBUILD_RAPL)
+endif()
+if(BUILD_TEGRA_PMT)
+  list(APPEND LINK_LIBRARIES pmt-tegra)
+  add_definitions(-DBUILD_TEGRA)
+endif()
+if(BUILD_XILINX_PMT)
+  list(APPEND LINK_LIBRARIES pmt-xilinx)
+  add_definitions(-DBUILD_XILINX)
+endif()
+
 target_link_libraries(
-  pypmt
-  PRIVATE pybind11::module
-          pybind11::lto
-          pybind11::windows_extras
-          $<TARGET_OBJECTS:pmt-common>
-          pmt-cray
-          pmt-dummy
-          pmt-tegra
-          pmt-rapl
-          pmt-xilinx)
+  pypmt PRIVATE pybind11::module pybind11::lto pybind11::windows_extras
+                $<TARGET_OBJECTS:pmt-common> ${LINK_LIBRARIES})
 
 if(${BUILD_POWERSENSOR2_PMT})
   add_definitions(-DBUILD_POWERSENSOR2)

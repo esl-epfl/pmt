@@ -2,7 +2,7 @@
 #define LIKWID_PMT_H
 
 #include <memory>
-#include "pmt.h"
+#include "common/pmt.h"
 
 namespace pmt {
 namespace likwid {

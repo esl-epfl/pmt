@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "pmt.h"
+#include "common/pmt.h"
 
 namespace pmt {
 class Dummy : public PMT {

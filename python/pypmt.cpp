@@ -6,7 +6,9 @@
 
 #include <../common/pmt.h>
 
+#ifdef BUILD_CRAY
 #include <../cray/Cray.h>
+#endif
 
 #ifdef BUILD_POWERSENSOR2
 #include <../powersensor2/PowerSensor2.h>
@@ -17,19 +19,25 @@
 #endif
 
 #include <../dummy/Dummy.h>
+#ifdef BUILD_TEGRA
 #include <../tegra/Tegra.h>
+#endif
 
 #ifdef BUILD_NVML
 #include <../nvml/NVML.h>
 #endif
 
+#ifdef BUILD_RAPL
 #include <../rapl/Rapl.h>
+#endif
 
 #ifdef BUILD_ROCM
 #include <../rocm/ROCM.h>
 #endif
 
+#ifdef BUILD_XILINX
 #include <../xilinx/Xilinx.h>
+#endif
 
 namespace py = pybind11;
 
@@ -43,11 +51,13 @@ PYBIND11_MODULE(pypmt, m) {
 
   py::class_<pmt::State>(m, "State");
 
+#ifdef BUILD_CRAY
   py::class_<pmt::cray::Cray>(m, "Cray")
       .def("create", &pmt::cray::Cray::Create)
       .def("read", &pmt::cray::Cray::Read)
       .def("startDump", &pmt::cray::Cray::StartDump)
       .def("stopDump", &pmt::cray::Cray::StopDump);
+#endif
 
 #ifdef BUILD_POWERSENSOR2
   py::class_<pmt::powersensor2::PowerSensor2>(m, "PowerSensor2")
@@ -73,11 +83,13 @@ PYBIND11_MODULE(pypmt, m) {
       .def("startDump", &pmt::Dummy::StartDump)
       .def("stopDump", &pmt::Dummy::StopDump);
 
+#ifdef BUILD_XILINX
   py::class_<pmt::tegra::Tegra>(m, "tegra")
       .def("create", &pmt::tegra::Tegra::Create)
       .def("read", &pmt::tegra::Tegra::Read)
       .def("startDump", &pmt::tegra::Tegra::StartDump)
       .def("stopDump", &pmt::tegra::Tegra::StopDump);
+#endif
 
 #ifdef BUILD_NVML
   py::class_<pmt::nvml::NVML>(m, "NVML")
@@ -87,11 +99,13 @@ PYBIND11_MODULE(pypmt, m) {
       .def("StopDump", &pmt::nvml::NVML::StopDump);
 #endif
 
+#ifdef BUILD_RAPL
   py::class_<pmt::rapl::Rapl>(m, "Rapl")
       .def("create", &pmt::rapl::Rapl::Create)
       .def("read", &pmt::rapl::Rapl::Read)
       .def("startDump", &pmt::rapl::Rapl::StartDump)
       .def("stopDump", &pmt::rapl::Rapl::StopDump);
+#endif
 
 #ifdef BUILD_ROCM
   py::class_<pmt::rocm::ROCM>(m, "ROCM")
@@ -101,9 +115,11 @@ PYBIND11_MODULE(pypmt, m) {
       .def("stopDump", &pmt::rocm::ROCM::StopDump);
 #endif
 
+#ifdef BUILD_XILINX
   py::class_<pmt::xilinx::Xilinx>(m, "Xilinx")
       .def("create", &pmt::xilinx::Xilinx::Create)
       .def("read", &pmt::xilinx::Xilinx::Read)
       .def("startDump", &pmt::xilinx::Xilinx::StartDump)
       .def("stopDump", &pmt::xilinx::Xilinx::StopDump);
+#endif
 }

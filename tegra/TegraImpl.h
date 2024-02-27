@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Tegra.h"
-#include "pmt.h"
+#include "common/pmt.h"
 
 namespace pmt::tegra {
 

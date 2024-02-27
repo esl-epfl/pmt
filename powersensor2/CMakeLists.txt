@@ -9,14 +9,20 @@ target_link_libraries(pmt-powersensor2 ${LINK_LIBRARIES})
 
 install(FILES PowerSensor2.h DESTINATION include/pmt)
 
-add_executable(PowerSensor2-test PowerSensor2-test.cpp)
+if(PMT_BUILD_TESTS)
+  add_executable(PowerSensor2-test PowerSensor2-test.cpp)
 
-target_link_libraries(PowerSensor2-test $<TARGET_OBJECTS:pmt-common>
-                      pmt-powersensor2 ${LINK_LIBRARIES})
+  target_link_libraries(PowerSensor2-test $<TARGET_OBJECTS:pmt-common>
+                        pmt-powersensor2 ${LINK_LIBRARIES})
 
-install(
-  TARGETS PowerSensor2-test
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)
+  install(
+    TARGETS PowerSensor2-test
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin)
+endif()
 
 target_link_libraries(pmt PRIVATE pmt-powersensor2)
+list(APPEND PMT_HEADER_FILES "powersensor2/PowerSensor2.h")
+set(PMT_HEADER_FILES
+    ${PMT_HEADER_FILES}
+    PARENT_SCOPE)

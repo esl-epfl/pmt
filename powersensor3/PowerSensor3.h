@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-#include "pmt.h"
+#include "common/pmt.h"
 
 namespace pmt::powersensor3 {
 

@@ -1,7 +1,7 @@
 #ifndef ROCM_PMT_H
 #define ROCM_PMT_H
 
-#include "pmt.h"
+#include "common/pmt.h"
 
 namespace pmt {
 namespace rocm {

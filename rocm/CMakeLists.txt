@@ -9,11 +9,17 @@ target_include_directories(pmt-rocm PRIVATE ${ROCM-SMI_INCLUDE_DIR})
 
 install(FILES ROCM.h DESTINATION include/pmt)
 
-add_executable(ROCM-test ROCM-test.cpp)
+if(PMT_BUILD_TESTS)
+  add_executable(ROCM-test ROCM-test.cpp)
 
-target_link_libraries(ROCM-test $<TARGET_OBJECTS:pmt-common> pmt-rocm
-                      ${LINK_LIBRARIES})
+  target_link_libraries(ROCM-test $<TARGET_OBJECTS:pmt-common> pmt-rocm
+                        ${LINK_LIBRARIES})
 
-install(TARGETS ROCM-test RUNTIME DESTINATION bin)
+  install(TARGETS ROCM-test RUNTIME DESTINATION bin)
+endif()
 
 target_link_libraries(pmt PRIVATE pmt-rocm)
+list(APPEND PMT_HEADER_FILES "rocm/ROCM.h")
+set(PMT_HEADER_FILES
+    ${PMT_HEADER_FILES}
+    PARENT_SCOPE)
