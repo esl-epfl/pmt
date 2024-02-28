@@ -88,12 +88,7 @@ endif()
 
 # Find dependencies for Likwid
 if(${BUILD_LIKWID_PMT})
-  find_package(Likwid QUIET)
-  if(${LIKWID_FOUND})
-    set(HAVE_LIKWID TRUE)
-  else()
-    message("Likwid was not found, Likwid will not be built.")
-  endif()
+  find_package(Likwid REQUIRED)
 endif()
 
 # Config file
