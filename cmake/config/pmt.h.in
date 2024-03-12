@@ -1,13 +1,23 @@
 #ifndef PMT_CONFIG_H_
 #define PMT_CONFIG_H_
 
+#cmakedefine BUILD_POWERSENSOR2_PMT
+#cmakedefine BUILD_POWERSENSOR3_PMT
+#cmakedefine BUILD_NVML_PMT
+#cmakedefine BUILD_ROCM_PMT
+#cmakedefine BUILD_RAPL_PMT
+#cmakedefine BUILD_TEGRA_PMT
+#cmakedefine BUILD_XILINX_PMT
+#cmakedefine BUILD_LIKWID_PMT
+#cmakedefine BUILD_CRAY_PMT
+
+#include <pmt/Dummy.h>
 #if defined(BUILD_POWERSENSOR2_PMT)
 #include <pmt/PowerSensor2.h>
 #endif
 #if defined(BUILD_POWERSENSOR3_PMT)
 #include <pmt/PowerSensor3.h>
 #endif
-#include <pmt/Dummy.h>
 #if defined(BUILD_NVML_PMT)
 #include <pmt/NVML.h>
 #endif
@@ -25,6 +35,9 @@
 #endif
 #if defined(BUILD_LIKWID_PMT)
 #include <pmt/Likwid.h>
+#endif
+#if defined(BUILD_CRAY_PMT)
+#include <pmt/Cray.h>
 #endif
 
 #endif

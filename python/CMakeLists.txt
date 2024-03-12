@@ -6,19 +6,15 @@ target_include_directories(pypmt PRIVATE ${CMAKE_BINARY_DIR})
 set(LINK_LIBRARIES pmt-dummy)
 if(BUILD_CRAY_PMT)
   list(APPEND LINK_LIBRARIES pmt-cray)
-  add_definitions(-DBUILD_CRAY)
 endif()
 if(BUILD_RAPL_PMT)
   list(APPEND LINK_LIBRARIES pmt-rapl)
-  add_definitions(-DBUILD_RAPL)
 endif()
 if(BUILD_TEGRA_PMT)
   list(APPEND LINK_LIBRARIES pmt-tegra)
-  add_definitions(-DBUILD_TEGRA)
 endif()
 if(BUILD_XILINX_PMT)
   list(APPEND LINK_LIBRARIES pmt-xilinx)
-  add_definitions(-DBUILD_XILINX)
 endif()
 
 target_link_libraries(
@@ -26,22 +22,18 @@ target_link_libraries(
                 $<TARGET_OBJECTS:pmt-common> ${LINK_LIBRARIES})
 
 if(${BUILD_POWERSENSOR2_PMT})
-  add_definitions(-DBUILD_POWERSENSOR2)
   target_link_libraries(pypmt PRIVATE pmt-powersensor2)
 endif()
 
 if(${BUILD_POWERSENSOR3_PMT})
-  add_definitions(-DBUILD_POWERSENSOR3)
   target_link_libraries(pypmt PRIVATE pmt-powersensor3)
 endif()
 
 if(${BUILD_NVML_PMT})
-  add_definitions(-DBUILD_NVML)
   target_link_libraries(pypmt PRIVATE pmt-nvml)
 endif()
 
 if(${BUILD_ROCM_PMT})
-  add_definitions(-DBUILD_ROCM)
   target_link_libraries(pypmt PRIVATE pmt-rocm)
 endif()
 

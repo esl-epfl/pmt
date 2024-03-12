@@ -1,11 +1,12 @@
-project(powersensor2)
+project(pmt-powersensor2)
 
-add_library(pmt-powersensor2 OBJECT PowerSensor2.cpp ${POWERSENSOR2_SOURCE})
+add_library(${PROJECT_NAME} OBJECT PowerSensor2.cpp ${POWERSENSOR2_SOURCE})
 
-target_include_directories(pmt-powersensor2 PRIVATE ${POWERSENSOR2_ROOT_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}
+                                                   ${POWERSENSOR2_ROOT_DIR})
 
 set(LINK_LIBRARIES OpenMP::OpenMP_C)
-target_link_libraries(pmt-powersensor2 ${LINK_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${LINK_LIBRARIES})
 
 install(FILES PowerSensor2.h DESTINATION include/pmt)
 
@@ -13,7 +14,8 @@ if(PMT_BUILD_TESTS)
   add_executable(PowerSensor2-test PowerSensor2-test.cpp)
 
   target_link_libraries(PowerSensor2-test $<TARGET_OBJECTS:pmt-common>
-                        pmt-powersensor2 ${LINK_LIBRARIES})
+                        $<TARGET_OBJECTS:${PROJECT_NAME}> ${LINK_LIBRARIES})
+  target_include_directories(PowerSensor2-test PRIVATE ${CMAKE_SOURCE_DIR})
 
   install(
     TARGETS PowerSensor2-test
@@ -21,7 +23,7 @@ if(PMT_BUILD_TESTS)
     RUNTIME DESTINATION bin)
 endif()
 
-target_link_libraries(pmt PRIVATE pmt-powersensor2)
+target_link_libraries(pmt PRIVATE ${PROJECT_NAME})
 list(APPEND PMT_HEADER_FILES "powersensor2/PowerSensor2.h")
 set(PMT_HEADER_FILES
     ${PMT_HEADER_FILES}

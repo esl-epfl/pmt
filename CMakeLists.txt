@@ -29,9 +29,6 @@ find_package(Threads REQUIRED)
 # Enable compile commands (needed for iwyu)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Add PMT source directory as include directory
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
 # Options to disable implementations
 # that require external dependencies
 option(BUILD_CRAY_PMT "" OFF)
@@ -91,8 +88,6 @@ endif()
 # Config file
 configure_file(${PROJECT_SOURCE_DIR}/cmake/config/pmt.h.in
                ${PROJECT_BINARY_DIR}/pmt.h)
-
-include_directories(${PROJECT_BINARY_DIR})
 
 # Installation
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -172,20 +167,20 @@ endif()
 set_target_properties(
   ${PROJECT_NAME} PROPERTIES PUBLIC_HEADER ${CMAKE_CURRENT_BINARY_DIR}/pmt.h)
 
+# Replicate header file structure in binary directory
+file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/pmt")
+file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/pmt/common")
+file(CREATE_LINK "${CMAKE_CURRENT_SOURCE_DIR}/common/pmt.h"
+     "${PROJECT_BINARY_DIR}/pmt/common/pmt.h" SYMBOLIC)
+foreach(PMT_HEADER_FILE ${PMT_HEADER_FILES})
+  set(LINK_SRC "${CMAKE_CURRENT_SOURCE_DIR}/${PMT_HEADER_FILE}")
+  get_filename_component(LINK_DST ${PMT_HEADER_FILE} NAME)
+  file(CREATE_LINK ${LINK_SRC} "${PROJECT_BINARY_DIR}/pmt/${LINK_DST}" SYMBOLIC)
+endforeach()
+
 if(NOT CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   set_target_properties(${PROJECT_NAME} PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
                                                    ${CMAKE_CURRENT_BINARY_DIR})
-  # Replicate header file structure in binary directory
-  file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/pmt")
-  file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/pmt/common")
-  file(CREATE_LINK "${CMAKE_CURRENT_SOURCE_DIR}/common/pmt.h"
-       "${PROJECT_BINARY_DIR}/pmt/common/pmt.h" SYMBOLIC)
-  foreach(PMT_HEADER_FILE ${PMT_HEADER_FILES})
-    set(LINK_SRC "${CMAKE_CURRENT_SOURCE_DIR}/${PMT_HEADER_FILE}")
-    get_filename_component(LINK_DST ${PMT_HEADER_FILE} NAME)
-    file(CREATE_LINK ${LINK_SRC} "${PROJECT_BINARY_DIR}/pmt/${LINK_DST}"
-         SYMBOLIC)
-  endforeach()
 else()
   # Install library
   target_include_directories(
