@@ -1,7 +1,6 @@
 project(likwid)
 
 add_library(pmt-likwid OBJECT Likwid.cpp LikwidImpl.cpp)
-target_compile_options(pmt-likwid PRIVATE -DHAVE_LIKWID)
 
 target_link_libraries(pmt-likwid Threads::Threads ${LIKWID_LIBRARY})
 

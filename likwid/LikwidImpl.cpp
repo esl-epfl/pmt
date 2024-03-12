@@ -5,15 +5,12 @@
 #include <cstring>
 #include <utility>
 
-#if defined(HAVE_LIKWID)
 #include <likwid.h>
-#endif
 
 namespace pmt::likwid {
 
 LikwidImpl::LikwidImpl(std::string event_group_name)
     : event_group(std::move(event_group_name)) {
-#if defined(HAVE_LIKWID)
   // Load the topology module
   if (topology_init() < 0) {
     std::cerr << "Failed to initialize LIKWID's topology module" << std::endl;
@@ -111,15 +108,12 @@ LikwidImpl::LikwidImpl(std::string event_group_name)
   }
 
   previous_time = GetTime();
-#endif
 }  // end constructor
 
 LikwidImpl::~LikwidImpl() {
-#if defined(HAVE_LIKWID)
   perfmon_stopCounters();
   perfmon_finalize();
   topology_finalize();
-#endif
 }  // end destructor
 
 State LikwidImpl::GetState() {
@@ -146,7 +140,6 @@ State LikwidImpl::GetState() {
 std::vector<double> LikwidImpl::GetMeasurements() {
   std::vector<double> measurements(nr_groups);
 
-#if defined(HAVE_LIKWID)
   for (int groupId = 0; groupId < nr_groups; groupId++) {
     // Read performance counters
     if (perfmon_readGroupCounters(groupId) != 0) {
@@ -164,7 +157,6 @@ std::vector<double> LikwidImpl::GetMeasurements() {
       measurements[groupId] += result;
     }
   }
-#endif
 
   return measurements;
 }

@@ -1,34 +1,29 @@
 #ifndef PMT_CONFIG_H_
 #define PMT_CONFIG_H_
 
-#cmakedefine HAVE_POWERSENSOR2
-#cmakedefine HAVE_POWERSENSOR3
-#cmakedefine HAVE_ROCM-smi
-#cmakedefine HAVE_LIKWID
-
-#if defined(HAVE_POWERSENSOR2)
+#if defined(BUILD_POWERSENSOR2_PMT)
 #include <pmt/PowerSensor2.h>
 #endif
-#if defined(HAVE_POWERSENSOR3)
+#if defined(BUILD_POWERSENSOR3_PMT)
 #include <pmt/PowerSensor3.h>
 #endif
 #include <pmt/Dummy.h>
-#if BUILD_NVML_PMT
+#if defined(BUILD_NVML_PMT)
 #include <pmt/NVML.h>
 #endif
-#if defined(HAVE_ROCMSMI)
+#if defined(BUILD_ROCM-SMI_PMT)
 #include <pmt/ROCM.h>
 #endif
-#if BUILD_RAPL_PMT
+#if defined(BUILD_RAPL_PMT)
 #include <pmt/Rapl.h>
 #endif
-#if BUILD_TEGRA_PMT
+#if defined(BUILD_TEGRA_PMT)
 #include <pmt/Tegra.h>
 #endif
-#if BUILD_XILINX_PMT
+#if defined(BUILD_XILINX_PMT)
 #include <pmt/Xilinx.h>
 #endif
-#if defined(HAVE_LIKWID)
+#if defined(BUILD_LIKWID_PMT)
 #include <pmt/Likwid.h>
 #endif
 

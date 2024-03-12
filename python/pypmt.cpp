@@ -4,39 +4,37 @@
 #include <pybind11/detail/descr.h>
 #include <pybind11/pytypes.h>
 
-#include <../common/pmt.h>
-
 #ifdef BUILD_CRAY
-#include <../cray/Cray.h>
+#include "cray/Cray.h"
 #endif
 
 #ifdef BUILD_POWERSENSOR2
-#include <../powersensor2/PowerSensor2.h>
+#include "powersensor2/PowerSensor2.h"
 #endif
 
 #ifdef BUILD_POWERSENSOR3
-#include <../powersensor3/PowerSensor3.h>
+#include "powersensor3/PowerSensor3.h"
 #endif
 
-#include <../dummy/Dummy.h>
+#include "dummy/Dummy.h"
 #ifdef BUILD_TEGRA
-#include <../tegra/Tegra.h>
+#include "tegra/Tegra.h"
 #endif
 
 #ifdef BUILD_NVML
-#include <../nvml/NVML.h>
+#include "nvml/NVML.h"
 #endif
 
 #ifdef BUILD_RAPL
-#include <../rapl/Rapl.h>
+#include "rapl/Rapl.h"
 #endif
 
 #ifdef BUILD_ROCM
-#include <../rocm/ROCM.h>
+#include "rocm/ROCM.h"
 #endif
 
 #ifdef BUILD_XILINX
-#include <../xilinx/Xilinx.h>
+#include "xilinx/Xilinx.h"
 #endif
 
 namespace py = pybind11;

@@ -1,6 +1,7 @@
 project(python)
 
 add_library(pypmt MODULE pypmt.cpp)
+target_include_directories(pypmt PRIVATE ${CMAKE_BINARY_DIR})
 
 set(LINK_LIBRARIES pmt-dummy)
 if(BUILD_CRAY_PMT)

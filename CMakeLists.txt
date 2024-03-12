@@ -51,7 +51,6 @@ if(${BUILD_POWERSENSOR2_PMT})
   set(POWERSENSOR2_ROOT_DIR
       ${CMAKE_CURRENT_SOURCE_DIR}/powersensor2/PowerSensor2)
   set(POWERSENSOR2_SOURCE ${POWERSENSOR2_ROOT_DIR}/PowerSensor.cc)
-  set(HAVE_POWERSENSOR2 TRUE)
 endif()
 
 if(${BUILD_POWERSENSOR3_PMT})
@@ -61,7 +60,6 @@ if(${BUILD_POWERSENSOR3_PMT})
       ${CMAKE_CURRENT_SOURCE_DIR}/powersensor3/PowerSensor3/host/include)
   set(POWERSENSOR3_SOURCE ${POWERSENSOR3_ROOT_SRC_DIR}/PowerSensor.cc
                           ${POWERSENSOR3_ROOT_SRC_DIR}/sensors.cc)
-  set(HAVE_POWERSENSOR3 TRUE)
 endif()
 
 # Find dependencies for NVML
