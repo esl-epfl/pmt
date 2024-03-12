@@ -13,3 +13,10 @@ repos:
       - id: include-what-you-use
         entry: iwyu_tool.py
         args: ['-p', 'build']
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.17
+    hooks:
+    - id: mdformat
+      args: ['--wrap=80']
+      files: CHANGELOG.md
+
