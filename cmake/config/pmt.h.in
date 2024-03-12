@@ -1,42 +1,42 @@
 #ifndef PMT_CONFIG_H_
 #define PMT_CONFIG_H_
 
-#cmakedefine BUILD_POWERSENSOR2_PMT
-#cmakedefine BUILD_POWERSENSOR3_PMT
-#cmakedefine BUILD_NVML_PMT
-#cmakedefine BUILD_ROCM_PMT
-#cmakedefine BUILD_RAPL_PMT
-#cmakedefine BUILD_TEGRA_PMT
-#cmakedefine BUILD_XILINX_PMT
-#cmakedefine BUILD_LIKWID_PMT
-#cmakedefine BUILD_CRAY_PMT
+#cmakedefine PMT_BUILD_POWERSENSOR2
+#cmakedefine PMT_BUILD_POWERSENSOR3
+#cmakedefine PMT_BUILD_NVML
+#cmakedefine PMT_BUILD_ROCM
+#cmakedefine PMT_BUILD_RAPL
+#cmakedefine PMT_BUILD_TEGRA
+#cmakedefine PMT_BUILD_XILINX
+#cmakedefine PMT_BUILD_LIKWID
+#cmakedefine PMT_BUILD_CRAY
 
 #include <pmt/Dummy.h>
-#if defined(BUILD_POWERSENSOR2_PMT)
+#if defined(PMT_BUILD_POWERSENSOR2)
 #include <pmt/PowerSensor2.h>
 #endif
-#if defined(BUILD_POWERSENSOR3_PMT)
+#if defined(PMT_BUILD_POWERSENSOR3)
 #include <pmt/PowerSensor3.h>
 #endif
-#if defined(BUILD_NVML_PMT)
+#if defined(PMT_BUILD_NVML)
 #include <pmt/NVML.h>
 #endif
-#if defined(BUILD_ROCM_PMT)
+#if defined(PMT_BUILD_ROCM)
 #include <pmt/ROCM.h>
 #endif
-#if defined(BUILD_RAPL_PMT)
+#if defined(PMT_BUILD_RAPL)
 #include <pmt/Rapl.h>
 #endif
-#if defined(BUILD_TEGRA_PMT)
+#if defined(PMT_BUILD_TEGRA)
 #include <pmt/Tegra.h>
 #endif
-#if defined(BUILD_XILINX_PMT)
+#if defined(PMT_BUILD_XILINX)
 #include <pmt/Xilinx.h>
 #endif
-#if defined(BUILD_LIKWID_PMT)
+#if defined(PMT_BUILD_LIKWID)
 #include <pmt/Likwid.h>
 #endif
-#if defined(BUILD_CRAY_PMT)
+#if defined(PMT_BUILD_CRAY)
 #include <pmt/Cray.h>
 #endif
 

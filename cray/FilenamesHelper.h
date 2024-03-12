@@ -1,5 +1,5 @@
-#ifndef FILENAMES_HELPER_PMT_H
-#define FILENAMES_HELPER_PMT_H
+#ifndef PMT_FILENAMES_HELPER_H
+#define PMT_FILENAMES_HELPER_H
 
 #include <string>
 #include <vector>

@@ -31,26 +31,26 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Options to disable implementations
 # that require external dependencies
-option(BUILD_CRAY_PMT "" OFF)
-option(BUILD_LIKWID_PMT "" OFF)
-option(BUILD_NVML_PMT "" OFF)
-option(BUILD_POWERSENSOR2_PMT "" OFF)
-option(BUILD_POWERSENSOR3_PMT "" OFF)
-option(BUILD_PYTHON_PMT "" OFF)
-option(BUILD_RAPL_PMT "" OFF)
-option(BUILD_ROCM_PMT "" OFF)
-option(BUILD_TEGRA_PMT "" OFF)
-option(BUILD_XILINX_PMT "" OFF)
+option(PMT_BUILD_CRAY "" OFF)
+option(PMT_BUILD_LIKWID "" OFF)
+option(PMT_BUILD_NVML "" OFF)
+option(PMT_BUILD_POWERSENSOR2 "" OFF)
+option(PMT_BUILD_POWERSENSOR3 "" OFF)
+option(PMT_BUILD_PYTHON "" OFF)
+option(PMT_BUILD_RAPL "" OFF)
+option(PMT_BUILD_ROCM "" OFF)
+option(PMT_BUILD_TEGRA "" OFF)
+option(PMT_BUILD_XILINX "" OFF)
 option(PMT_BUILD_TESTS "" ON)
 
 # Find dependencies for PowerSensor
-if(${BUILD_POWERSENSOR2_PMT})
+if(${PMT_BUILD_POWERSENSOR2})
   set(POWERSENSOR2_ROOT_DIR
       ${CMAKE_CURRENT_SOURCE_DIR}/powersensor2/PowerSensor2)
   set(POWERSENSOR2_SOURCE ${POWERSENSOR2_ROOT_DIR}/PowerSensor.cc)
 endif()
 
-if(${BUILD_POWERSENSOR3_PMT})
+if(${PMT_BUILD_POWERSENSOR3})
   set(POWERSENSOR3_ROOT_SRC_DIR
       ${CMAKE_CURRENT_SOURCE_DIR}/powersensor3/PowerSensor3/host/src)
   set(POWERSENSOR3_ROOT_INC_DIR
@@ -60,11 +60,11 @@ if(${BUILD_POWERSENSOR3_PMT})
 endif()
 
 # Find dependencies for NVML
-if(${BUILD_NVML_PMT})
+if(${PMT_BUILD_NVML})
   find_package(CUDAToolkit REQUIRED)
 endif()
 
-if(${BUILD_PYTHON_PMT})
+if(${PMT_BUILD_PYTHON})
   find_package(
     Python3
     COMPONENTS Interpreter Development
@@ -73,7 +73,7 @@ if(${BUILD_PYTHON_PMT})
 endif()
 
 # Find dependencies for ROCM
-if(${BUILD_ROCM_PMT})
+if(${PMT_BUILD_ROCM})
   find_package(rocm_smi REQUIRED)
   add_library(ROCM::smi INTERFACE IMPORTED)
   target_include_directories(ROCM::smi INTERFACE ${ROCM_SMI_INCLUDE_DIRS})
@@ -81,7 +81,7 @@ if(${BUILD_ROCM_PMT})
 endif()
 
 # Find dependencies for Likwid
-if(${BUILD_LIKWID_PMT})
+if(${PMT_BUILD_LIKWID})
   find_package(Likwid REQUIRED)
 endif()
 
@@ -113,15 +113,15 @@ add_library(pmt SHARED $<TARGET_OBJECTS:pmt-common>)
 set(PMT_HEADER_FILES "")
 
 # Cray
-if(${BUILD_CRAY_PMT})
+if(${PMT_BUILD_CRAY})
   add_subdirectory(cray)
 endif()
 
 # PowerSensor
-if(${BUILD_POWERSENSOR2_PMT})
+if(${PMT_BUILD_POWERSENSOR2})
   add_subdirectory(powersensor2)
 endif()
-if(${BUILD_POWERSENSOR3_PMT})
+if(${PMT_BUILD_POWERSENSOR3})
   add_subdirectory(powersensor3)
 endif()
 
@@ -129,12 +129,12 @@ endif()
 add_subdirectory(dummy)
 
 # NVML
-if(${BUILD_NVML_PMT})
+if(${PMT_BUILD_NVML})
   add_subdirectory(nvml)
 endif()
 
 # Tegra
-if(${BUILD_TEGRA_PMT})
+if(${PMT_BUILD_TEGRA})
   add_subdirectory(tegra)
 endif()
 
@@ -144,17 +144,17 @@ if(${pybind11_FOUND})
 endif()
 
 # Rapl
-if(${BUILD_RAPL_PMT})
+if(${PMT_BUILD_RAPL})
   add_subdirectory(rapl)
 endif()
 
 # ROCM
-if(${BUILD_ROCM_PMT})
+if(${PMT_BUILD_ROCM})
   add_subdirectory(rocm)
 endif()
 
 # Xilinx
-if(${BUILD_XILINX_PMT})
+if(${PMT_BUILD_XILINX})
   add_subdirectory(xilinx)
 endif()
 

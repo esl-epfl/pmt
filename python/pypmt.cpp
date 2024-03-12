@@ -18,7 +18,7 @@ PYBIND11_MODULE(pypmt, m) {
 
   py::class_<pmt::State>(m, "State");
 
-#if defined(BUILD_CRAY_PMT)
+#if defined(PMT_BUILD_CRAY)
   py::class_<pmt::cray::Cray>(m, "Cray")
       .def("create", &pmt::cray::Cray::Create)
       .def("read", &pmt::cray::Cray::Read)
@@ -26,7 +26,7 @@ PYBIND11_MODULE(pypmt, m) {
       .def("stopDump", &pmt::cray::Cray::StopDump);
 #endif
 
-#if defined(BUILD_POWERSENSOR2_PMT)
+#if defined(PMT_BUILD_POWERSENSOR2)
   py::class_<pmt::powersensor2::PowerSensor2>(m, "PowerSensor2")
       .def("create", &pmt::powersensor2::PowerSensor2::Create)
       .def("read", &pmt::powersensor2::PowerSensor2::Read)
@@ -34,7 +34,7 @@ PYBIND11_MODULE(pypmt, m) {
       .def("stopDump", &pmt::powersensor2::PowerSensor2::StopDump);
 #endif
 
-#if defined(BUILD_POWERSENSOR3_PMT)
+#if defined(PMT_BUILD_POWERSENSOR3)
   py::class_<pmt::powersensor3::PowerSensor3>(m, "PowerSensor3")
       .def("create", &pmt::powersensor3::PowerSensor3::Create)
       .def("read", &pmt::powersensor3::PowerSensor3::Read)
@@ -50,7 +50,7 @@ PYBIND11_MODULE(pypmt, m) {
       .def("startDump", &pmt::Dummy::StartDump)
       .def("stopDump", &pmt::Dummy::StopDump);
 
-#if defined(BUILD_XILINX_PMT)
+#if defined(PMT_BUILD_XILINX)
   py::class_<pmt::tegra::Tegra>(m, "tegra")
       .def("create", &pmt::tegra::Tegra::Create)
       .def("read", &pmt::tegra::Tegra::Read)
@@ -58,7 +58,7 @@ PYBIND11_MODULE(pypmt, m) {
       .def("stopDump", &pmt::tegra::Tegra::StopDump);
 #endif
 
-#if defined(BUILD_NVML_PMT)
+#if defined(PMT_BUILD_NVML)
   py::class_<pmt::nvml::NVML>(m, "NVML")
       .def("create", &pmt::nvml::NVML::Create)
       .def("read", &pmt::nvml::NVML::Read)
@@ -66,7 +66,7 @@ PYBIND11_MODULE(pypmt, m) {
       .def("StopDump", &pmt::nvml::NVML::StopDump);
 #endif
 
-#if defined(BUILD_RAPL_PMT)
+#if defined(PMT_BUILD_RAPL)
   py::class_<pmt::rapl::Rapl>(m, "Rapl")
       .def("create", &pmt::rapl::Rapl::Create)
       .def("read", &pmt::rapl::Rapl::Read)
@@ -74,7 +74,7 @@ PYBIND11_MODULE(pypmt, m) {
       .def("stopDump", &pmt::rapl::Rapl::StopDump);
 #endif
 
-#if defined(BUILD_ROCM_PMT)
+#if defined(PMT_BUILD_ROCM)
   py::class_<pmt::rocm::ROCM>(m, "ROCM")
       .def("create", &pmt::rocm::ROCM::Create)
       .def("read", &pmt::rocm::ROCM::Read)
@@ -82,7 +82,7 @@ PYBIND11_MODULE(pypmt, m) {
       .def("stopDump", &pmt::rocm::ROCM::StopDump);
 #endif
 
-#if defined(BUILD_XILINX_PMT)
+#if defined(PMT_BUILD_XILINX)
   py::class_<pmt::xilinx::Xilinx>(m, "Xilinx")
       .def("create", &pmt::xilinx::Xilinx::Create)
       .def("read", &pmt::xilinx::Xilinx::Read)
