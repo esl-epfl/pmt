@@ -40,7 +40,7 @@ if(${BUILD_NVML_PMT})
   target_link_libraries(pypmt PRIVATE pmt-nvml)
 endif()
 
-if(${ROCM-SMI_FOUND})
+if(${BUILD_ROCM_PMT})
   add_definitions(-DBUILD_ROCM)
   target_link_libraries(pypmt PRIVATE pmt-rocm)
 endif()

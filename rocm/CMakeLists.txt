@@ -2,10 +2,8 @@ project(rocm)
 
 add_library(pmt-rocm OBJECT ROCM.cpp)
 
-set(LINK_LIBRARIES Threads::Threads ${ROCM-SMI_LIBRARY})
+set(LINK_LIBRARIES Threads::Threads ROCM::smi)
 target_link_libraries(pmt-rocm ${LINK_LIBRARIES})
-
-target_include_directories(pmt-rocm PRIVATE ${ROCM-SMI_INCLUDE_DIR})
 
 install(FILES ROCM.h DESTINATION include/pmt)
 

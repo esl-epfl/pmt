@@ -1,6 +1,6 @@
-project(pmt)
-
 cmake_minimum_required(VERSION 3.17.5)
+
+project(pmt)
 
 # Set cmake module path
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
@@ -77,8 +77,10 @@ endif()
 
 # Find dependencies for ROCM
 if(${BUILD_ROCM_PMT})
-  find_package(ROCM-SMI REQUIRED)
-  message(${ROCM-SMI_INCLUDE_DIR})
+  find_package(rocm_smi REQUIRED)
+  add_library(ROCM::smi INTERFACE IMPORTED)
+  target_include_directories(ROCM::smi INTERFACE ${ROCM_SMI_INCLUDE_DIRS})
+  target_link_libraries(ROCM::smi INTERFACE ${ROCM_SMI_LIBRARIES})
 endif()
 
 # Find dependencies for Likwid
@@ -152,7 +154,7 @@ if(${BUILD_RAPL_PMT})
 endif()
 
 # ROCM
-if(${ROCM-SMI_FOUND})
+if(${BUILD_ROCM_PMT})
   add_subdirectory(rocm)
 endif()
 
