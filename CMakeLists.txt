@@ -139,7 +139,7 @@ if(${PMT_BUILD_TEGRA})
 endif()
 
 # Python bindings
-if(${pybind11_FOUND})
+if(${PMT_BUILD_PYTHON})
   add_subdirectory(python)
 endif()
 
@@ -159,7 +159,7 @@ if(${PMT_BUILD_XILINX})
 endif()
 
 # Likwid
-if(${LIKWID_FOUND})
+if(${PMT_BUILD_LIKWID})
   add_subdirectory(likwid)
 endif()
 
