@@ -35,11 +35,8 @@ if(${BUILD_POWERSENSOR3_PMT})
 endif()
 
 if(${BUILD_NVML_PMT})
-  find_package(CUDAToolkit QUIET)
-  if(${CUDAToolkit_FOUND})
-    add_definitions(-DBUILD_NVML)
-    target_link_libraries(pypmt PRIVATE pmt-nvml)
-  endif()
+  add_definitions(-DBUILD_NVML)
+  target_link_libraries(pypmt PRIVATE pmt-nvml)
 endif()
 
 if(${ROCM-SMI_FOUND})

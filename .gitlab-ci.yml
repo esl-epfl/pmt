@@ -1,6 +1,6 @@
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
-  CMAKE_OPTIONS: "-DBUILD_POWERSENSOR2_PMT=ON -DBUILD_POWERSENSOR3_PMT=ON -DBUILD_NVML_PMT=ON -DBUILD_RAPL_PMT=ON -DBUILD_PYTHON_PMT=ON"
+  CMAKE_OPTIONS: "-DBUILD_POWERSENSOR2_PMT=ON -DBUILD_POWERSENSOR3_PMT=ON -DBUILD_RAPL_PMT=ON -DBUILD_PYTHON_PMT=ON"
   SKIP: "include-what-you-use"
 
 stages:
@@ -48,7 +48,7 @@ test-das6:
     - module load py-pybind11/2.11.0
     - module load cuda/12.2.1
   script:
-    - cmake -S . -B build ${CMAKE_OPTIONS}
+    - cmake -S . -B build ${CMAKE_OPTIONS} -DBUILD_NVML_PMT=ON
     - make -C build
     - $(pwd)/build/rapl/Rapl-test sleep 3
     - $(pwd)/build/nvml/NVML-test sleep 3

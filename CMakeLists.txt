@@ -66,10 +66,7 @@ endif()
 
 # Find dependencies for NVML
 if(${BUILD_NVML_PMT})
-  find_package(CUDAToolkit QUIET)
-  if(${CUDAToolkit_FOUND})
-    set(HAVE_NVML TRUE)
-  endif()
+  find_package(CUDAToolkit REQUIRED)
 endif()
 
 if(${BUILD_PYTHON_PMT})
@@ -137,7 +134,7 @@ endif()
 add_subdirectory(dummy)
 
 # NVML
-if(${CUDAToolkit_FOUND})
+if(${BUILD_NVML_PMT})
   add_subdirectory(nvml)
 endif()
 

@@ -3,7 +3,6 @@
 
 #cmakedefine HAVE_POWERSENSOR2
 #cmakedefine HAVE_POWERSENSOR3
-#cmakedefine HAVE_NVML
 #cmakedefine HAVE_ROCM-smi
 #cmakedefine HAVE_LIKWID
 
@@ -14,7 +13,7 @@
 #include <pmt/PowerSensor3.h>
 #endif
 #include <pmt/Dummy.h>
-#if defined(HAVE_NVML)
+#if BUILD_NVML_PMT
 #include <pmt/NVML.h>
 #endif
 #if defined(HAVE_ROCMSMI)
