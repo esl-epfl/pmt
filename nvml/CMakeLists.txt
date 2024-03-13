@@ -4,7 +4,6 @@ add_library(${PROJECT_NAME} OBJECT NVML.cpp)
 
 set(LINK_LIBRARIES CUDA::nvml Threads::Threads)
 target_link_libraries(${PROJECT_NAME} ${LINK_LIBRARIES})
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR})
 
 install(FILES NVML.h DESTINATION include/pmt)
 

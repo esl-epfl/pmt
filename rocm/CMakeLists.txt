@@ -4,7 +4,6 @@ add_library(${PROJECT_NAME} OBJECT ROCM.cpp)
 
 set(LINK_LIBRARIES Threads::Threads ROCM::smi)
 target_link_libraries(${PROJECT_NAME} ${LINK_LIBRARIES})
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR})
 
 install(FILES ROCM.h DESTINATION include/pmt)
 

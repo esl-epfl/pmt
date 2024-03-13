@@ -53,3 +53,15 @@ test-das6:
     - $(pwd)/build/rapl/Rapl-test sleep 3
     - $(pwd)/build/nvml/NVML-test sleep 3
     - PYTHONPATH=$PYTHONPATH:$(pwd)/build/python python3 ${CI_PROJECT_DIR}/python/PythonNVMLDemo.py
+
+test-das6-integration:
+  stage: test
+  tags:
+    - das6-gpu
+  before_script:
+    - module load spack/9.4.0
+    - module load cuda/12.2.1
+    - cmake -S example -B build -DPMT_BUILD_NVML=ON -DPMT_GIT_REVISION=${CI_COMMIT_SHA}
+    - make -C build
+  script:
+    - $(pwd)/build/example sleep 3

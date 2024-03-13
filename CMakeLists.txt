@@ -101,6 +101,9 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH True)
 
 include(GNUInstallDirs)
 
+# Set toplevel source directory as include directory
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
 # PMT interface and common functionality
 add_subdirectory(common)
 
