@@ -10,6 +10,7 @@
 #cmakedefine PMT_BUILD_XILINX
 #cmakedefine PMT_BUILD_LIKWID
 #cmakedefine PMT_BUILD_CRAY
+#cmakedefine PMT_BUILD_NVIDIA
 
 #include <pmt/Dummy.h>
 #if defined(PMT_BUILD_POWERSENSOR2)
@@ -38,6 +39,9 @@
 #endif
 #if defined(PMT_BUILD_CRAY)
 #include <pmt/Cray.h>
+#endif
+#if defined(PMT_BUILD_NVIDIA)
+#include <pmt/NVIDIA.h>
 #endif
 
 #endif

@@ -41,7 +41,12 @@ option(PMT_BUILD_RAPL "" OFF)
 option(PMT_BUILD_ROCM "" OFF)
 option(PMT_BUILD_TEGRA "" OFF)
 option(PMT_BUILD_XILINX "" OFF)
+option(PMT_BUILD_NVIDIA "" OFF)
 option(PMT_BUILD_TESTS "" ON)
+
+if(${PMT_BUILD_NVML} OR ${PMT_BUILD_TEGRA})
+  set(PMT_BUILD_NVIDIA ON)
+endif()
 
 # Find dependencies for PowerSensor
 if(${PMT_BUILD_POWERSENSOR2})
@@ -60,7 +65,7 @@ if(${PMT_BUILD_POWERSENSOR3})
 endif()
 
 # Find dependencies for NVML
-if(${PMT_BUILD_NVML})
+if(${PMT_BUILD_NVML} OR ${PMT_BUILD_NVIDIA})
   find_package(CUDAToolkit REQUIRED)
 endif()
 
@@ -164,6 +169,11 @@ endif()
 # Likwid
 if(${PMT_BUILD_LIKWID})
   add_subdirectory(likwid)
+endif()
+
+# NVIDIA
+if(${PMT_BUILD_NVIDIA})
+  add_subdirectory(nvidia)
 endif()
 
 # Public header file
