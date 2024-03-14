@@ -1,11 +1,4 @@
 project(pmt-dummy)
 
-add_library(${PROJECT_NAME} OBJECT Dummy.cpp)
-target_link_libraries(pmt PRIVATE ${PROJECT_NAME})
-
-install(FILES Dummy.h DESTINATION include/pmt)
-
-list(APPEND PMT_HEADER_FILES "dummy/Dummy.h")
-set(PMT_HEADER_FILES
-    ${PMT_HEADER_FILES}
-    PARENT_SCOPE)
+include(AddSensor)
+add_sensor(SENSOR_NAME "dummy" HEADER Dummy.h SRC_FILES Dummy.cpp)
