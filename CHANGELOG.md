@@ -4,6 +4,23 @@ This repository contains releases of the Power Measurement Toolkit (PMT), a
 comprehensive toolkit for power measurement and monitoring. Below are details
 for each release:
 
+## Unreleased
+
+### Added:
+
+- `pmt::Create` interface that accepts the platform as a string
+- `pmt::NVIDIA` that automatically dispatches either `NVML` or `Tegra`
+- Support to include PMT in another CMake project using `FetchContent` (see
+  `example`)
+- Add Likwid support based on performance groups (thanks @markbuettner!)
+
+### Changed:
+
+- The CMake options are prefixed with `PMT_`, rather than having it as `_PMT`
+  suffix
+- Simpler CMake code for `ROCM`
+- The Python interface uses the new `pmt::Create` interface
+
 ## 1.2.0
 
 ### Changelog:
