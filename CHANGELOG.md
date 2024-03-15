@@ -4,7 +4,7 @@ This repository contains releases of the Power Measurement Toolkit (PMT), a
 comprehensive toolkit for power measurement and monitoring. Below are details
 for each release:
 
-## Unreleased
+## 1.3.0
 
 ### Added:
 
