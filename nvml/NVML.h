@@ -8,6 +8,7 @@
 namespace pmt::nvml {
 class NVML : public PMT {
  public:
+  inline static std::string name = "nvml";
   static std::unique_ptr<NVML> Create(int device_number = 0);
 };
 }  // end namespace pmt::nvml

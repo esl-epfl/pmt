@@ -12,6 +12,4 @@ add_sensor(
   Cray.cpp
   FilenamesHelper.cpp
   LINK_LIBRARIES
-  ${LINK_LIBRARIES}
-  TEST
-  Cray-test.cpp)
+  ${LINK_LIBRARIES})

@@ -17,6 +17,7 @@ struct CrayMeasurement {
 
 class Cray : public PMT {
  public:
+  inline static std::string Cray::name = "cray";
   static std::unique_ptr<Cray> Create();
 };
 }  // end namespace cray

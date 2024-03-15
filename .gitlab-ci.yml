@@ -48,10 +48,10 @@ test-das6:
     - module load py-pybind11/2.11.0
     - module load cuda/12.2.1
   script:
-    - cmake -S . -B build ${CMAKE_OPTIONS} -DPMT_BUILD_NVML=ON
+    - cmake -S . -B build ${CMAKE_OPTIONS} -DPMT_BUILD_NVML=ON -DPMT_BUILD_BINARY=ON
     - make -C build
-    - $(pwd)/build/rapl/Rapl-test sleep 3
-    - $(pwd)/build/nvml/NVML-test sleep 3
+    - PMT_NAME=rapl $(pwd)/build/bin/PMT sleep 3
+    - PMT_NAME=nvml $(pwd)/build/bin/PMT sleep 3
     - PYTHONPATH=$PYTHONPATH:$(pwd)/build/python python3 ${CI_PROJECT_DIR}/python/PythonNVMLDemo.py
 
 test-das6-integration:

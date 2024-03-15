@@ -2,8 +2,6 @@ project(pmt-rocm)
 
 include(AddSensor)
 
-add_library(${PROJECT_NAME} OBJECT ROCM.cpp)
-
 set(LINK_LIBRARIES Threads::Threads ROCM::smi)
 set(INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR})
 
@@ -17,6 +15,4 @@ add_sensor(
   LINK_LIBRARIES
   ${LINK_LIBRARIES}
   INCLUDE_DIRECTORIES
-  ${INCLUDE_DIRECTORIES}
-  TEST
-  ROCM-test.cpp)
+  ${INCLUDE_DIRECTORIES})

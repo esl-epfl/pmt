@@ -1,6 +1,7 @@
 project(pmt-powersensor2)
 
 include(AddSensor)
+
 set(LINK_LIBRARIES OpenMP::OpenMP_C)
 set(INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR} ${POWERSENSOR2_ROOT_DIR})
 
@@ -15,6 +16,4 @@ add_sensor(
   LINK_LIBRARIES
   ${LINK_LIBRARIES}
   INCLUDE_DIRECTORIES
-  ${INCLUDE_DIRECTORIES}
-  TEST
-  PowerSensor2-test.cpp)
+  ${INCLUDE_DIRECTORIES})

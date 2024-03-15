@@ -88,6 +88,11 @@ class PMT {
   std::unique_ptr<std::ofstream> dump_file_ = nullptr;
   mutable std::mutex dump_file_mutex_;
 };
+
+std::unique_ptr<PMT> Create(const std::string &name);
+std::unique_ptr<PMT> Create(const std::string &name, int argument);
+std::unique_ptr<PMT> Create(const std::string &name, const char *argument);
+
 }  // end namespace pmt
 
 #endif

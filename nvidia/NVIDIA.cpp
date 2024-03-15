@@ -28,6 +28,7 @@ inline void __checkCudaCall(cudaError_t result, const char *const func,
 #endif
 
 namespace pmt::nvidia {
+
 std::unique_ptr<PMT> NVIDIA::Create(int device_number) {
 #if defined(PMT_BUILD_TEGRA)
   cudaDeviceProp property;

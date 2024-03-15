@@ -12,6 +12,4 @@ add_sensor(
   SRC_FILES
   Xilinx.cpp
   LINK_LIBRARIES
-  ${LINK_LIBRARIES}
-  TEST
-  Xilinx-test.cpp)
+  ${LINK_LIBRARIES})

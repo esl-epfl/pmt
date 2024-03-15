@@ -11,6 +11,4 @@ add_sensor(
   Rapl.cpp
   RaplImpl.cpp
   LINK_LIBRARIES
-  ${LINK_LIBRARIES}
-  TEST
-  Rapl-test.cpp)
+  ${LINK_LIBRARIES})

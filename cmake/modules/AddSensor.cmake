@@ -7,9 +7,8 @@ macro(add_sensor)
   ## SRC_FILES : the list of the files needed to create the sensor library
   ## INCLUDE_DIRECTORIES : the list of directories to include in the built
   ## LINK_LIBRARIES : the list of libraries to link to the sensor
-  ## TEST : the test file to be used to test the library
 
-  set(oneValueArgs SENSOR_NAME HEADER TEST)
+  set(oneValueArgs SENSOR_NAME HEADER)
   set(multiValueArgs SRC_FILES LINK_LIBRARIES INCLUDE_DIRECTORIES)
   cmake_parse_arguments(ADD_SENSOR "" "${oneValueArgs}" "${multiValueArgs}"
                         ${ARGN})
@@ -36,18 +35,5 @@ macro(add_sensor)
   set(PMT_HEADER_FILES
       ${PMT_HEADER_FILES}
       PARENT_SCOPE)
-
-  if(PMT_BUILD_TESTS AND ADD_SENSOR_TEST)
-    get_filename_component(TEST_NAME ${ADD_SENSOR_TEST} NAME_WE)
-
-    add_executable(${TEST_NAME} ${ADD_SENSOR_TEST})
-
-    target_link_libraries(
-      ${TEST_NAME} $<TARGET_OBJECTS:pmt-common>
-      $<TARGET_OBJECTS:${LIBRARY_NAME}> ${ADD_SENSOR_LINK_LIBRARIES})
-    target_include_directories(${TEST_NAME} PRIVATE ${CMAKE_SOURCE_DIR})
-
-    install(TARGETS ${TEST_NAME} RUNTIME DESTINATION bin)
-  endif()
 
 endmacro()

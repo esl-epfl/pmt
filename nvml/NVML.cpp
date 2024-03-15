@@ -25,6 +25,7 @@ inline void __checkNVMLCall(nvmlReturn_t result, const char *const func,
 }
 
 namespace pmt::nvml {
+
 class NVMLState {
  public:
   operator State();

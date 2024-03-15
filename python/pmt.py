@@ -1,5 +1,4 @@
 import pypmt
-import os
 import re
 
 
@@ -8,45 +7,7 @@ def is_tty_device(device_id):
 
 
 def get_pmt(platform, device_id=0):
-    if platform == "cray":
-        return pypmt.Cray.create()
-    elif platform == 'powersensor2':
-        try:
-            if is_tty_device(device_id):
-                return pypmt.PowerSensor2.create(str(device_id))
-            else:
-                return pypmt.PowerSensor2.create()
-        except AttributeError:
-            raise Exception("PowerSensor2 not installed")
-    elif platform == 'powersensor3':
-        try:
-            if is_tty_device(device_id):
-                return pypmt.PowerSensor3.create(str(device_id))
-            else:
-                return pypmt.PowerSensor3.create()
-        except AttributeError:
-            raise Exception("PowerSensor3 not installed")
-    elif platform == "dummy":
-        return pypmt.Dummy.create()
-    elif platform == "tegra":
-        return pypmt.tegra.create()
-    elif platform == "nvml":
-        try:
-            return pypmt.NVML.create(device_id)
-        except AttributeError:
-            raise Exception("NVML not installed")
-    elif platform == "rapl":
-        return pypmt.Rapl.create()
-    elif platform == "rocm":
-        try:
-            return pypmt.ROCM.create(device_id)
-        except AttributeError:
-            raise Exception("ROCM not installed")
-    elif platform == "xilinx":
-        return pypmt.Xilinx.create()
-    else:
-        raise Exception(f"Invalid platform: {platform}")
-
+    return pypmt.create(platform, device_id)
 
 def measure(platform, device_id=0):
     def decorator(func):

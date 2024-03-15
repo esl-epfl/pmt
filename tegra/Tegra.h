@@ -8,6 +8,7 @@
 namespace pmt::tegra {
 class Tegra : public PMT {
  public:
+  inline static std::string name = "tegra";
   static std::unique_ptr<Tegra> Create();
 };
 }  // end namespace pmt::tegra

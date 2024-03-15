@@ -8,6 +8,7 @@
 namespace pmt::rapl {
 class Rapl : public PMT {
  public:
+  inline static std::string name = "rapl";
   static std::unique_ptr<Rapl> Create();
 };
 }  // end namespace pmt::rapl

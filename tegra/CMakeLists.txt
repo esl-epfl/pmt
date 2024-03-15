@@ -4,6 +4,7 @@ include(AddSensor)
 
 set(LINK_LIBRARIES Threads::Threads)
 set(INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR})
+
 add_sensor(
   SENSOR_NAME
   "tegra"
@@ -15,6 +16,4 @@ add_sensor(
   LINK_LIBRARIES
   ${LINK_LIBRARIES}
   INCLUDE_DIRECTORIES
-  ${INCLUDE_DIRECTORIES}
-  TEST
-  Tegra-test.cpp)
+  ${INCLUDE_DIRECTORIES})

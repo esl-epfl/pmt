@@ -10,6 +10,7 @@ namespace pmt::powersensor2 {
 
 class PowerSensor2 : public PMT {
  public:
+  inline static std::string name = "powersensor2";
   static std::unique_ptr<PowerSensor2> Create(
       const char *device = default_device().c_str());
   static std::string default_device() { return "/dev/ttyACM0"; }

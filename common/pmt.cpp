@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <iomanip>
 
+#include <pmt.h>
+
 #include "common/pmt.h"
 namespace pmt {
 
@@ -137,4 +139,81 @@ State PMT::Read() {
   return state_latest_;
 }
 
+inline void create_warning(const std::string &name) {
+#if defined(DEBUG)
+  std::stringstream error;
+  error << "Invalid or unavailable platform specified: " << name << std::endl;
+  throw std::runtime_error(error.str());
+#endif
+}
+
+std::unique_ptr<PMT> Create(const std::string &name) {
+#if defined(PMT_BUILD_CRAY)
+  if (name == cray::Cray::name) {
+    return cray::Cray::Create();
+  }
+#endif
+#if defined(PMT_BUILD_LIKWID)
+  if (name == likwid::Likwid::name) {
+    return likwid::Likwid::Create();
+  }
+#endif
+#if defined(PMT_BUILD_RAPL)
+  if (name == rapl::Rapl::name) {
+    return rapl::Rapl::Create();
+  }
+#endif
+#if defined(PMT_BUILD_TEGRA)
+  if (name == tegra::Tegra::name) {
+    return tegra::Tegra::Create();
+  }
+#endif
+#if defined(PMT_BUILD_NVIDIA)
+  if (name == nvidia::NVIDIA::name) {
+    return nvidia::NVIDIA::Create();
+  }
+#endif
+  create_warning(name);
+  return Dummy::Create();
+}
+
+std::unique_ptr<PMT> Create(const std::string &name, int argument) {
+#if defined(PMT_BUILD_NVML)
+  if (name == nvml::NVML::name) {
+    return nvml::NVML::Create(argument);
+  }
+#endif
+#if defined(PMT_BUILD_NVIDIA)
+  if (name == nvidia::NVIDIA::name) {
+    return nvidia::NVIDIA::Create(argument);
+  }
+#endif
+#if defined(PMT_BUILD_ROCM)
+  if (name == rocm::ROCM::name) {
+    return rocm::ROCM::Create(argument);
+  }
+#endif
+  create_warning(name);
+  return Dummy::Create();
+}
+
+std::unique_ptr<PMT> Create(const std::string &name, const char *argument) {
+#if defined(PMT_BUILD_POWERSENSOR2)
+  if (name == powersensor2::PowerSensor2::name) {
+    return powersensor2::PowerSensor2::Create(argument);
+  }
+#endif
+#if defined(PMT_BUILD_POWERSENSOR3)
+  if (name == powersensor3::PowerSensor3::name) {
+    return powersensor3::PowerSensor3::Create(argument);
+  }
+#endif
+#if defined(PMT_BUILD_XILINX)
+  if (name == xilinx::Xilinx::name) {
+    return xilinx::Xilinx::Create(argument);
+  }
+#endif
+  create_warning(name);
+  return Dummy::Create();
+};
 }  // end namespace pmt

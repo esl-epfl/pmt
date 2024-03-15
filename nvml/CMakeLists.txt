@@ -11,6 +11,4 @@ add_sensor(
   SRC_FILES
   NVML.cpp
   LINK_LIBRARIES
-  ${LINK_LIBRARIES}
-  TEST
-  NVML-test.cpp)
+  ${LINK_LIBRARIES})
