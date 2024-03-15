@@ -1,5 +1,8 @@
 project(pmt-powersensor2)
 
+set(POWERSENSOR2_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/PowerSensor2)
+set(POWERSENSOR2_SOURCE ${POWERSENSOR2_ROOT_DIR}/PowerSensor.cc)
+
 include(AddSensor)
 
 set(LINK_LIBRARIES OpenMP::OpenMP_C)

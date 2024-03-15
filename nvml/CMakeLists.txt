@@ -1,5 +1,7 @@
 project(pmt-nvml)
 
+find_package(CUDAToolkit REQUIRED)
+
 include(AddSensor)
 set(LINK_LIBRARIES CUDA::nvml Threads::Threads)
 

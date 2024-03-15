@@ -1,5 +1,10 @@
 project(pmt-rocm)
 
+find_package(rocm_smi REQUIRED)
+add_library(ROCM::smi INTERFACE IMPORTED)
+target_include_directories(ROCM::smi INTERFACE ${ROCM_SMI_INCLUDE_DIRS})
+target_link_libraries(ROCM::smi INTERFACE ${ROCM_SMI_LIBRARIES})
+
 include(AddSensor)
 
 set(LINK_LIBRARIES Threads::Threads ROCM::smi)

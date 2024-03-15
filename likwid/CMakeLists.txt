@@ -1,5 +1,7 @@
 project(pmt-likwid)
 
+find_package(Likwid REQUIRED)
+
 include(AddSensor)
 set(LINK_LIBRARIES Threads::Threads ${LIKWID_LIBRARY})
 set(INCLUDE_DIRECTORIES ${LIKWID_INCLUDE_DIR})

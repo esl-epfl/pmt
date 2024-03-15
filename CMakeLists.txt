@@ -12,7 +12,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
       CACHE STRING "Default build type." FORCE)
 endif()
 
-#Set CXX Standard
+# Set CXX Standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -48,48 +48,6 @@ if(${PMT_BUILD_NVML} OR ${PMT_BUILD_TEGRA})
   set(PMT_BUILD_NVIDIA ON)
 endif()
 
-# Find dependencies for PowerSensor
-if(${PMT_BUILD_POWERSENSOR2})
-  set(POWERSENSOR2_ROOT_DIR
-      ${CMAKE_CURRENT_SOURCE_DIR}/powersensor2/PowerSensor2)
-  set(POWERSENSOR2_SOURCE ${POWERSENSOR2_ROOT_DIR}/PowerSensor.cc)
-endif()
-
-if(${PMT_BUILD_POWERSENSOR3})
-  set(POWERSENSOR3_ROOT_SRC_DIR
-      ${CMAKE_CURRENT_SOURCE_DIR}/powersensor3/PowerSensor3/host/src)
-  set(POWERSENSOR3_ROOT_INC_DIR
-      ${CMAKE_CURRENT_SOURCE_DIR}/powersensor3/PowerSensor3/host/include)
-  set(POWERSENSOR3_SOURCE ${POWERSENSOR3_ROOT_SRC_DIR}/PowerSensor.cc
-                          ${POWERSENSOR3_ROOT_SRC_DIR}/sensors.cc)
-endif()
-
-# Find dependencies for NVML
-if(${PMT_BUILD_NVML} OR ${PMT_BUILD_NVIDIA})
-  find_package(CUDAToolkit REQUIRED)
-endif()
-
-if(${PMT_BUILD_PYTHON})
-  find_package(
-    Python3
-    COMPONENTS Interpreter Development
-    REQUIRED)
-  find_package(pybind11 CONFIG REQUIRED)
-endif()
-
-# Find dependencies for ROCM
-if(${PMT_BUILD_ROCM})
-  find_package(rocm_smi REQUIRED)
-  add_library(ROCM::smi INTERFACE IMPORTED)
-  target_include_directories(ROCM::smi INTERFACE ${ROCM_SMI_INCLUDE_DIRS})
-  target_link_libraries(ROCM::smi INTERFACE ${ROCM_SMI_LIBRARIES})
-endif()
-
-# Find dependencies for Likwid
-if(${PMT_BUILD_LIKWID})
-  find_package(Likwid REQUIRED)
-endif()
-
 # Config file
 configure_file(${PROJECT_SOURCE_DIR}/cmake/config/pmt.h.in
                ${PROJECT_BINARY_DIR}/pmt.h)
@@ -108,12 +66,6 @@ include(GNUInstallDirs)
 
 # Set toplevel source directory as include directory
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
-# Replicate header file structure in binary directory
-file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/pmt")
-file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/pmt/common")
-file(CREATE_LINK "${CMAKE_CURRENT_SOURCE_DIR}/common/pmt.h"
-     "${PROJECT_BINARY_DIR}/pmt/common/pmt.h" SYMBOLIC)
 
 # Use this variable wherever <pmt.h> is included
 set(PMT_INCLUDE_DIR "${PROJECT_BINARY_DIR}")
@@ -163,6 +115,10 @@ set_target_properties(
   ${PROJECT_NAME} PROPERTIES PUBLIC_HEADER ${CMAKE_CURRENT_BINARY_DIR}/pmt.h)
 
 # Replicate header file structure in binary directory
+file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/pmt")
+file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/pmt/common")
+file(CREATE_LINK "${CMAKE_CURRENT_SOURCE_DIR}/common/pmt.h"
+     "${PROJECT_BINARY_DIR}/pmt/common/pmt.h" SYMBOLIC)
 foreach(PMT_HEADER_FILE ${PMT_HEADER_FILES})
   set(LINK_SRC "${CMAKE_CURRENT_SOURCE_DIR}/${PMT_HEADER_FILE}")
   get_filename_component(LINK_DST ${PMT_HEADER_FILE} NAME)
@@ -171,7 +127,7 @@ endforeach()
 
 if(NOT CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   set_target_properties(${PROJECT_NAME} PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
-                                                   ${CMAKE_CURRENT_BINARY_DIR})
+                                                   ${PMT_INCLUDE_DIR})
 else()
   # Install library
   target_include_directories(
