@@ -18,5 +18,5 @@ repos:
     hooks:
     - id: mdformat
       args: ['--wrap=80']
-      files: CHANGELOG.md
+      files:  ^.*\.(md)$
 
