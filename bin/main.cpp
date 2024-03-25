@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
       sensor = (std::strlen(pmt_device) > 1)
                    ? pmt::Create(pmt_name, pmt_device)
                    : pmt::Create(pmt_name, std::atoi(pmt_device));
-      run(*sensor, argc, argv);
     }
+    run(*sensor, argc, argv);
   }
 }
