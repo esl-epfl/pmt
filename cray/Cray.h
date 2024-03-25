@@ -5,7 +5,7 @@
 #include <memory>
 #include <string>
 
-#include "common/pmt.h"
+#include "common/PMT.h"
 
 namespace pmt {
 namespace cray {

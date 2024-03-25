@@ -5,7 +5,7 @@
 
 #include <pmt.h>
 
-#include "common/pmt.h"
+#include "common/PMT.h"
 namespace pmt {
 
 PMT::~PMT() {

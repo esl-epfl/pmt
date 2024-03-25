@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "Rapl.h"
-#include "common/pmt.h"
+#include "common/PMT.h"
 
 namespace pmt::rapl {
 

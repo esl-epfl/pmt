@@ -117,8 +117,8 @@ set_target_properties(
 # Replicate header file structure in binary directory
 file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/pmt")
 file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/pmt/common")
-file(CREATE_LINK "${CMAKE_CURRENT_SOURCE_DIR}/common/pmt.h"
-     "${PROJECT_BINARY_DIR}/pmt/common/pmt.h" SYMBOLIC)
+file(CREATE_LINK "${CMAKE_CURRENT_SOURCE_DIR}/common/PMT.h"
+     "${PROJECT_BINARY_DIR}/pmt/common/PMT.h" SYMBOLIC)
 foreach(PMT_HEADER_FILE ${PMT_HEADER_FILES})
   set(LINK_SRC "${CMAKE_CURRENT_SOURCE_DIR}/${PMT_HEADER_FILE}")
   get_filename_component(LINK_DST ${PMT_HEADER_FILE} NAME)

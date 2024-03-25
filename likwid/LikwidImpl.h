@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "Likwid.h"
-#include "common/pmt.h"
+#include "common/PMT.h"
 
 namespace pmt::likwid {
 

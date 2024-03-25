@@ -1,3 +1,4 @@
+#include <cstring>
 #include <iostream>
 #include <iomanip>
 #include <memory>
@@ -52,12 +53,18 @@ int main(int argc, char* argv[]) {
   const std::string pmt_device_env = "PMT_DEVICE";
   const char* pmt_name = std::getenv(pmt_name_env.c_str());
   const char* pmt_device = std::getenv(pmt_device_env.c_str());
-  const int device_number = pmt_device ? std::atoi(pmt_device) : 0;
   if (pmt_name == nullptr) {
     throw std::runtime_error(
         "Select PMT using the PMT_NAME environment variable.");
   } else {
-    std::unique_ptr<pmt::PMT> sensor = pmt::Create(pmt_name, device_number);
-    run(*sensor, argc, argv);
+    std::unique_ptr<pmt::PMT> sensor;
+    if (pmt_device == nullptr) {
+      sensor = pmt::Create(pmt_name);
+    } else {
+      sensor = (std::strlen(pmt_device) > 1)
+                   ? pmt::Create(pmt_name, pmt_device)
+                   : pmt::Create(pmt_name, std::atoi(pmt_device));
+      run(*sensor, argc, argv);
+    }
   }
 }
