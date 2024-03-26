@@ -12,5 +12,6 @@ add_sensor(
   NVML.h
   SRC_FILES
   NVML.cpp
+  NVMLImpl.cpp
   LINK_LIBRARIES
   ${LINK_LIBRARIES})

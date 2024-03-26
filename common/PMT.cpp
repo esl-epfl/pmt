@@ -168,6 +168,11 @@ std::unique_ptr<PMT> Create(const std::string &name) {
     return tegra::Tegra::Create();
   }
 #endif
+#if defined(PMT_BUILD_NVML)
+  if (name == nvml::NVML::name) {
+    return nvml::NVML::Create();
+  }
+#endif
 #if defined(PMT_BUILD_NVIDIA)
   if (name == nvidia::NVIDIA::name) {
     return nvidia::NVIDIA::Create();

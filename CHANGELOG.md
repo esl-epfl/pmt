@@ -4,6 +4,16 @@ This repository contains releases of the Power Measurement Toolkit (PMT), a
 comprehensive toolkit for power measurement and monitoring. Below are details
 for each release:
 
+## Unreleased
+
+### Changed:
+
+- Use instantaneous power measurement in `NVML`
+
+### Added:
+
+- `NVML` measures GPU and module seperately (for Grace Hopper)
+
 ## 1.3.0
 
 ### Added:

@@ -14,7 +14,7 @@ class TegraState {
  public:
   operator State();
   double timestamp_;
-  std::vector<std::pair<std::string, int>> measurements;
+  std::vector<TegraMeasurement> measurements;
   unsigned int watt_ = 0;
   unsigned int joules_ = 0;
 };
