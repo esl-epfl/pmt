@@ -9,10 +9,12 @@ for each release:
 ### Changed:
 
 - Use instantaneous power measurement in `NVML`
+- Change output of polling mode for `PMT` to show individual measurements
 
 ### Added:
 
 - `NVML` measures GPU and module seperately (for Grace Hopper)
+- `State::NrMeasurements()` and `State::{timetamp,name,joules,watts}(int)`
 
 ## 1.3.0
 

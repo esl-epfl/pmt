@@ -14,18 +14,17 @@ void run(pmt::PMT& sensor, int argc, char* argv[]) {
   if (argc == 1) {
     auto first = sensor.Read();
     while (true) {
-      auto start = sensor.Read();
+      auto state = sensor.Read();
+      std::cout << pmt::PMT::seconds(first, state) << " s, ";
+      for (int i = 0; i < state.NrMeasurements(); i++) {
+        std::cout << state.name(i) << ": " << state.watts(i) << " W";
+        if (i < (state.NrMeasurements() - 1)) {
+          std::cout << ", ";
+        }
+      }
+      std::cout << std::endl;
       std::this_thread::sleep_for(
           std::chrono::milliseconds(sensor.GetMeasurementInterval()));
-      auto end = sensor.Read();
-      std::cout << std::fixed << std::setprecision(3);
-      std::cout << pmt::PMT::seconds(start, end) << " s, ";
-      std::cout << pmt::PMT::joules(start, end) << " J, ";
-      std::cout << pmt::PMT::watts(start, end) << " W, ";
-      std::cout << pmt::PMT::seconds(first, end) << " s (total), ";
-      std::cout << pmt::PMT::joules(first, end) << " J (total), ";
-      std::cout << pmt::PMT::watts(first, end) << " W (average)";
-      std::cout << std::endl;
     }
   } else {
     std::stringstream command;

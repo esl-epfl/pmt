@@ -30,6 +30,13 @@ class State {
     watt_.resize(nr_measurements);
   }
 
+  int NrMeasurements() { return nr_measurements_; }
+
+  double timestamp() { return timestamp_; }
+  std::string name(int i);
+  float joules(int i);
+  float watts(int i);
+
   double timestamp_;
   int nr_measurements_;
   std::vector<std::string> name_;

@@ -32,6 +32,21 @@ float PMT::GetDumpInterval() {
                         : static_cast<float>(GetMeasurementInterval()) * 1e-3;
 }
 
+std::string State::name(int i) {
+  assert(i < nr_measurements_);
+  return name_[i];
+}
+
+float State::joules(int i) {
+  assert(i < nr_measurements_);
+  return joules_[i];
+}
+
+float State::watts(int i) {
+  assert(i < nr_measurements_);
+  return watt_[i];
+}
+
 void PMT::StartThread() {
   thread_ = std::thread([&] {
     const State start = GetState();
