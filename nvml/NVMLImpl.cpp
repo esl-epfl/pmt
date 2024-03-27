@@ -50,7 +50,10 @@ NVMLImpl::NVMLImpl(int device_number) {
   nr_scopes_ = 1 + (values[0].nvmlReturn == NVML_SUCCESS);
 }
 
-NVMLImpl::~NVMLImpl() { checkNVMLCall(nvmlShutdown()); }
+NVMLImpl::~NVMLImpl() {
+  stopped_ = true;
+  checkNVMLCall(nvmlShutdown());
+}
 
 std::vector<NVMLMeasurement> NVMLImpl::GetMeasurements() {
   const int nr_field_ids = 2;
@@ -75,11 +78,10 @@ std::vector<NVMLMeasurement> NVMLImpl::GetMeasurements() {
 
   for (int i = 0; i < nr_scopes_; ++i) {
     for (int j = 0; j < nr_field_ids; ++j) {
-      NVMLMeasurement m;
-      m.name = scopeNames[i] + suffixes[j];
-      m.value = values[nr_field_ids * i + j].value.uiVal;
-      m.timestamp = values[nr_field_ids * i + j].timestamp;
-      measurements[nr_field_ids * i + j] = m;
+      int idx = nr_field_ids * i + j;
+      measurements[idx].name = scopeNames[i] + suffixes[j];
+      measurements[idx].value = values[idx].value.uiVal;
+      measurements[idx].timestamp = values[idx].timestamp;
     }
   }
 
@@ -87,6 +89,10 @@ std::vector<NVMLMeasurement> NVMLImpl::GetMeasurements() {
 }
 
 NVMLState NVMLImpl::GetNVMLState() {
+  if (stopped_) {
+    return state_previous_;
+  }
+
   NVMLState state;
   try {
     state.timestamp_ = GetTime();

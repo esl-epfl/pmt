@@ -89,9 +89,9 @@ class PMT {
   mutable std::mutex dump_file_mutex_;
 };
 
-std::unique_ptr<PMT> Create(const std::string &name);
-std::unique_ptr<PMT> Create(const std::string &name, int argument);
-std::unique_ptr<PMT> Create(const std::string &name, const char *argument);
+std::unique_ptr<PMT> Create(const std::string &name, int argument = 0);
+std::unique_ptr<PMT> Create(const std::string &name,
+                            const char *argument = nullptr);
 
 }  // end namespace pmt
 

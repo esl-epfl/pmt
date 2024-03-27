@@ -5,7 +5,6 @@
 
 namespace pmt::nvml {
 
-// using NVMLMeasurement = std::pair<std::string, int>;
 struct NVMLMeasurement {
   std::string name;
   unsigned int value;
@@ -43,6 +42,7 @@ class NVMLImpl : public NVML {
   const unsigned int kFieldIdPowerAverage = NVML_FI_DEV_POWER_AVERAGE;
   unsigned int nr_scopes_;
   nvmlDevice_t device_;
+  bool stopped_ = false;
 };
 
 }  // end namespace pmt::nvml

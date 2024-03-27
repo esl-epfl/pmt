@@ -57,14 +57,7 @@ int main(int argc, char* argv[]) {
     throw std::runtime_error(
         "Select PMT using the PMT_NAME environment variable.");
   } else {
-    std::unique_ptr<pmt::PMT> sensor;
-    if (pmt_device == nullptr) {
-      sensor = pmt::Create(pmt_name);
-    } else {
-      sensor = (std::strlen(pmt_device) > 1)
-                   ? pmt::Create(pmt_name, pmt_device)
-                   : pmt::Create(pmt_name, std::atoi(pmt_device));
-    }
+    std::unique_ptr<pmt::PMT> sensor = pmt::Create(pmt_name, pmt_device);
     run(*sensor, argc, argv);
   }
 }

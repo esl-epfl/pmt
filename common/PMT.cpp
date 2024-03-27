@@ -1,6 +1,7 @@
 #include <cassert>
 #include <chrono>
 #include <cstdlib>
+#include <cstring>
 #include <iomanip>
 
 #include <pmt.h>
@@ -147,41 +148,6 @@ inline void create_warning(const std::string &name) {
 #endif
 }
 
-std::unique_ptr<PMT> Create(const std::string &name) {
-#if defined(PMT_BUILD_CRAY)
-  if (name == cray::Cray::name) {
-    return cray::Cray::Create();
-  }
-#endif
-#if defined(PMT_BUILD_LIKWID)
-  if (name == likwid::Likwid::name) {
-    return likwid::Likwid::Create();
-  }
-#endif
-#if defined(PMT_BUILD_RAPL)
-  if (name == rapl::Rapl::name) {
-    return rapl::Rapl::Create();
-  }
-#endif
-#if defined(PMT_BUILD_TEGRA)
-  if (name == tegra::Tegra::name) {
-    return tegra::Tegra::Create();
-  }
-#endif
-#if defined(PMT_BUILD_NVML)
-  if (name == nvml::NVML::name) {
-    return nvml::NVML::Create();
-  }
-#endif
-#if defined(PMT_BUILD_NVIDIA)
-  if (name == nvidia::NVIDIA::name) {
-    return nvidia::NVIDIA::Create();
-  }
-#endif
-  create_warning(name);
-  return Dummy::Create();
-}
-
 std::unique_ptr<PMT> Create(const std::string &name, int argument) {
 #if defined(PMT_BUILD_NVML)
   if (name == nvml::NVML::name) {
@@ -198,27 +164,76 @@ std::unique_ptr<PMT> Create(const std::string &name, int argument) {
     return rocm::ROCM::Create(argument);
   }
 #endif
+
   create_warning(name);
   return Dummy::Create();
 }
 
 std::unique_ptr<PMT> Create(const std::string &name, const char *argument) {
+  int device_number = 0;
+
+  if (argument == nullptr) {
+    // Create PMT instance without argument
+#if defined(PMT_BUILD_CRAY)
+    if (name == cray::Cray::name) {
+      return cray::Cray::Create();
+    }
+#endif
+#if defined(PMT_BUILD_LIKWID)
+    if (name == likwid::Likwid::name) {
+      return likwid::Likwid::Create();
+    }
+#endif
+#if defined(PMT_BUILD_RAPL)
+    if (name == rapl::Rapl::name) {
+      return rapl::Rapl::Create();
+    }
+#endif
+#if defined(PMT_BUILD_TEGRA)
+    if (name == tegra::Tegra::name) {
+      return tegra::Tegra::Create();
+    }
+#endif
+#if defined(PMT_BUILD_NVML)
+    if (name == nvml::NVML::name) {
+      return nvml::NVML::Create();
+    }
+#endif
+#if defined(PMT_BUILD_NVIDIA)
+    if (name == nvidia::NVIDIA::name) {
+      return nvidia::NVIDIA::Create();
+    }
+#endif
+
+  } else {
+    if (std::strlen(argument) > 1) {
+      // Create PMT instance with const char* argument
 #if defined(PMT_BUILD_POWERSENSOR2)
-  if (name == powersensor2::PowerSensor2::name) {
-    return powersensor2::PowerSensor2::Create(argument);
-  }
+      if (name == powersensor2::PowerSensor2::name) {
+        return powersensor2::PowerSensor2::Create(argument);
+      }
 #endif
 #if defined(PMT_BUILD_POWERSENSOR3)
-  if (name == powersensor3::PowerSensor3::name) {
-    return powersensor3::PowerSensor3::Create(argument);
-  }
+      if (name == powersensor3::PowerSensor3::name) {
+        return powersensor3::PowerSensor3::Create(argument);
+      }
 #endif
 #if defined(PMT_BUILD_XILINX)
-  if (name == xilinx::Xilinx::name) {
-    return xilinx::Xilinx::Create(argument);
-  }
+      if (name == xilinx::Xilinx::name) {
+        return xilinx::Xilinx::Create(argument);
+      }
 #endif
+    } else {
+      // Overwrite the default device number
+      device_number = std::atoi(argument);
+    }
+  }
+
+  // Create PMT instance with integer argument
+  return Create(name, device_number);
+
   create_warning(name);
   return Dummy::Create();
-};
+}
+
 }  // end namespace pmt
