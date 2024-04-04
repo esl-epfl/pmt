@@ -6,10 +6,11 @@ def is_tty_device(device_id):
     return isinstance(device_id, str) and bool(re.search(r"^/dev/tty.*", device_id))
 
 
-def get_pmt(platform, device_id=0):
+def get_pmt(platform, device_id=None):
     return pypmt.create(platform, device_id)
 
-def measure(platform, device_id=0):
+
+def measure(platform, device_id=None):
     def decorator(func):
         def wrapper(*args, **kwargs):
             pmt = get_pmt(platform, device_id)
