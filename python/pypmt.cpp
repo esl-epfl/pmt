@@ -21,5 +21,12 @@ PYBIND11_MODULE(pypmt, m) {
       .def("startDump", &pmt::PMT::StartDump)
       .def("stopDump", &pmt::PMT::StopDump);
 
-  py::class_<pmt::State>(m, "State");
+  py::class_<pmt::State>(m, "State")
+      .def("timestamp", &pmt::State::timestamp, "Get timestamp")
+      .def("watts", &pmt::State::watts, py::arg("index"),
+           "Get instantenous power consumption for the specified measurement")
+      .def("name", &pmt::State::name, py::arg("index"),
+           "Get name for the specified measurement")
+      .def("nr_measurements", &pmt::State::NrMeasurements,
+           "Get number of distinct measurements");
 }
