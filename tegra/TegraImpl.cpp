@@ -203,9 +203,9 @@ std::vector<TegraMeasurement> TegraImpl::GetMeasurements() {
 const std::vector<std::string> sensors_agx_xavier{"GPU", "CPU",   "SOC",
                                                   "CV",  "VDDRQ", "SYS5V"};
 const std::vector<std::string> sensors_agx_orin{
-    "VDD_GPU_SOC", "VDD_CPU_CV", "VIN_SYS_5V0", "NC", "VDDQ_VDD2_1V8AO", "NC"};
-const std::vector<std::string> sensors_TegraImplnano{"POM_5V_IN", "POM_5V_GPU",
-                                                     "POM_5V_CPU"};
+    "VDD_GPU_SOC", "VDD_CPU_CV", "VIN_SYS_5V0", "VDDQ_VDD2_1V8AO"};
+const std::vector<std::string> sensors_jetson_nano{"POM_5V_IN", "POM_5V_GPU",
+                                                   "POM_5V_CPU"};
 
 TegraState::operator State() {
   State state(1 + measurements.size());
@@ -242,7 +242,7 @@ TegraState TegraImpl::GetTegraState() {
     for (auto& measurement : state.measurements) {
       state.watt_ += measurement.second;
     }
-  } else if (detail::CheckSensors(sensors_TegraImplnano, state.measurements)) {
+  } else if (detail::CheckSensors(sensors_jetson_nano, state.measurements)) {
     // Jetson Nano: POM_5V_IN only
     state.watt_ += state.measurements[0].second;
   }
