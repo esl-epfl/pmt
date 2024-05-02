@@ -3,6 +3,10 @@
 #include "NVML.h"
 #include "common/PMT.h"
 
+namespace nvml {
+class Context;
+class Device;
+}  // end namespace nvml
 namespace pmt::nvml {
 
 struct NVMLMeasurement {
@@ -41,8 +45,10 @@ class NVMLImpl : public NVML {
   const unsigned int kFieldIdPowerInstant = NVML_FI_DEV_POWER_INSTANT;
   const unsigned int kFieldIdPowerAverage = NVML_FI_DEV_POWER_AVERAGE;
   unsigned int nr_scopes_;
-  nvmlDevice_t device_;
   bool stopped_ = false;
+
+  std::unique_ptr<::nvml::Context> context_;
+  std::unique_ptr<::nvml::Device> device_;
 };
 
 }  // end namespace pmt::nvml

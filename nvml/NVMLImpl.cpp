@@ -4,40 +4,11 @@
 #include <stdexcept>
 #include <vector>
 
-#include <cuda_runtime.h>
+#include <cudawrappers/nvml.hpp>
+
 #include <ext/alloc_traits.h>
 
 #include "NVMLImpl.h"
-
-#define checkNVMLCall(val) __checkNVMLCall((val), #val, __FILE__, __LINE__)
-
-inline void __checkNVMLCall(nvmlReturn_t result, const char *const func,
-                            const char *const file, int const line) {
-  if (result != NVML_SUCCESS) {
-    std::stringstream error;
-    error << "NVML Error at " << file;
-    error << ":" << line;
-    error << " in function " << func;
-    error << ": " << nvmlErrorString(result);
-    error << std::endl;
-    throw std::runtime_error(error.str());
-  }
-}
-
-#define checkCudaCall(val) __checkCudaCall((val), #val, __FILE__, __LINE__)
-
-inline void __checkCudaCall(cudaError_t result, const char *const func,
-                            const char *const file, int const line) {
-  if (result != cudaSuccess) {
-    std::stringstream error;
-    error << "CUDA Error at " << file;
-    error << ":" << line;
-    error << " in function " << func;
-    error << ": " << cudaGetErrorString(result);
-    error << std::endl;
-    throw std::runtime_error(error.str());
-  }
-}
 
 namespace pmt::nvml {
 
@@ -52,54 +23,27 @@ NVMLState::operator State() {
   return state;
 }
 
-/*
- * Convert a cudaUUID_t to CUDA's string representation.
- * The cudaUUID_t contains an array of 16 bytes, the UUID has
- * the form * 'GPU-XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX', with every
- * X being * an alphanumeric character.
- */
-std::string to_string(cudaUUID_t uuid) {
-  std::stringstream result;
-  result << "GPU";
-
-  for (int i = 0; i < 16; ++i) {
-    if (i == 0 || i == 4 || i == 6 || i == 8 || i == 10) {
-      result << "-";
-    }
-    result << std::hex << std::setfill('0') << std::setw(2)
-           << static_cast<unsigned>(static_cast<unsigned char>(uuid.bytes[i]));
-  }
-
-  return result.str();
-}
-
 NVMLImpl::NVMLImpl(int device_number) {
   const char *pmt_device = getenv("PMT_DEVICE");
   device_number = pmt_device ? atoi(pmt_device) : device_number;
 
-  // Get the UUID of the CUDA device with the specified device number
-  cudaDeviceProp prop;
-  checkCudaCall(cudaGetDeviceProperties(&prop, device_number));
+  // Initialize CUDA
+  cu::init();
+  cu::Device device(device_number);
 
-  // Get the string representation of the UUID
-  const std::string uuid = to_string(prop.uuid);
-
-  // Initialize NVML and get the device handle corresponding to the CUDA device
-  checkNVMLCall(nvmlInit());
-  checkNVMLCall(nvmlDeviceGetHandleByUUID(uuid.c_str(), &device_));
+  // Initialize NVML
+  context_ = std::make_unique<::nvml::Context>();
+  device_ = std::make_unique<::nvml::Device>(*context_, device);
 
   // Check whether the CPU+GPU scope is supported (e.g. Grace Hopper)
   nvmlFieldValue_t values[1];
   values[0].fieldId = kFieldIdPowerAverage;
   values[0].scopeId = 1;
-  checkNVMLCall(nvmlDeviceGetFieldValues(device_, 1, values));
+  device_->getFieldValues(1, values);
   nr_scopes_ = 1 + (values[0].nvmlReturn == NVML_SUCCESS);
 }
 
-NVMLImpl::~NVMLImpl() {
-  stopped_ = true;
-  checkNVMLCall(nvmlShutdown());
-}
+NVMLImpl::~NVMLImpl() { stopped_ = true; }
 
 std::vector<NVMLMeasurement> NVMLImpl::GetMeasurements() {
   const int nr_field_ids = 2;
@@ -117,7 +61,7 @@ std::vector<NVMLMeasurement> NVMLImpl::GetMeasurements() {
     values[i + 1].scopeId = scopeId;
   }
 
-  checkNVMLCall(nvmlDeviceGetFieldValues(device_, nr_measurements, values));
+  device_->getFieldValues(nr_measurements, values);
 
   const std::string scopeNames[] = {"gpu", "module"};
   const std::string suffixes[] = {"_instant", "_average"};

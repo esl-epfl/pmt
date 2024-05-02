@@ -46,6 +46,13 @@ option(PMT_BUILD_BINARY "" OFF)
 
 if(${PMT_BUILD_NVML} OR ${PMT_BUILD_TEGRA})
   set(PMT_BUILD_NVIDIA ON)
+  include(FetchContent)
+  find_package(CUDAToolkit REQUIRED)
+  FetchContent_Declare(
+    cudawrappers
+    GIT_REPOSITORY https://github.com/nlesc-recruit/cudawrappers
+    GIT_TAG main)
+  FetchContent_MakeAvailable(cudawrappers)
 endif()
 
 # Config file

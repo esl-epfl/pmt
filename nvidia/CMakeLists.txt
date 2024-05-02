@@ -3,7 +3,7 @@ project(pmt-nvidia)
 include(AddSensor)
 
 find_package(CUDAToolkit REQUIRED)
-set(LINK_LIBRARIES CUDA::nvml CUDA::cudart Threads::Threads)
+set(LINK_LIBRARIES cudawrappers::nvml Threads::Threads)
 
 add_sensor(
   SENSOR_NAME

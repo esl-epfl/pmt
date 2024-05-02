@@ -1,6 +1,6 @@
 #include <sstream>
 
-#include <cuda_runtime.h>
+#include <cudawrappers/cu.hpp>
 
 #include "NVIDIA.h"
 #if defined(PMT_BUILD_NVML)
@@ -31,9 +31,9 @@ namespace pmt::nvidia {
 
 std::unique_ptr<PMT> NVIDIA::Create(int device_number) {
 #if defined(PMT_BUILD_TEGRA)
-  cudaDeviceProp property;
-  checkCudaCall(cudaGetDeviceProperties(&property, device_number));
-  if (property.integrated) {
+  cu::init();
+  cu::Device device(device_number);
+  if (device.getAttribute(CU_DEVICE_ATTRIBUTE_INTEGRATED)) {
     return tegra::Tegra::Create();
   }
 #endif
