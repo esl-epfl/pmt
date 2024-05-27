@@ -13,7 +13,7 @@ application sections.
 First clone the repository:
 
 ```
-git clone --recursive git@git.astron.nl:RD/pmt.git
+git clone --recursive https://git.astron.nl/RD/pmt.git
 ```
 
 The `--recursive` flag makes sure that the git submodules are also cloned. If
