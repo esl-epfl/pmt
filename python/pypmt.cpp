@@ -4,7 +4,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(pypmt, m) {
+PYBIND11_MODULE(pmt, m) {
   m.doc() = "libpmt python bindings";
 
   m.def("create", py::overload_cast<const std::string &, int>(&pmt::Create),

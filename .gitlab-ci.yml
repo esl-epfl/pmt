@@ -52,7 +52,7 @@ test-das6:
     - make -C build
     - PMT_NAME=rapl $(pwd)/build/bin/PMT sleep 3
     - PMT_NAME=nvml $(pwd)/build/bin/PMT sleep 3
-    - PYTHONPATH=$PYTHONPATH:$(pwd)/build/python python3 ${CI_PROJECT_DIR}/python/PythonNVMLDemo.py
+    - PYTHONPATH=$PYTHONPATH:$(pwd)/build/python/site-packages python3 ${CI_PROJECT_DIR}/python/demo.py
 
 test-das6-integration:
   stage: test
