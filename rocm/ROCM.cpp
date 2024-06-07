@@ -1,3 +1,4 @@
+#include <rocm-core/rocm_version.h>
 #include <rocm_smi/rocm_smi.h>
 
 #include "ROCM.h"
@@ -6,9 +7,14 @@ namespace {
 
 size_t GetPower(uint32_t device_number) {
   rsmi_status_t status;
-  uint64_t power;  // in mW
+  uint64_t power;  // in microWatts (uW)
   const uint32_t sensor_number = 0;
+#if ROCM_VERSION_MAJOR < 6
   status = rsmi_dev_power_ave_get(device_number, sensor_number, &power);
+#else
+  RSMI_POWER_TYPE power_type;
+  status = rsmi_dev_power_get(device_number, &power, &power_type);
+#endif
 
   if (status == RSMI_STATUS_PERMISSION || status != RSMI_STATUS_SUCCESS) {
     throw std::runtime_error("ROCM-SMI read failed");
