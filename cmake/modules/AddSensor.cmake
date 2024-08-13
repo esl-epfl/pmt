@@ -21,7 +21,7 @@ macro(add_sensor)
 
   # Build the necessary sensor files
   add_library(${LIBRARY_NAME} OBJECT ${ADD_SENSOR_SRC_FILES})
-  target_link_libraries(${LIBRARY_NAME} ${ADD_SENSOR_LINK_LIBRARIES})
+  target_link_libraries(${LIBRARY_NAME} PUBLIC ${ADD_SENSOR_LINK_LIBRARIES})
   if(ADD_SENSOR_INCLUDE_DIRECTORIES)
     target_include_directories(${LIBRARY_NAME}
                                PRIVATE ${ADD_SENSOR_INCLUDE_DIRECTORIES})

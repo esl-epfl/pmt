@@ -21,3 +21,5 @@ add_sensor(
   ${LINK_LIBRARIES}
   INCLUDE_DIRECTORIES
   ${INCLUDE_DIRECTORIES})
+
+target_link_libraries(pmt PUBLIC Threads::Threads)

@@ -40,7 +40,7 @@ class ROCMImpl : public ROCM {
   ~ROCMImpl();
 
  private:
-  virtual State GetState();
+  virtual State GetState() override;
 
   virtual const char *GetDumpFilename() override { return "/tmp/pmt_rocm.out"; }
 
