@@ -1,7 +1,12 @@
 #include <nvml.h>
+#include <cuda.h>
 
 #include "NVML.h"
 #include "common/PMT.h"
+
+#if (CUDA_VERSION <= 12000)
+#define PMT_NVML_LEGACY_MODE
+#endif
 
 namespace nvml {
 class Context;
@@ -42,9 +47,11 @@ class NVMLImpl : public NVML {
   NVMLState GetNVMLState();
   std::vector<NVMLMeasurement> GetMeasurements();
 
+#if not defined(PMT_NVML_LEGACY_MODE)
   const unsigned int kFieldIdPowerInstant = NVML_FI_DEV_POWER_INSTANT;
   const unsigned int kFieldIdPowerAverage = NVML_FI_DEV_POWER_AVERAGE;
   unsigned int nr_scopes_;
+#endif
   bool stopped_ = false;
 
   std::unique_ptr<::nvml::Context> context_;

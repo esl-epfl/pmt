@@ -36,15 +36,26 @@ NVMLImpl::NVMLImpl(int device_number) {
   device_ = std::make_unique<::nvml::Device>(*context_, device);
 
   // Check whether the CPU+GPU scope is supported (e.g. Grace Hopper)
+#if not defined(PMT_NVML_LEGACY_MODE)
   nvmlFieldValue_t values[1];
   values[0].fieldId = kFieldIdPowerAverage;
   values[0].scopeId = 1;
   device_->getFieldValues(1, values);
   nr_scopes_ = 1 + (values[0].nvmlReturn == NVML_SUCCESS);
+#endif
 }
 
 NVMLImpl::~NVMLImpl() { stopped_ = true; }
 
+#if defined(PMT_NVML_LEGACY_MODE)
+std::vector<NVMLMeasurement> NVMLImpl::GetMeasurements() {
+  NVMLMeasurement measurement;
+  measurement.name = "gpu_average";
+  measurement.value = device_->getPower();
+  measurement.timestamp = GetTime();
+  return {measurement};
+}
+#else
 std::vector<NVMLMeasurement> NVMLImpl::GetMeasurements() {
   const int nr_field_ids = 2;
   const int nr_measurements = nr_scopes_ * nr_field_ids;
@@ -77,6 +88,7 @@ std::vector<NVMLMeasurement> NVMLImpl::GetMeasurements() {
 
   return measurements;
 }
+#endif
 
 NVMLState NVMLImpl::GetNVMLState() {
   if (stopped_) {
@@ -90,9 +102,14 @@ NVMLState NVMLImpl::GetNVMLState() {
 
     // Default: use use the instantaneous GPU power
     // Grace Hopper: use the instantaneous module power
+#if defined(PMT_NVML_LEGACY_MODE)
+    state.watt_ = state.measurements_[0].value;
+    state.timestamp_ = state.measurements_[0].timestamp;
+#else
     const unsigned int measurement_id = nr_scopes_ == 1 ? 0 : 2;
     state.watt_ = state.measurements_[measurement_id].value;
     state.timestamp_ = state.measurements_[measurement_id].timestamp / 1.0e6;
+#endif
 
     // Set derived fields of state
     state.joules_ = state_previous_.joules_;
