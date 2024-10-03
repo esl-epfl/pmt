@@ -16,7 +16,7 @@ const int kKeepAliveInterval = 10;  // call Measure() roughly every nth update
 
 struct RaplMeasurement {
   std::string name;
-  size_t joules;
+  std::size_t joules;
 };
 
 class RaplImpl : public Rapl {
@@ -29,14 +29,13 @@ class RaplImpl : public Rapl {
   virtual int GetMeasurementInterval() override { return 100; }
 
  private:
-  std::vector<int> DetectPackages();
   void Init();
   std::vector<RaplMeasurement> GetMeasurements();
 
   double previous_timestamp_;
   std::vector<RaplMeasurement> previous_measurements_;
 
-  std::vector<std::string> domain_names_;
+  std::vector<std::string> packages_names_;
   std::vector<std::string> file_names_;
 
   // The numbers in the rapl /energy_uj files range from zero up to a maximum
@@ -46,10 +45,10 @@ class RaplImpl : public Rapl {
   //  now = <read value>
   //  offset += now < previous ? max : 0
   //  result += offset + now - first
-  std::vector<size_t> uj_max_;
-  std::vector<size_t> uj_first_;
-  std::vector<size_t> uj_previous_;
-  std::vector<size_t> uj_offset_;
+  std::vector<std::size_t> uj_max_;
+  std::vector<std::size_t> uj_first_;
+  std::vector<std::size_t> uj_previous_;
+  std::vector<std::size_t> uj_offset_;
 
   // Mutex used to guard GetMeasurements()
   std::mutex mutex_;
