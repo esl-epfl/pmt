@@ -1,11 +1,9 @@
 #include <algorithm>
 #include <cassert>
-#include <iostream>
 #include <iterator>
 #include <memory>
 #include <stdexcept>
 #include <cstring>
-#include <sstream>
 #include <cerrno>
 #include <system_error>
 
@@ -13,6 +11,7 @@
 #include <ext/alloc_traits.h>
 #include <sched.h>
 #include <unistd.h>
+#include <fmt/format.h>
 
 #include "RaplImpl.h"
 
@@ -41,8 +40,7 @@ RaplImpl::RaplImpl() {
 }
 
 std::string GetBasename(int package_id) {
-  return std::string("/sys/class/powercap/intel-rapl:" +
-                     std::to_string(package_id));
+  return fmt::format("/sys/class/powercap/intel-rapl:{0}", package_id);
 }
 
 template <typename T>
@@ -91,11 +89,10 @@ void RaplImpl::Init() {
     // test access right
     const int access_ret_code = ::access(filename_energy.c_str(), R_OK);
     if (valid && access_ret_code != 0) {
-      std::ostringstream ss;
-      ss << "Unable to access '" << filename_domain
-         << "' : " << ::strerror(errno) << "\n"
-         << "Please check the permission or try to run as 'root'";
-      throw std::runtime_error(ss.str());
+      throw std::runtime_error(
+          fmt::format("Unable to access '{0}' : {1}\nPlease check the "
+                      "permission or try to run as 'root'",
+                      filename_domain, ::strerror(errno)));
     }
 
     if (valid) {
@@ -132,19 +129,20 @@ std::vector<RaplMeasurement> RaplImpl::GetMeasurements() {
   assert(n == file_names_.size());
   assert(n == uj_max_.size());
 
-  auto file_name = file_names_.begin();
-  auto packages_name = packages_names_.begin();
+  auto file_name_it = file_names_.begin();
+  auto packages_name_it = packages_names_.begin();
 
   // Take all measurements
-  for (std::size_t i = 0; i < n; i++) {
+  while (file_name_it < file_names_.end()) {
     std::size_t measurement;
-    if (!ReadFile(*file_name, measurement)) {
-      throw std::runtime_error("Could not open " + *file_name);
+    if (!ReadFile(*file_name_it, measurement)) {
+      throw std::runtime_error(
+          fmt::format("Could not open {0}", *file_name_it));
     }
-    measurements.push_back({*packages_name, measurement});
+    measurements.push_back({*packages_name_it, measurement});
 
-    file_name = std::next(file_name);
-    packages_name = std::next(packages_name);
+    file_name_it++;
+    packages_name_it++;
   }
 
   for (std::size_t i = 0; i < measurements.size(); i++) {

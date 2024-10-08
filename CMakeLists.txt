@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.17.5)
 
 project(pmt)
 
+
 # Set cmake module path
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
@@ -44,9 +45,10 @@ option(PMT_BUILD_XILINX "" OFF)
 option(PMT_BUILD_NVIDIA "" OFF)
 option(PMT_BUILD_BINARY "" OFF)
 
+include(FetchContent)
+
 if(${PMT_BUILD_NVML} OR ${PMT_BUILD_TEGRA})
   set(PMT_BUILD_NVIDIA ON)
-  include(FetchContent)
   find_package(CUDAToolkit REQUIRED)
   FetchContent_Declare(
     cudawrappers
@@ -54,6 +56,15 @@ if(${PMT_BUILD_NVML} OR ${PMT_BUILD_TEGRA})
     GIT_TAG main)
   FetchContent_MakeAvailable(cudawrappers)
 endif()
+
+# fetch libfmt
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG 0c9fce2ffefecfdce794e1859584e25877b7b592
+)
+FetchContent_MakeAvailable(fmt)
+
 
 # Config file
 configure_file(${PROJECT_SOURCE_DIR}/cmake/config/pmt.h.in
