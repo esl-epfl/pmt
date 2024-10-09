@@ -21,9 +21,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Set debug print info
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
-# Enable OpenMP
-find_package(OpenMP REQUIRED)
-
 # Enable PThreads
 find_package(Threads REQUIRED)
 
